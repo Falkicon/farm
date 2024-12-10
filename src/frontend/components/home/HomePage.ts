@@ -148,12 +148,11 @@ export class HomePage extends LitElement {
                 </div>
 
                 <div class="card">
-                    <h2>Getting Started</h2>
+                    <h2>Documentation</h2>
                     <p>
                         Learn how to use and develop with this application.
                     </p>
                     <ul>
-                        <li><a href="/docs/README.md">README</a></li>
                         <li><a href="/docs/ARCHITECTURE.md">Architecture Guide</a></li>
                         <li><a href="/docs/COMPONENTS.md">Component Guide</a></li>
                     </ul>
