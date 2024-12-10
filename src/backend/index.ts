@@ -2,6 +2,7 @@ import fastify from 'fastify';
 import cors from '@fastify/cors';
 import helmet from '@fastify/helmet';
 import { registerHealthRoute } from './routes/health';
+import { config } from './config/environment';
 
 // Create Fastify instance with pretty logging
 const server = fastify({
@@ -13,7 +14,8 @@ const server = fastify({
                 ignore: 'pid,hostname,reqId',
                 messageFormat: '{msg}',
                 colorize: true,
-                singleLine: true
+                singleLine: true,
+                level: config.logging.level
             }
         }
     }
@@ -21,7 +23,7 @@ const server = fastify({
 
 // Register plugins
 server.register(cors, {
-    origin: true,
+    origin: config.security.corsOrigins,
     credentials: true
 });
 server.register(helmet);
@@ -43,8 +45,10 @@ console.log(routeTree);
 // Start server
 const start = async () => {
     try {
-        const port = process.env.PORT || 8000;
-        await server.listen({ port: Number(port), host: '0.0.0.0' });
+        await server.listen({
+            port: config.app.port,
+            host: '0.0.0.0'
+        });
 
         // Wait a moment for frontend to start
         setTimeout(() => {
@@ -53,10 +57,10 @@ const start = async () => {
             console.log('[DEVELOPMENT SERVERS]');
             console.log(divider);
             console.log('\n[FRONTEND]');
-            console.log('  App:      http://localhost:3000');
+            console.log(`  App:      ${config.app.frontendUrl}`);
             console.log('\n[BACKEND]');
-            console.log(`  API:      http://localhost:${port}/api`);
-            console.log(`  Health:   http://localhost:${port}/api/health`);
+            console.log(`  API:      http://localhost:${config.app.port}/api`);
+            console.log(`  Health:   http://localhost:${config.app.port}/api/health`);
             console.log(`  Docs:     http://localhost:8080 (when running 'npm run docs')`);
             console.log('\n' + divider);
             console.log('[STATUS] All services running. Press Ctrl+C to stop');

@@ -1,5 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { version } from '../../../package.json';
+import { config } from '../config/environment';
 
 export function registerHealthRoute(server: FastifyInstance) {
     server.get('/api/health', {
@@ -34,7 +35,14 @@ export function registerHealthRoute(server: FastifyInstance) {
                             }
                         },
                         environment: { type: 'string' },
-                        nodeVersion: { type: 'string' }
+                        nodeVersion: { type: 'string' },
+                        config: {
+                            type: 'object',
+                            properties: {
+                                logging: { type: 'string' },
+                                cors: { type: 'array', items: { type: 'string' } }
+                            }
+                        }
                     }
                 }
             }
@@ -44,7 +52,7 @@ export function registerHealthRoute(server: FastifyInstance) {
         const dbStatus = {
             connected: false,
             latency: null,
-            configured: false
+            configured: config.database.url ? true : false
         };
 
         // Get memory usage
@@ -63,8 +71,12 @@ export function registerHealthRoute(server: FastifyInstance) {
                 heapTotal: memory.heapTotal,
                 external: memory.external
             },
-            environment: process.env.NODE_ENV || 'development',
-            nodeVersion: process.version
+            environment: config.isDevelopment ? 'development' : config.isTest ? 'test' : 'production',
+            nodeVersion: process.version,
+            config: {
+                logging: config.logging.format,
+                cors: config.security.corsOrigins
+            }
         };
 
         server.log.info('[HEALTH] Check OK');

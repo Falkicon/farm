@@ -1,32 +1,33 @@
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 
 // Vite configuration using the defineConfig helper for better TypeScript support
-export default defineConfig({
-  // Project root directory
-  // '.' means the current directory where vite.config.ts is located
-  root: '.',
+export default defineConfig(({ mode }) => {
+  // Load env files based on mode
+  const env = loadEnv(mode, process.cwd(), '');
 
-  // Build configuration
-  build: {
-    // Output directory for production build
-    // Will create the production build in dist/frontend
-    outDir: 'dist/frontend',
-  },
+  return {
+    // Project root directory
+    root: '.',
 
-  // Development server configuration
-  server: {
-    // Dev server will run on port 3000
-    // Matches the configuration in custom_instructions
-    port: 3000,
-  },
+    // Build configuration
+    build: {
+      outDir: 'dist/frontend',
+    },
 
-  // Path resolution configuration
-  resolve: {
-    alias: {
-      // Creates an alias for the src directory
-      // Allows imports like: import Component from '@/components/Component'
-      // instead of relative paths like: import Component from '../../../components/Component'
-      '@': '/src'
-    }
-  }
-}); 
+    // Development server configuration
+    server: {
+      port: parseInt(env.VITE_DEV_SERVER_PORT || '3000'),
+      host: env.VITE_DEV_SERVER_HOST || 'localhost',
+    },
+
+    // Path resolution configuration
+    resolve: {
+      alias: {
+        '@': '/src'
+      }
+    },
+
+    // Environment variable configuration
+    envPrefix: 'VITE_', // Only expose VITE_ prefixed env variables to client
+  };
+});

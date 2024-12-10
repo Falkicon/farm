@@ -1,11 +1,15 @@
 # Add if not already present
 **/node_modules
 **/dist
-**/.env
-**/.env.*
 **/coverage
 **/.turbo
 **/.next
+
+# Environment files
+**/.env
+**/.env.*
+!**/.env.example
+!**/.env.local.example
 
 # Docker
 **/docker-compose*.yml

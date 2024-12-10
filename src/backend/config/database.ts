@@ -1,33 +1,41 @@
-// This file is temporarily disabled until database features are needed
-/*
-import { PrismaClient } from '@prisma/client';
-import dotenv from 'dotenv';
+import { PrismaClient, Prisma } from '@prisma/client';
+import { config } from './environment';
 
-dotenv.config();
+// Define logger configuration
+const logConfig: Prisma.LogDefinition[] = [
+    {
+        level: 'error',
+        emit: 'stdout',
+    },
+    {
+        level: 'warn',
+        emit: 'stdout',
+    }
+];
 
-const prismaClientOptions = {
+const prismaClientOptions: Prisma.PrismaClientOptions = {
     datasources: {
         db: {
-            url: process.env.DATABASE_URL
+            url: config.database.url
         }
     },
-    log: ['error', 'warn'],
-    connectionTimeout: 20000,
+    log: logConfig
 };
 
-if (process.env.NODE_ENV !== 'development') {
+// Add SSL configuration for production
+if (config.isProduction && prismaClientOptions.datasources?.db) {
     prismaClientOptions.datasources.db = {
-        url: process.env.DATABASE_URL,
+        url: config.database.url,
         ssl: {
             rejectUnauthorized: false
         }
-    };
+    } as Prisma.Datasources['db'];
 }
 
 export const prisma = new PrismaClient(prismaClientOptions);
 
+// Graceful shutdown
 process.on('SIGINT', async () => {
     await prisma.$disconnect();
     process.exit(0);
 });
-*/ 
