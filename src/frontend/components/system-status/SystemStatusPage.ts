@@ -1,22 +1,22 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
-import { API_CONFIG } from '../../config/api';
+import { API_CONFIG } from '../../shared/config/api';
 
 interface SystemStatus {
-    backend: boolean;
-    apiVersion: string | null;
-    lastChecked: string | null;
+  backend: boolean;
+  apiVersion: string | null;
+  lastChecked: string | null;
 }
 
 @customElement('system-status-page')
 export class SystemStatusPage extends LitElement {
-    @state() private statuses: SystemStatus = {
-        backend: false,
-        apiVersion: null,
-        lastChecked: null
-    };
+  @state() private statuses: SystemStatus = {
+    backend: false,
+    apiVersion: null,
+    lastChecked: null
+  };
 
-    static styles = css`
+  static styles = css`
     .status-grid {
       display: grid;
       gap: 1rem;
@@ -39,30 +39,30 @@ export class SystemStatusPage extends LitElement {
     .status-error { background: #f44336; }
   `;
 
-    async connectedCallback() {
-        super.connectedCallback();
-        await this.checkStatuses();
-        // Refresh every 30 seconds
-        setInterval(() => this.checkStatuses(), 30000);
+  async connectedCallback() {
+    super.connectedCallback();
+    await this.checkStatuses();
+    // Refresh every 30 seconds
+    setInterval(() => this.checkStatuses(), 30000);
+  }
+
+  async checkStatuses() {
+    try {
+      const healthCheck = await fetch(`${API_CONFIG.BASE_URL}/health`);
+      const data = await healthCheck.json();
+
+      this.statuses = {
+        backend: data.status === 'ok',
+        apiVersion: data.version,
+        lastChecked: new Date().toLocaleTimeString()
+      };
+    } catch (e) {
+      this.statuses.backend = false;
     }
+  }
 
-    async checkStatuses() {
-        try {
-            const healthCheck = await fetch(`${API_CONFIG.BASE_URL}/health`);
-            const data = await healthCheck.json();
-
-            this.statuses = {
-                backend: data.status === 'ok',
-                apiVersion: data.version,
-                lastChecked: new Date().toLocaleTimeString()
-            };
-        } catch (e) {
-            this.statuses.backend = false;
-        }
-    }
-
-    render() {
-        return html`
+  render() {
+    return html`
       <div class="status-grid">
         <h1>System Status</h1>
         
@@ -82,5 +82,5 @@ export class SystemStatusPage extends LitElement {
         </div>
       </div>
     `;
-    }
+  }
 } 

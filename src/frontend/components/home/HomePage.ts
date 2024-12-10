@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
+import { API_CONFIG } from '../../shared/config/api';
 
 @customElement('home-page')
 export class HomePage extends LitElement {
@@ -100,11 +101,11 @@ export class HomePage extends LitElement {
 
     async checkSystemStatus() {
         try {
-            const response = await fetch('/api/health');
+            const response = await fetch(`${API_CONFIG.BASE_URL}/health`);
             const data = await response.json();
             this.systemStatus = {
                 isLoading: false,
-                isHealthy: data.status === 'ok' && data.database === 'connected'
+                isHealthy: data.status === 'ok'
             };
         } catch (e) {
             this.systemStatus = {
@@ -139,7 +140,7 @@ export class HomePage extends LitElement {
                     <p>${this.getStatusIndicator()}</p>
                     <p>
                         Monitor the health and performance of your application's core systems.
-                        Check connection status, database health, and more.
+                        Check connection status and more.
                     </p>
                     <p>
                         <a href="/system-status">View System Status →</a>
@@ -147,22 +148,22 @@ export class HomePage extends LitElement {
                 </div>
 
                 <div class="card">
-                    <h2>Documentation</h2>
+                    <h2>Getting Started</h2>
                     <p>
-                        Access comprehensive documentation about the application architecture,
-                        components, and development guidelines.
+                        Learn how to use and develop with this application.
                     </p>
-                    <p>
-                        <a href="/docs">View Documentation →</a>
-                    </p>
+                    <ul>
+                        <li><a href="/docs/README.md">README</a></li>
+                        <li><a href="/docs/ARCHITECTURE.md">Architecture Guide</a></li>
+                        <li><a href="/docs/COMPONENTS.md">Component Guide</a></li>
+                    </ul>
                 </div>
 
                 <div class="card">
-                    <h2>Quick Links</h2>
+                    <h2>Development</h2>
                     <ul>
-                        <li><a href="/api-docs">API Documentation</a></li>
-                        <li><a href="/components">Component Library</a></li>
-                        <li><a href="/settings">Application Settings</a></li>
+                        <li><a href="/system-status">System Status</a></li>
+                        <li><a href="/api/health">API Health Check</a></li>
                     </ul>
                 </div>
             </div>

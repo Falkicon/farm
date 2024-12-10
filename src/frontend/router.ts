@@ -15,7 +15,7 @@ interface AppRouterContext extends RouterContext {
 type RouteAction = (
     context: AppRouterContext,
     params?: RouteParams
-) => TemplateResult;
+) => TemplateResult | Promise<TemplateResult>;
 
 /**
  * Application route configuration
@@ -37,6 +37,18 @@ const routes: AppRoute[] = [
     {
         path: '/system-status',
         action: () => html`<system-status-page></system-status-page>`
+    },
+    {
+        path: '/docs/:docName',
+        action: async (context) => {
+            const docName = context.params.docName;
+            try {
+                const doc = await fetch(`/docs/${docName}`).then(r => r.text());
+                return html`<doc-viewer .content=${doc}></doc-viewer>`;
+            } catch (e) {
+                return html`<h1>Documentation Not Found</h1>`;
+            }
+        }
     },
     {
         path: '(.*)',
