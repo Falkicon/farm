@@ -1,32 +1,30 @@
 import { FastifyInstance } from 'fastify';
-// import { PrismaClient } from '@prisma/client';
+import { version } from '../../../package.json';
 
-// let prisma: PrismaClient | null = null;
-
-// try {
-//     prisma = new PrismaClient();
-// } catch (e) {
-//     console.warn('Prisma client not initialized - database checks will be disabled');
-// }
-
-export default async function healthRoutes(fastify: FastifyInstance) {
-    fastify.get('/api/health', async () => {
-        // let databaseStatus = 'disconnected';
-
-        // if (prisma) {
-        //     try {
-        //         await prisma.$queryRaw`SELECT 1`;
-        //         databaseStatus = 'connected';
-        //     } catch (e) {
-        //         console.error('Database health check failed:', e);
-        //     }
-        // }
-
-        return {
+export function registerHealthRoute(server: FastifyInstance) {
+    server.get('/api/health', {
+        schema: {
+            response: {
+                200: {
+                    type: 'object',
+                    properties: {
+                        status: { type: 'string' },
+                        version: { type: 'string' },
+                        timestamp: { type: 'string' }
+                    }
+                }
+            }
+        }
+    }, async (_request, _reply) => {
+        const response = {
             status: 'ok',
-            // database: databaseStatus,
-            version: process.env.npm_package_version || '0.0.1',
+            version,
             timestamp: new Date().toISOString()
         };
+
+        server.log.info('[HEALTH] Check OK');
+        return response;
     });
-} 
+
+    server.log.info('[ROUTE] Registered: /api/health');
+}

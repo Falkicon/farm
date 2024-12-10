@@ -1,20 +1,79 @@
 {
-  "terminal.integrated.defaultProfile.windows": "Git Bash",
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
   "terminal.integrated.profiles.windows": {
-    "Git Bash": {
-      "path": "C:\\Program Files\\Git\\bin\\bash.exe",
-      "icon": "terminal-bash"
+    "PowerShell": {
+      "source": "PowerShell",
+      "icon": "terminal-powershell",
+      "args": ["-NoLogo"]
     }
   },
+  "terminal.integrated.env.windows": {
+    "PSExecutionPolicyPreference": "RemoteSigned"
+  },
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": "vscode.typescript-language-features",
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit"
+  },
+  "editor.tabSize": 2,
+  "editor.detectIndentation": false,
+  "editor.insertSpaces": true,
+  "editor.rulers": [100],
   "files.eol": "\n",
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "files.associations": {
+    "*.js": "javascript",
+    "*.ts": "typescript",
+    "*.tsx": "typescriptreact",
+    "*.ps1": "powershell",
+    "*.sh": "shellscript",
+    "*.json": "jsonc",
+    ".env*": "dotenv"
+  },
+  "[javascript]": {
+    "files.eol": "\n"
+  },
+  "[typescript]": {
+    "files.eol": "\n"
+  },
+  "[json]": {
+    "files.eol": "\n"
+  },
+  "[jsonc]": {
+    "files.eol": "\n"
+  },
+  "[powershell]": {
+    "files.eol": "\r\n"
+  },
+  "[shellscript]": {
+    "files.eol": "\n"
+  },
   "css.validate": false,
+  "scss.validate": false,
   "tailwindCSS.includeLanguages": {
     "typescript": "html",
-    "javascript": "html"
+    "javascript": "html",
+    "typescriptreact": "html"
   },
-  "editor.quickSuggestions": {
-    "strings": true
-  }
-} 
+  "tailwindCSS.experimental.classRegex": [
+    ["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+  ],
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/.turbo": true,
+    "**/.next": true,
+    "**/coverage": true
+  },
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/node_modules": true,
+    "**/dist": true
+  },
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "typescript.preferences.importModuleSpecifier": "shortest",
+  "javascript.preferences.importModuleSpecifier": "shortest"
+}

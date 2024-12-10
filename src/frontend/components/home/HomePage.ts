@@ -16,7 +16,7 @@ export class HomePage extends LitElement {
             max-width: 1200px;
             margin: 0 auto;
         }
-        
+
         .welcome-section {
             margin-bottom: 2rem;
         }
@@ -82,7 +82,7 @@ export class HomePage extends LitElement {
 
         .status-healthy { background: #4caf50; }
         .status-unhealthy { background: #f44336; }
-        .status-loading { 
+        .status-loading {
             background: #ffd700;
             animation: pulse 1.5s infinite;
         }
@@ -163,10 +163,9 @@ export class HomePage extends LitElement {
                     <h2>Development</h2>
                     <ul>
                         <li><a href="/system-status">System Status</a></li>
-                        <li><a href="/api/health">API Health Check</a></li>
                     </ul>
                 </div>
             </div>
         `;
     }
-} 
+}

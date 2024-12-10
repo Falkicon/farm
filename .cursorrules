@@ -1,10 +1,8 @@
 # Cursor Rules Configuration
 
-# Terminal Command Settings
-terminal.shell.windows: "C:\\Program Files\\Git\\bin\\bash.exe"
-terminal.integrated.shell.windows: "C:\\Program Files\\Git\\bin\\bash.exe"
-terminal.preferredShell: "bash"  # Use Bash instead of CMD
-terminal.commandPrefix: ""  # Remove CMD prefix since we're using bash
+# Terminal Settings (Cross-Platform)
+terminal.preferredShell: "default"  # Use system default shell
+terminal.commandPrefix: ""  # No prefix needed
 
 # Project Structure
 project.type: "web-app"
@@ -18,7 +16,7 @@ project.architecture: "monorepo"  # Frontend and backend in same repo
 package.manager: "npm"
 package.nodeVersion: ">=18.0.0"
 
-# Development Scripts
+# Development Scripts (Cross-Platform)
 scripts.dev: "npm run dev"
 scripts.build: "npm run build"
 scripts.test: "npm run test"
@@ -33,7 +31,7 @@ files.docs: "**/*.md"
 files.config: ["*.config.{js,ts}", "tsconfig*.json", ".env*"]
 files.ignore: ["node_modules", "dist", "coverage", ".turbo", ".next"]
 
-# Project Structure Paths
+# Project Structure Paths (Using forward slashes for cross-platform)
 paths.frontend: "src/frontend"
 paths.backend: "src/backend"
 paths.components: "src/frontend/components"
@@ -92,10 +90,7 @@ env.required: [
   "NODE_ENV"
 ]
 
-# VSCode Settings
+# Editor Settings (Cross-Platform)
 editor.formatOnSave: true
 editor.defaultFormatter: "esbenp.prettier-vscode"
-editor.terminal.shell.windows: "${env:windir}\\System32\\cmd.exe"
-
-# Remember: Always use cmd /c prefix for npm commands
-# Example: cmd /c npm run clean
+editor.lineEndings: "lf"  # Use LF for all files

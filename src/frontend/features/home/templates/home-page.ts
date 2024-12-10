@@ -1,30 +1,36 @@
-import { LitElement, html, css } from 'lit';
-import { customElement } from 'lit/decorators.js';
-import { styles } from '../../../styles/shared-styles.ts';
+import { html } from 'lit';
+import { API_CONFIG } from '../../../shared/config/api';
 
-@customElement('home-page')
-export class HomePage extends LitElement {
-    static styles = [
-        styles, // This should contain your Tailwind styles
-        css`
-            :host {
-                display: block;
+export const homePageTemplate = () => html`
+  <div class="container mx-auto p-4">
+    <h1 class="text-2xl font-bold mb-4">Welcome to the Application</h1>
+    <div class="space-y-4">
+      <app-card>
+        <h2 slot="header">API Status</h2>
+        <div slot="content">
+          <p class="mb-4">API URL: ${API_CONFIG.BASE_URL}</p>
+          <app-button @click=${async () => {
+            const baseUrl = API_CONFIG.BASE_URL.replace(/\/api$/, '');
+            const url = `${baseUrl}/api/health`;
+            try {
+                console.log('Making request to:', url);
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                console.log('API response:', data);
+                alert(JSON.stringify(data, null, 2));
+            } catch (error: unknown) {
+                const message = error instanceof Error ? error.message : 'Unknown error occurred';
+                console.error('API error:', error);
+                alert('Error connecting to API: ' + message + '\nURL: ' + url);
             }
-        `
-    ];
-
-    render() {
-        return html`
-            <div class="container mx-auto p-4">
-                <h1 class="text-2xl font-bold mb-4">Welcome Home</h1>
-                <p>This is the home page of your application.</p>
-            </div>
-        `;
-    }
-}
-
-declare global {
-    interface HTMLElementTagNameMap {
-        'home-page': HomePage;
-    }
-}
+        }}>
+            API Health Check
+          </app-button>
+        </div>
+      </app-card>
+    </div>
+  </div>
+`;
