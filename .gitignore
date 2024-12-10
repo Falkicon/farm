@@ -1,0 +1,13 @@
+# Add if not already present
+**/node_modules
+**/dist
+**/.env
+**/.env.*
+**/coverage
+**/.turbo
+**/.next
+
+# Docker
+**/docker-compose*.yml
+**/Dockerfile*
+**/.docker

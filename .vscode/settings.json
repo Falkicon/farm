@@ -1,0 +1,20 @@
+{
+  "terminal.integrated.defaultProfile.windows": "Git Bash",
+  "terminal.integrated.profiles.windows": {
+    "Git Bash": {
+      "path": "C:\\Program Files\\Git\\bin\\bash.exe",
+      "icon": "terminal-bash"
+    }
+  },
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "vscode.typescript-language-features",
+  "files.eol": "\n",
+  "css.validate": false,
+  "tailwindCSS.includeLanguages": {
+    "typescript": "html",
+    "javascript": "html"
+  },
+  "editor.quickSuggestions": {
+    "strings": true
+  }
+} 

@@ -1,0 +1,32 @@
+{
+  // Specify the main entry point files for documentation generation
+  // These are the root files from which TypeDoc will begin parsing
+  "entryPoints": ["./src/frontend/index.ts", "./src/backend/server.ts"],
+
+  // Determines how TypeDoc processes entry points
+  // "expand" means it will include all referenced files from entry points
+  "entryPointStrategy": "expand",
+
+  // Output directory for the generated documentation
+  "out": "docs",
+
+  // Patterns to exclude from documentation generation
+  // Here we exclude all node_modules to avoid documenting external dependencies
+  "exclude": ["**/node_modules/**"],
+
+  // Skip documentation for private class members and methods
+  "excludePrivate": true,
+
+  // Skip documentation for protected class members and methods
+  "excludeProtected": true,
+
+  // Skip documentation for external modules (from node_modules)
+  "excludeExternals": true,
+
+  // The visual theme to use for generated documentation
+  // "default" is TypeDoc's standard theme
+  "theme": "default",
+
+  // The title that appears in the generated documentation
+  "name": "Web App Boilerplate Documentation"
+} 

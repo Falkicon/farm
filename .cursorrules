@@ -1,0 +1,101 @@
+# Cursor Rules Configuration
+
+# Terminal Command Settings
+terminal.shell.windows: "C:\\Program Files\\Git\\bin\\bash.exe"
+terminal.integrated.shell.windows: "C:\\Program Files\\Git\\bin\\bash.exe"
+terminal.preferredShell: "bash"  # Use Bash instead of CMD
+terminal.commandPrefix: ""  # Remove CMD prefix since we're using bash
+
+# Project Structure
+project.type: "web-app"
+project.framework: "lit"
+project.backend: "fastify"
+project.language: "typescript"
+project.styling: "tailwindcss"
+project.architecture: "monorepo"  # Frontend and backend in same repo
+
+# Package Manager
+package.manager: "npm"
+package.nodeVersion: ">=18.0.0"
+
+# Development Scripts
+scripts.dev: "npm run dev"
+scripts.build: "npm run build"
+scripts.test: "npm run test"
+scripts.clean: "npm run clean"
+scripts.docs: "npm run docs"
+
+# File Patterns
+files.source: "src/**/*.{ts,tsx}"
+files.styles: "src/**/*.css"
+files.tests: "**/*.test.ts"
+files.docs: "**/*.md"
+files.config: ["*.config.{js,ts}", "tsconfig*.json", ".env*"]
+files.ignore: ["node_modules", "dist", "coverage", ".turbo", ".next"]
+
+# Project Structure Paths
+paths.frontend: "src/frontend"
+paths.backend: "src/backend"
+paths.components: "src/frontend/components"
+paths.styles: "src/frontend/styles"
+paths.server: "src/backend/server.ts"
+paths.public: "public"
+paths.build: "dist"
+paths.docs: "docs"
+
+# Dependencies to Track
+dependencies.frontend: [
+  "lit",
+  "lit-element",
+  "lit-html",
+  "universal-router"
+]
+dependencies.backend: [
+  "fastify",
+  "@fastify/cors",
+  "@fastify/helmet"
+]
+dependencies.database: [
+  "@prisma/client"
+]
+dependencies.dev: [
+  "typescript",
+  "vite",
+  "eslint",
+  "prettier",
+  "tailwindcss"
+]
+
+# Development Tools
+tools.bundler: "vite"
+tools.testing: ["vitest", "playwright"]
+tools.linting: ["eslint", "prettier"]
+tools.documentation: "typedoc"
+tools.database: "prisma"
+
+# TypeScript Configuration
+typescript.target: "ES2020"
+typescript.module: "ESNext"
+typescript.configs: ["tsconfig.json", "tsconfig.backend.json"]
+typescript.experimentalDecorators: true
+typescript.useDefineForClassFields: false
+typescript.emitDecoratorMetadata: true
+
+# Server Configuration
+server.frontend.port: 3000
+server.backend.port: 8000
+server.docs.port: 8080
+
+# Environment Variables
+env.required: [
+  "DATABASE_URL",
+  "NODE_ENV"
+]
+
+# VSCode Settings
+editor.formatOnSave: true
+editor.defaultFormatter: "esbenp.prettier-vscode"
+editor.terminal.shell.windows: "${env:windir}\\System32\\cmd.exe"
+
+# Remember: Always use cmd /c prefix for npm commands
+# Example: cmd /c npm run clean
