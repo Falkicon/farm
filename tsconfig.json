@@ -23,10 +23,11 @@
     "useDefineForClassFields": false,
     
     // Types and path aliases
-    "types": ["vite/client"],
+    "types": ["vite/client", "node"],
     "paths": {
       "@/*": ["./src/*"] // Enable @ imports from src directory
-    }
+    },
+    "baseUrl": "."
   },
   // Frontend-specific configuration
   "include": ["src/frontend", "vite.config.ts"],
