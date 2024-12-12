@@ -1,5 +1,7 @@
 # FARM
 
+> ⚠️ **Alpha Status**: This project is currently in alpha. While the core features are functional, APIs and architecture may change significantly between versions. Use in production at your own risk.
+
 **F**ull Stack • **A**PI-first • **R**eactive • **M**odern Web Platform
 
 [![Documentation Status](https://github.com/Falkicon/farm/actions/workflows/docs.yml/badge.svg)](https://github.com/Falkicon/farm/actions/workflows/docs.yml)
