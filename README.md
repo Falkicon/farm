@@ -4,7 +4,26 @@
 
 **F**ull Stack • **A**PI-first • **R**eactive • **M**odern Web Platform
 
-[![Documentation](https://img.shields.io/badge/Documentation-passing-brightgreen.svg)](https://github.com/Falkicon/farm/actions/workflows/docs.yml)[![Tests](https://img.shields.io/badge/Tests-passing-brightgreen.svg)](https://github.com/Falkicon/farm/actions/workflows/test.yml)[![Build](https://img.shields.io/badge/Build-passing-brightgreen.svg)](https://github.com/Falkicon/farm/actions/workflows/build.yml)[![E2E](https://img.shields.io/badge/E2E-passing-brightgreen.svg)](https://github.com/Falkicon/farm/actions/workflows/e2e.yml)[![CodeQL](https://img.shields.io/badge/CodeQL-passing-brightgreen.svg)](https://github.com/Falkicon/farm/actions/workflows/codeql.yml)[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)[![npm](https://img.shields.io/badge/npm-0.0.1-green.svg)](https://www.npmjs.com/package/farm)[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue.svg)](https://www.typescriptlang.org/)[![Node](https://img.shields.io/badge/node-%3E%3D22.0.0-brightgreen.svg)](https://nodejs.org/)[![codecov](https://img.shields.io/badge/codecov-unknown-lightgrey.svg)](https://codecov.io/gh/Falkicon/farm)[![Storybook](https://img.shields.io/badge/Storybook-FF4785?logo=storybook&logoColor=white)](https://falkicon.github.io/farm/storybook)[![code style](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)[![commitizen](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+<!-- Status -->
+[![Documentation](https://img.shields.io/badge/Documentation-passing-brightgreen.svg)](https://github.com/Falkicon/farm/actions/workflows/docs.yml)
+[![Tests](https://img.shields.io/badge/Tests-passing-brightgreen.svg)](https://github.com/Falkicon/farm/actions/workflows/test.yml)
+[![Build](https://img.shields.io/badge/Build-passing-brightgreen.svg)](https://github.com/Falkicon/farm/actions/workflows/build.yml)
+[![E2E](https://img.shields.io/badge/E2E-passing-brightgreen.svg)](https://github.com/Falkicon/farm/actions/workflows/e2e.yml)
+[![CodeQL](https://img.shields.io/badge/CodeQL-passing-brightgreen.svg)](https://github.com/Falkicon/farm/actions/workflows/codeql.yml)
+
+<!-- Project Info -->
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![npm](https://img.shields.io/badge/npm-0.0.1-green.svg)](https://www.npmjs.com/package/farm)
+[![codecov](https://img.shields.io/badge/codecov-unknown-lightgrey.svg)](https://codecov.io/gh/Falkicon/farm)
+
+<!-- Tech Stack -->
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue.svg)](https://www.typescriptlang.org/)
+[![Node](https://img.shields.io/badge/node-%3E%3D22.0.0-brightgreen.svg)](https://nodejs.org/)
+[![Storybook](https://img.shields.io/badge/Storybook-FF4785?logo=storybook&logoColor=white)](https://falkicon.github.io/farm/storybook)
+
+<!-- Development -->
+[![code style](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+[![commitizen](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
 A production-ready full-stack TypeScript boilerplate combining Lit Web Components, Fastify, and modern web platform features. Built for developers who want a robust, scalable, and type-safe foundation for their web applications.
 
