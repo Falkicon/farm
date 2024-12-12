@@ -1,11 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Base styles and resets */
+@import './global.css';
 
-:root {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-}
-
-#app {
-  min-height: 100vh;
-} 
+/* Feature-specific styles can be imported here */

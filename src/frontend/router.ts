@@ -1,53 +1,21 @@
-import { html, TemplateResult } from 'lit';
+import { html } from 'lit';
+import type { Route } from 'universal-router';
 import UniversalRouter from 'universal-router';
-import type { RouterContext, RouteParams } from 'universal-router';
 
-/**
- * Extended router context with custom properties
- */
-interface AppRouterContext extends RouterContext {
-    path: string;
-}
+// Import components directly to ensure single registration
+import './components/index';
 
-/**
- * Route action handler type
- */
-type RouteAction = (
-    context: AppRouterContext,
-    params?: RouteParams
-) => TemplateResult | Promise<TemplateResult>;
-
-/**
- * Application route configuration
- */
-interface AppRoute {
-    path: string;
-    action: RouteAction;
-    children?: AppRoute[];
-}
-
-/**
- * Application routes configuration
- */
-const routes: AppRoute[] = [
+const routes: Route[] = [
     {
         path: '/',
         action: () => html`<home-page></home-page>`
     },
     {
-        path: '/system-status',
-        action: () => html`<system-status-page></system-status-page>`
-    },
-    {
-        path: '/docs/:docName',
-        action: async (context) => {
-            const docName = context.params.docName;
-            try {
-                const doc = await fetch(`/docs/${docName}`).then(r => r.text());
-                return html`<doc-viewer .content=${doc}></doc-viewer>`;
-            } catch (e) {
-                return html`<h1>Documentation Not Found</h1>`;
-            }
+        path: '/system',
+        action: async () => {
+            // Only lazy load the system page since it's not part of the main bundle
+            await import('../system/pages/SystemStatusPage');
+            return html`<system-status-page></system-status-page>`;
         }
     },
     {
@@ -56,7 +24,4 @@ const routes: AppRoute[] = [
     }
 ];
 
-/**
- * Application router instance
- */
-export const router = new UniversalRouter<TemplateResult, AppRouterContext>(routes); 
+export const router = new UniversalRouter(routes);

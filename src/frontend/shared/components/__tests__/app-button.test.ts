@@ -12,7 +12,7 @@ describe('AppButton', () => {
     it('meets accessibility guidelines', async () => {
         const el = await fixture<AppButton>(html`<app-button>Click me</app-button>`);
         const results = await axe(el);
-        expect(results).to.satisfy(toHaveNoViolations);
+        expect(results.violations.length).to.equal(0);
     });
 
     it('renders with default variant', async () => {
@@ -61,4 +61,4 @@ describe('AppButton', () => {
         const styles = getComputedStyle(button);
         expect(styles.outline).not.to.equal('none');
     });
-}); 
+});

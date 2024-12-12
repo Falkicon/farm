@@ -1,36 +1,34 @@
 {
   "compilerOptions": {
-    // ECMAScript target version
-    "target": "ES2020",
+    "target": "ES2022",
     "module": "ESNext",
-    // Available APIs for the project
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "skipLibCheck": true,
-    "moduleResolution": "bundler", // Use bundler for module resolution (Vite)
-    "allowImportingTsExtensions": true, // Allow imports with .ts extensions
-    "resolveJsonModule": true, // Enable importing JSON files
-    "isolatedModules": true, // Ensure each file can be safely transpiled
-    "noEmit": true, // Don't emit files (Vite handles this)
-    
-    // Type checking settings
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    
-    // Decorator support for Lit
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "useDefineForClassFields": false,
-    
-    // Types and path aliases
-    "types": ["vite/client", "node"],
-    "paths": {
-      "@/*": ["./src/*"] // Enable @ imports from src directory
-    },
-    "baseUrl": "."
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitOverride": true,
+    "plugins": [
+      {
+        "name": "ts-lit-plugin",
+        "strict": true
+      }
+    ]
   },
-  // Frontend-specific configuration
-  "include": ["src/frontend", "vite.config.ts"],
-  "exclude": ["src/backend"],
-  "references": [{ "path": "./tsconfig.backend.json" }] // Reference to backend config
-} 
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
+}

@@ -1,76 +1,97 @@
-import fastify from 'fastify';
-import cors from '@fastify/cors';
-import helmet from '@fastify/helmet';
-import { registerHealthRoute } from './routes/health';
-import { config } from './config/environment';
+import server from './server';
+import { config } from 'dotenv';
+import { networkInterfaces } from 'os';
+import { createStartupBanner } from './utils/banner';
 
-// Create Fastify instance with pretty logging
-const server = fastify({
-    logger: {
-        transport: {
-            target: 'pino-pretty',
-            options: {
-                translateTime: 'HH:MM:ss Z',
-                ignore: 'pid,hostname,reqId',
-                messageFormat: '{msg}',
-                colorize: true,
-                singleLine: true,
-                level: config.logging.level
-            }
+// Load environment variables
+config();
+
+const PORT = 8000;
+const HOST = '0.0.0.0';
+const NODE_ENV = process.env.NODE_ENV || 'development';
+const FRONTEND_PORT = 3000;
+
+// Get local IP address
+const getLocalIP = () => {
+  try {
+    const nets = networkInterfaces();
+    for (const name of Object.keys(nets)) {
+      for (const net of nets[name] ?? []) {
+        // Skip internal and non-IPv4 addresses
+        if (!net.internal && net.family === 'IPv4') {
+          return net.address;
         }
+      }
     }
-});
-
-// Register plugins
-server.register(cors, {
-    origin: config.security.corsOrigins,
-    credentials: true
-});
-server.register(helmet);
-
-// Register routes
-registerHealthRoute(server);
-
-// Log registered routes in a cleaner format
-const routeTree = server.printRoutes()
-    .replace(/[├─│]/g, '|')
-    .replace(/[└]/g, '+')
-    .split('\n')
-    .map(line => '  ' + line.trim())
-    .join('\n');
-
-console.log('\n[API] Available Routes:');
-console.log(routeTree);
-
-// Start server
-const start = async () => {
-    try {
-        await server.listen({
-            port: config.app.port,
-            host: '0.0.0.0'
-        });
-
-        // Wait a moment for frontend to start
-        setTimeout(() => {
-            const divider = '='.repeat(60);
-            console.log('\n' + divider);
-            console.log('[DEVELOPMENT SERVERS]');
-            console.log(divider);
-            console.log('\n[FRONTEND]');
-            console.log(`  App:      ${config.app.frontendUrl}`);
-            console.log('\n[BACKEND]');
-            console.log(`  API:      http://localhost:${config.app.port}/api`);
-            console.log(`  Health:   http://localhost:${config.app.port}/api/health`);
-            console.log(`  Docs:     http://localhost:8080 (when running 'npm run docs')`);
-            console.log('\n' + divider);
-            console.log('[STATUS] All services running. Press Ctrl+C to stop');
-            console.log(divider + '\n');
-        }, 1000); // Wait 1s for frontend to initialize
-
-    } catch (err) {
-        server.log.error(err);
-        process.exit(1);
-    }
+    return '127.0.0.1';
+  } catch (error) {
+    console.error('Error getting local IP:', error);
+    return '127.0.0.1';
+  }
 };
 
-start();
+// Start the server
+const start = async () => {
+  try {
+    // Configure server
+    server.log.info('Configuring server...');
+
+    // Add error handlers
+    process.on('unhandledRejection', (err) => {
+      console.error('Unhandled rejection:', err);
+      process.exit(1);
+    });
+
+    process.on('uncaughtException', (err) => {
+      console.error('Uncaught exception:', err);
+      process.exit(1);
+    });
+
+    // Start server silently
+    server.log.info(`Starting server on ${HOST}:${PORT}...`);
+    await server.listen({
+      port: PORT,
+      host: HOST,
+      listenTextResolver: () => ''
+    });
+
+    // Display startup banner
+    createStartupBanner({
+      mode: NODE_ENV,
+      backendPort: PORT,
+      frontendPort: FRONTEND_PORT,
+      localIP: getLocalIP()
+    });
+
+    // Log startup message directly to stdout
+    process.stdout.write('Server started successfully\n\n');
+  } catch (err) {
+    console.error('Failed to start server:', err);
+    server.log.error('Failed to start server:', err);
+    process.exit(1);
+  }
+};
+
+// Handle graceful shutdown
+const shutdown = async () => {
+  try {
+    console.log('\nShutting down server...');
+    await server.close();
+    console.log('Server shutdown complete');
+    process.exit(0);
+  } catch (err) {
+    console.error('Error during shutdown:', err);
+    server.log.error('Error during shutdown:', err);
+    process.exit(1);
+  }
+};
+
+// Register shutdown handlers
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);
+
+// Start server
+start().catch((err) => {
+  console.error('Fatal error during startup:', err);
+  process.exit(1);
+});
