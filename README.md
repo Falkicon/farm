@@ -27,7 +27,7 @@
 
 A production-ready full-stack TypeScript boilerplate combining Lit Web Components, Fastify, and modern web platform features. Built for developers who want a robust, scalable, and type-safe foundation for their web applications.
 
-[View Documentation](https://falkicon.github.io/farm/)
+<!-- [View Documentation](https://falkicon.github.io/farm/) -->
 
 ## Features
 

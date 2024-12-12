@@ -22,7 +22,7 @@
   ],
   "scripts": {
     "dev": "cross-env NODE_ENV=development run-p dev:backend dev:frontend",
-    "dev:frontend": "vite --clearScreen false --logLevel debug",
+    "dev:frontend": "vite --clearScreen false --logLevel debug --open",
     "dev:backend": "cross-env NODE_ENV=development node --trace-warnings --import tsx src/backend/index.ts",
     "dev:clean": "npm run kill-ports && npm run dev",
     "build": "tsc && vite build",
@@ -36,7 +36,7 @@
     "lint:fix": "eslint \"src/**/*.{ts,tsx,js,jsx}\" --fix",
     "format": "prettier --write 'src/**/*.{ts,tsx,css,md}'",
     "docs:build": "typedoc --tsconfig tsconfig.typedoc.json --options typedoc.config.json",
-    "docs:serve": "http-server docs -p 8082",
+    "docs:serve": "http-server docs -p 8082 -o",
     "docs": "npm run docs:clean && npm run docs:build && npm run docs:serve",
     "docs:clean": "rimraf docs && kill-port 8080 8081 8082",
     "clean": "run-s cleanup && rimraf dist docs .turbo .next coverage 'node_modules/.cache' 'node_modules/.vite' 'prisma/dev.db'",
