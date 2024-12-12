@@ -3,14 +3,14 @@
   "version": "1.0.0",
   "description": "Modern web application boilerplate with TypeScript, Web Components, and Fastify",
   "type": "module",
-  "homepage": "https://yourusername.github.io/fabricmill",
-  "documentation": "https://yourusername.github.io/fabricmill",
+  "homepage": "https://falkicon.github.io/fabricmill",
+  "documentation": "https://falkicon.github.io/fabricmill",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/fabricmill.git"
+    "url": "https://github.com/falkicon/fabricmill.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/fabricmill/issues"
+    "url": "https://github.com/falkicon/fabricmill/issues"
   },
   "keywords": [
     "typescript",
@@ -51,9 +51,9 @@
     "@fastify/helmet": "^13.0.0",
     "@fastify/multipart": "^9.0.1",
     "@prisma/client": "^6.0.1",
-    "@sentry/browser": "^8.43.0",
-    "@types/systeminformation": "^3.23.1",
-    "chalk": "^4.1.2",
+    "@sentry/browser": "^8.44.0",
+    "@types/systeminformation": "^3.54.1",
+    "chalk": "^5.3.0",
     "dotenv": "^16.4.7",
     "fastify": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
@@ -62,9 +62,9 @@
     "lit-html": "^3.2.1",
     "localforage": "^1.10.0",
     "msw": "^2.6.8",
-    "systeminformation": "^5.23.9",
+    "systeminformation": "^5.23.10",
     "universal-router": "^9.2.1",
-    "zod": "^3.24.0"
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.1",
@@ -79,9 +79,9 @@
     "@storybook/web-components": "^8.4.7",
     "@storybook/web-components-vite": "^8.4.7",
     "@testing-library/dom": "^10.4.0",
-    "@types/dotenv": "^6.1.1",
+    "@types/dotenv": "^8.2.3",
     "@types/jsonwebtoken": "^9.0.7",
-    "@types/node": "^22.10.1",
+    "@types/node": "^22.10.2",
     "@typescript-eslint/eslint-plugin": "^8.18.0",
     "@typescript-eslint/parser": "^8.18.0",
     "@vitest/coverage-v8": "^2.1.8",
@@ -117,6 +117,7 @@
     "vitest": "^2.1.8"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=22.0.0",
+    "npm": ">=10.0.0"
   }
 }
