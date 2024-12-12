@@ -1,0 +1,39 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "skipLibCheck": true,
+        "noEmit": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "useDefineForClassFields": false,
+        "module": "ESNext",
+        "target": "ES2020",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "allowJs": true,
+        "declaration": true,
+        "sourceMap": true,
+        "rootDir": "./src",
+        "baseUrl": "./src",
+        "paths": {
+            "@/*": ["*"]
+        }
+    },
+    "include": [
+        "src/frontend/components/**/*.ts",
+        "src/frontend/shared/**/*.ts",
+        "src/frontend/core/**/*.ts",
+        "src/system/components/**/*.ts",
+        "src/backend/routes/**/*.ts",
+        "src/backend/middleware/**/*.ts",
+        "src/backend/config/**/*.ts",
+        "src/backend/utils/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist",
+        "**/*.test.ts",
+        "**/*.spec.ts",
+        "**/*.stories.ts"
+    ]
+}

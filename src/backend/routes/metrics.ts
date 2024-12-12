@@ -79,7 +79,26 @@ export async function metricsRoutes(fastify: FastifyInstance) {
     }
   });
 
-  // Get specific metric history
+  /**
+   * Get historical data for a specific metric
+   *
+   * @name GET /metrics/:metric/history
+   * @summary Returns historical data for a specific metric
+   * @description Retrieves historical data for a specified metric type.
+   * Currently returns a 501 status as this feature is not yet implemented.
+   *
+   * @param {string} metric - The name of the metric to fetch history for
+   * @throws {Error} 501 - Feature not implemented
+   * @throws {Error} 500 - If an error occurs while fetching metric history
+   *
+   * @example
+   * ```typescript
+   * // Get CPU usage history
+   * const response = await fetch('/metrics/cpu/history');
+   * const cpuHistory = await response.json();
+   * // Will currently return a 501 status
+   * ```
+   */
   fastify.get('/metrics/:metric/history', async (request, reply) => {
     const { metric } = request.params as { metric: string };
     try {

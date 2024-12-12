@@ -1,5 +1,5 @@
 import { RequestInterceptor, ResponseInterceptor } from './index';
-import { RequestConfig, APIResponse, APIError } from '../types';
+import { RequestConfig, APIResponse } from '../types';
 
 interface RetryConfig {
   maxAttempts: number;
@@ -7,6 +7,21 @@ interface RetryConfig {
   maxDelay: number;
   backoffFactor: number;
   retryableStatuses: number[];
+}
+
+/**
+ * Extended request config with retry metadata
+ */
+interface RequestConfigWithRetry extends RequestConfig {
+  __retry_original?: RequestConfig;
+}
+
+/**
+ * Extended error with retry metadata
+ */
+interface RetryableError extends Error {
+  status?: number;
+  __retry_original?: RequestConfig;
 }
 
 export class RetryInterceptor implements RequestInterceptor, ResponseInterceptor {
@@ -30,14 +45,13 @@ export class RetryInterceptor implements RequestInterceptor, ResponseInterceptor
     return RetryInterceptor.instance;
   }
 
-  private shouldRetry(error: Error, attempt: number): boolean {
+  private shouldRetry(error: RetryableError, attempt: number): boolean {
     if (attempt >= this.config.maxAttempts) {
       return false;
     }
 
-    if (error instanceof Error && 'status' in error) {
-      const status = (error as APIError).status;
-      return this.config.retryableStatuses.includes(status || 0);
+    if (error.status) {
+      return this.config.retryableStatuses.includes(error.status);
     }
 
     return error.name === 'AbortError' || error.name === 'TimeoutError';
@@ -58,11 +72,12 @@ export class RetryInterceptor implements RequestInterceptor, ResponseInterceptor
 
   async onRequest(config: RequestConfig): Promise<RequestConfig> {
     // Store original request config for retries
-    (config as any).__retry_original = { ...config };
+    const configWithRetry = config as RequestConfigWithRetry;
+    configWithRetry.__retry_original = { ...config };
     return config;
   }
 
-  async onRequestError(error: Error): Promise<Error> {
+  async onRequestError(error: Error): Promise<never> {
     throw error;
   }
 
@@ -70,10 +85,12 @@ export class RetryInterceptor implements RequestInterceptor, ResponseInterceptor
     return response;
   }
 
-  async onResponseError(error: Error, attempt = 0): Promise<Error> {
-    const originalConfig = (error as any).__retry_original as RequestConfig;
+  async onResponseError(error: Error): Promise<Error> {
+    const retryableError = error as RetryableError;
+    const originalConfig = retryableError.__retry_original;
+    let attempt = 0;
 
-    if (originalConfig?.endpoint && this.shouldRetry(error, attempt)) {
+    while (originalConfig?.endpoint && this.shouldRetry(retryableError, attempt)) {
       await this.delay(attempt);
 
       try {
@@ -84,20 +101,23 @@ export class RetryInterceptor implements RequestInterceptor, ResponseInterceptor
           body: originalConfig.body || null
         });
 
+        // Check response status before parsing JSON
         if (!response.ok) {
-          const apiError = new APIError(`HTTP error! status: ${response.status}`);
-          apiError.status = response.status;
+          const apiError = new Error(`HTTP error! status: ${response.status}`);
+          (apiError as RetryableError).status = response.status;
+          (apiError as RetryableError).__retry_original = originalConfig;
           throw apiError;
         }
 
-        const data = await response.json();
-        const successError = new APIError('Success after retry');
-        successError.status = response.status;
-        successError.data = data;
+        // Return success as error to maintain interface compatibility
+        const successError = new Error('Success after retry');
+        (successError as RetryableError).status = response.status;
         return successError;
       } catch (retryError) {
-        // Pass the attempt number for the next retry
-        return this.onResponseError(retryError as Error, attempt + 1);
+        attempt++;
+        if (attempt >= this.config.maxAttempts) {
+          throw retryError as Error;
+        }
       }
     }
 

@@ -27,8 +27,8 @@ interface FormConfig {
 }
 
 @customElement('api-form')
-export class APIForm extends LitElement {
-  static styles = css`
+export class ApiForm extends LitElement {
+  static override styles = css`
     :host {
       display: block;
       padding: 1rem;
@@ -225,7 +225,7 @@ export class APIForm extends LitElement {
     }
   }
 
-  render() {
+  protected override render() {
     return html`
       <form
         @submit=${this.handleSubmit}

@@ -7,7 +7,7 @@ export class ErrorBoundary extends LitElement {
     @property({ type: String }) fallbackMessage = 'Something went wrong';
     @property({ type: Boolean }) showDetails = false;
 
-    static styles = css`
+    static override styles = css`
         .error-boundary {
             @apply p-4 border border-red-300 rounded-md bg-red-50;
         }
@@ -34,7 +34,7 @@ export class ErrorBoundary extends LitElement {
         }));
     }
 
-    render() {
+    override render() {
         if (this.error) {
             return html`
                 <div class="error-boundary" role="alert">
@@ -42,7 +42,7 @@ export class ErrorBoundary extends LitElement {
                     ${this.showDetails ? html`
                         <pre class="error-details">${this.error.stack}</pre>
                     ` : ''}
-                    <button 
+                    <button
                         class="retry-button"
                         @click=${this.retry}
                         aria-label="Retry operation"
@@ -60,4 +60,4 @@ export class ErrorBoundary extends LitElement {
         this.requestUpdate();
         this.dispatchEvent(new CustomEvent('retry'));
     }
-} 
+}

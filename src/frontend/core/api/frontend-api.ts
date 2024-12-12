@@ -3,12 +3,14 @@ import { InterceptorManager, RequestInterceptor, ResponseInterceptor } from './i
 import { AuthInterceptor } from './interceptors/auth';
 import { getConfig } from './config';
 import { parseQueryParams } from './utils/transforms';
+import { APICache } from './utils/cache';
 
 export class FrontendAPI {
   private static instance: FrontendAPI;
   private baseURL: string;
   private defaultConfig: RequestConfig;
   private interceptors: InterceptorManager;
+  private cache: APICache;
 
   private constructor() {
     const config = getConfig();
@@ -19,6 +21,7 @@ export class FrontendAPI {
       timeout: config.timeout,
     };
     this.interceptors = new InterceptorManager();
+    this.cache = APICache.getInstance();
 
     // Register default interceptors
     this.interceptors.addRequestInterceptor(AuthInterceptor.getInstance());
@@ -39,6 +42,15 @@ export class FrontendAPI {
     data?: unknown
   ): Promise<APIResponse<T>> {
     const url = new URL(endpoint, this.baseURL);
+    const cacheKey = `${method}:${url.toString()}`;
+
+    // Check cache for GET requests
+    if (method === 'GET') {
+      const cachedResponse = this.cache.get<T>(cacheKey);
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+    }
 
     // Add query parameters if they exist
     if (config?.query) {
@@ -86,6 +98,17 @@ export class FrontendAPI {
         status: response.status,
         headers: response.headers,
       };
+
+      // Cache the response if it's a GET request and has cache-control header
+      if (method === 'GET') {
+        const cacheControl = response.headers.get('cache-control');
+        if (cacheControl) {
+          const maxAge = parseInt(cacheControl.match(/max-age=(\d+)/)?.[1] || '0', 10);
+          if (maxAge > 0) {
+            this.cache.set(cacheKey, apiResponse, maxAge * 1000);
+          }
+        }
+      }
 
       // Run response interceptors
       return this.interceptors.runResponseInterceptors(apiResponse);

@@ -2,11 +2,52 @@ import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import './Sparkline';
 
+/**
+ * Represents a single data point in the metric history
+ */
 interface MetricHistory {
   value: number;
   timestamp: Date;
 }
 
+/**
+ * System metric card component for displaying metric values with history
+ *
+ * @remarks
+ * Displays a metric with its current value, trend indicator, and historical
+ * data visualization using a sparkline. Supports various units and states.
+ *
+ * @example
+ * ```html
+ * <system-metric-card
+ *   label="CPU Usage"
+ *   value="45"
+ *   unit="%"
+ *   .history=${[
+ *     { value: 42, timestamp: new Date('2024-01-01') },
+ *     { value: 45, timestamp: new Date('2024-01-02') }
+ *   ]}
+ * >
+ *   <span slot="subtitle">System Load</span>
+ * </system-metric-card>
+ * ```
+ *
+ * @csspart metric-card - The main card container
+ * @csspart metric-content - The content wrapper
+ * @csspart metric-header - The header section with label and status
+ * @csspart metric-value - The main value display
+ * @csspart sparkline-container - The container for the sparkline
+ *
+ * @slot subtitle - Optional subtitle content below the metric value
+ *
+ * @cssprop --system-radius-lg - Border radius for the card
+ * @cssprop --system-spacing-6 - Padding for the card
+ * @cssprop --system-font-size-2xl - Font size for the metric value
+ * @cssprop --color-accent - Color for the metric value
+ * @cssprop --color-text-secondary - Color for labels and subtitles
+ *
+ * @category Metrics
+ */
 @customElement('system-metric-card')
 export class MetricCard extends LitElement {
   static override styles = css`
@@ -112,21 +153,51 @@ export class MetricCard extends LitElement {
     }
   `;
 
+  /**
+   * Label text for the metric
+   * @type {string}
+   * @default ''
+   */
   @property({ type: String })
   label = '';
 
+  /**
+   * Current value of the metric
+   * @type {number}
+   * @default 0
+   */
   @property({ type: Number })
   value = 0;
 
+  /**
+   * Unit of measurement (e.g., '%', 'MB', 'ms')
+   * @type {string}
+   * @default ''
+   */
   @property({ type: String })
   unit = '';
 
+  /**
+   * Whether the metric card is disabled
+   * @type {boolean}
+   * @default false
+   */
   @property({ type: Boolean, reflect: true })
   disabled = false;
 
+  /**
+   * Historical data points for the metric
+   * @type {MetricHistory[]}
+   * @default []
+   */
   @property({ attribute: false })
   history: MetricHistory[] = [];
 
+  /**
+   * Calculates the trend direction based on historical data
+   * @returns {'up' | 'down' | 'neutral'} The trend direction
+   * @private
+   */
   private getTrend(): 'up' | 'down' | 'neutral' {
     if (this.history.length < 2) return 'neutral';
     const last = this.history[this.history.length - 1].value;
@@ -134,6 +205,10 @@ export class MetricCard extends LitElement {
     return last > prev ? 'up' : last < prev ? 'down' : 'neutral';
   }
 
+  /**
+   * Renders the metric card component
+   * @returns The metric card template with current value and trend
+   */
   protected override render() {
     const trend = this.getTrend();
 

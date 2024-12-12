@@ -30,14 +30,14 @@ async function generateComponentDocs() {
 
     for (const file of files) {
         if (file.endsWith('.ts') && !file.endsWith('.test.ts')) {
-            const sourceFile = ts.createSourceFile(
+            const _sourceFile = ts.createSourceFile(
                 file,
                 await fs.readFile(path.join(componentsDir, file), 'utf8'),
                 ts.ScriptTarget.Latest,
                 true
             );
 
-            const componentDoc = parseComponentFile(sourceFile);
+            const componentDoc = parseComponentFile(_sourceFile);
             if (componentDoc) {
                 docs.push(componentDoc);
                 await generateMarkdown(componentDoc);
@@ -51,7 +51,36 @@ async function generateComponentDocs() {
 function parseComponentFile(sourceFile: ts.SourceFile): ComponentDoc | null {
     // Implementation of TypeScript AST parsing
     // Extract class decorators, properties, methods, and JSDoc comments
-    return null;
+    const classNodes = sourceFile.statements.filter(ts.isClassDeclaration);
+    if (classNodes.length === 0) return null;
+
+    const classNode = classNodes[0];
+    const className = classNode.name?.text || 'UnnamedComponent';
+
+    return {
+        name: className,
+        description: getClassDescription(classNode),
+        properties: getClassProperties(classNode),
+        events: getClassEvents(classNode),
+        examples: getClassExamples(classNode)
+    };
+}
+
+function getClassDescription(_node: ts.ClassDeclaration): string {
+    // Extract JSDoc comment
+    return '';
+}
+
+function getClassProperties(_node: ts.ClassDeclaration): PropertyDoc[] {
+    return [];
+}
+
+function getClassEvents(_node: ts.ClassDeclaration): EventDoc[] {
+    return [];
+}
+
+function getClassExamples(_node: ts.ClassDeclaration): string[] {
+    return [];
 }
 
 async function generateMarkdown(doc: ComponentDoc): Promise<void> {
@@ -102,4 +131,4 @@ ${docs.map(doc => `- [${doc.name}](./${doc.name}.md)`).join('\n')}
     );
 }
 
-generateComponentDocs().catch(console.error); 
+generateComponentDocs().catch(console.error);

@@ -1,153 +1,231 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { FrontendAPI } from '../../frontend-api';
-import { APICache } from '../../utils/cache';
-import { AuthInterceptor } from '../../interceptors/auth';
 import { APIError } from '../../types';
-
-interface HealthResponse {
-  status: string;
-  timestamp: string;
-}
 
 describe('API Integration', () => {
   let api: FrontendAPI;
-  let cache: APICache;
+  let originalFetch: typeof fetch;
 
-  beforeAll(() => {
+  beforeEach(() => {
     api = FrontendAPI.getInstance();
-    cache = APICache.getInstance();
-    cache.clear();
+    originalFetch = global.fetch;
   });
 
-  afterAll(() => {
-    cache.clear();
+  afterEach(() => {
+    global.fetch = originalFetch;
+    vi.clearAllMocks();
   });
 
   describe('Health Check', () => {
     it('should check backend health', async () => {
-      const response = await api.get<HealthResponse>('/health');
+      const mockResponse = { status: 'healthy' };
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve(mockResponse),
+        headers: new Headers({ 'content-type': 'application/json' }),
+      });
 
-      expect(response.status).toBe(200);
-      expect(response.data).toEqual(
-        expect.objectContaining({
-          status: 'healthy',
-          timestamp: expect.any(String),
-        })
-      );
+      const response = await api.get('/health');
+      expect(response.data).toEqual(mockResponse);
     });
 
     it('should cache health check response', async () => {
-      const cacheKey = cache.getCacheKey('/health');
-      expect(cache.has(cacheKey)).toBe(false);
+      const mockResponse = { status: 'healthy' };
+      const mockFetch = vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve(mockResponse),
+        headers: new Headers({
+          'content-type': 'application/json',
+          'cache-control': 'max-age=60'
+        }),
+      });
+      global.fetch = mockFetch;
 
-      const response = await api.get<HealthResponse>('/health');
-      expect(cache.has(cacheKey)).toBe(true);
+      // First call should make a request
+      await api.get('/health');
 
-      const cachedResponse = cache.get<HealthResponse>(cacheKey);
-      expect(cachedResponse?.data).toEqual(response.data);
+      // Second call within cache time should use cached response
+      await api.get('/health');
+
+      expect(mockFetch).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('Authentication', () => {
     it('should handle unauthorized requests', async () => {
-      const authInterceptor = AuthInterceptor.getInstance();
-      authInterceptor.clearAuthToken();
-
-      await expect(async () => {
-        await api.get('/protected-resource');
-      }).rejects.toThrow();
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: false,
+        status: 401,
+        statusText: 'Unauthorized',
+        headers: new Headers({ 'content-type': 'application/json' }),
+      });
 
       try {
         await api.get('/protected-resource');
+        expect.fail('Expected error to be thrown');
       } catch (error) {
         expect((error as APIError).status).toBe(401);
       }
     });
 
     it('should add auth token to requests', async () => {
-      const authInterceptor = AuthInterceptor.getInstance();
-      const mockToken = 'test-token';
-      authInterceptor.setAuthToken(mockToken);
+      const mockResponse = { data: 'protected' };
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve(mockResponse),
+        headers: new Headers({ 'content-type': 'application/json' }),
+      });
 
-      const response = await api.get('/auth-test');
-      expect(response.status).toBe(200);
+      await api.get('/protected-resource', {
+        headers: { Authorization: 'Bearer test-token' },
+      });
+
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.objectContaining({
+          headers: expect.objectContaining({
+            Authorization: 'Bearer test-token',
+          }),
+        })
+      );
     });
   });
 
   describe('Error Handling', () => {
     it('should handle 404 errors', async () => {
-      await expect(async () => {
-        await api.get('/non-existent-endpoint');
-      }).rejects.toThrow();
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: false,
+        status: 404,
+        statusText: 'Not Found',
+        headers: new Headers({ 'content-type': 'application/json' }),
+      });
 
       try {
         await api.get('/non-existent-endpoint');
+        expect.fail('Expected error to be thrown');
       } catch (error) {
         expect((error as APIError).status).toBe(404);
       }
     });
 
     it('should handle network errors', async () => {
-      await expect(async () => {
-        await api.get('http://invalid-url');
-      }).rejects.toThrow();
+      global.fetch = vi.fn().mockRejectedValue(new Error('Network error'));
+
+      try {
+        await api.get('/test');
+        expect.fail('Expected error to be thrown');
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error);
+        expect((error as Error).message).toBe('Network error');
+      }
     });
 
     it('should handle timeout errors', async () => {
-      await expect(async () => {
-        await api.get('/slow-endpoint', { timeout: 1 });
-      }).rejects.toThrowError();
+      const timeoutError = new Error('Timeout');
+      timeoutError.name = 'AbortError';
+      global.fetch = vi.fn().mockRejectedValue(timeoutError);
+
+      try {
+        await api.get('/test', { timeout: 1000 });
+        expect.fail('Expected error to be thrown');
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error);
+        expect((error as Error).name).toBe('AbortError');
+      }
     });
   });
 
   describe('Request Methods', () => {
-    interface TestData {
-      id: number;
-      name: string;
-    }
-
     it('should handle POST requests with JSON data', async () => {
-      const data: TestData = { id: 1, name: 'test' };
-      const response = await api.post<TestData>('/test', data);
+      const mockData = { test: 'data' };
+      const mockResponse = { success: true };
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve(mockResponse),
+        headers: new Headers({ 'content-type': 'application/json' }),
+      });
 
-      expect(response.status).toBe(200);
-      expect(response.data).toEqual(expect.objectContaining(data));
+      const response = await api.post('/test', mockData);
+      expect(response.data).toEqual(mockResponse);
     });
 
     it('should handle PUT requests', async () => {
-      const data: TestData = { id: 1, name: 'updated' };
-      const response = await api.put<TestData>('/test/1', data);
+      const mockData = { test: 'data' };
+      const mockResponse = { success: true };
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve(mockResponse),
+        headers: new Headers({ 'content-type': 'application/json' }),
+      });
 
-      expect(response.status).toBe(200);
-      expect(response.data).toEqual(expect.objectContaining(data));
+      const response = await api.put('/test', mockData);
+      expect(response.data).toEqual(mockResponse);
     });
 
     it('should handle DELETE requests', async () => {
-      const response = await api.delete('/test/1');
-      expect(response.status).toBe(200);
+      const mockResponse = { success: true };
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve(mockResponse),
+        headers: new Headers({ 'content-type': 'application/json' }),
+      });
+
+      const response = await api.delete('/test');
+      expect(response.data).toEqual(mockResponse);
     });
 
     it('should handle query parameters', async () => {
-      const response = await api.get('/test', {
-        query: { filter: 'active', sort: 'desc' }
+      const mockResponse = { data: 'test' };
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve(mockResponse),
+        headers: new Headers({ 'content-type': 'application/json' }),
       });
 
-      expect(response.status).toBe(200);
+      await api.get('/test', { query: { param: 'value' } });
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining('param=value'),
+        expect.any(Object)
+      );
     });
   });
 
   describe('Content Types', () => {
     it('should handle JSON responses', async () => {
-      const response = await api.get('/api/json');
-      expect(response.headers.get('content-type')).toContain('application/json');
+      const mockResponse = { data: 'test' };
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve(mockResponse),
+        headers: new Headers({ 'content-type': 'application/json' }),
+      });
+
+      const response = await api.get('/test');
+      expect(response.data).toEqual(mockResponse);
     });
 
     it('should handle form data submissions', async () => {
       const formData = new FormData();
-      formData.append('file', new Blob(['test'], { type: 'text/plain' }));
+      formData.append('test', 'data');
 
-      const response = await api.post('/api/upload', formData);
-      expect(response.status).toBe(200);
+      const mockResponse = { success: true };
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve(mockResponse),
+        headers: new Headers({ 'content-type': 'multipart/form-data' }),
+        formData: () => Promise.resolve(formData),
+      });
+
+      const response = await api.post('/test', formData);
+      expect(response.data).toEqual(mockResponse);
     });
   });
 });

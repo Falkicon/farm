@@ -1,6 +1,29 @@
 import { LitElement, html, css } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
+/**
+ * Main navigation component for the application
+ *
+ * @remarks
+ * Provides the primary navigation menu with links to major sections of the application.
+ * Uses CSS custom properties for theming and consistent styling.
+ *
+ * @example
+ * ```html
+ * <main-nav></main-nav>
+ * ```
+ *
+ * @csspart nav - The navigation container
+ * @csspart ul - The navigation list
+ *
+ * @cssprop --surface-color - Background color of the navigation
+ * @cssprop --border-color - Color of the bottom border
+ * @cssprop --text-color - Color of the navigation links
+ * @cssprop --hover-color - Background color of links on hover
+ * @cssprop --primary-color - Color for active links
+ *
+ * @category Navigation
+ */
 @customElement('main-nav')
 export class MainNav extends LitElement {
     static override styles = css`
@@ -37,6 +60,10 @@ export class MainNav extends LitElement {
     }
   `;
 
+    /**
+     * Renders the navigation component
+     * @returns The navigation template with home and system links
+     */
     protected override render() {
         return html`
       <nav>

@@ -23,7 +23,7 @@ interface TableResponse {
 
 @customElement('data-table')
 export class DataTable extends LitElement {
-  static styles = css`
+  static override styles = css`
     :host {
       display: block;
       padding: 1rem;
@@ -97,7 +97,7 @@ export class DataTable extends LitElement {
 
   private api = FrontendAPI.getInstance();
 
-  async connectedCallback() {
+  override async connectedCallback() {
     super.connectedCallback();
     await this.loadData();
   }
@@ -132,7 +132,7 @@ export class DataTable extends LitElement {
     await this.loadData();
   }
 
-  render() {
+  protected override render() {
     return html`
       ${this.error ? html`<div class="error">${this.error}</div>` : ''}
 

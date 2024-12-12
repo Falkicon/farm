@@ -60,7 +60,7 @@ async function killProcessOnPort(port) {
                         execSync(`taskkill /F /PID ${pid}`, { stdio: 'inherit' });
                     }
                 }
-            } catch (error) {
+            } catch {
                 console.log(`[WARN] Could not terminate process on port ${port} gracefully`);
             }
         } else {
@@ -76,7 +76,7 @@ async function killProcessOnPort(port) {
                 if (await isPortInUse(port)) {
                     execSync(`lsof -ti:${port} | xargs -r kill -9`, { stdio: 'inherit' });
                 }
-            } catch (error) {
+            } catch {
                 console.log(`[WARN] Could not terminate process on port ${port}`);
             }
         }
@@ -104,7 +104,7 @@ Promise.all(ports.map(killProcessOnPort))
         console.log('[DONE] Port check complete');
         process.exit(0);
     })
-    .catch(error => {
-        console.warn('[WARN] Error during port check:', error);
-        process.exit(0); // Exit with success to not break the startup
+    .catch(() => {
+        console.log('[ERROR] Failed to check or kill ports');
+        process.exit(1);
     });

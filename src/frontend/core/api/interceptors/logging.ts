@@ -2,24 +2,49 @@ import * as Sentry from '@sentry/browser';
 import { RequestInterceptor, ResponseInterceptor } from './index';
 import { RequestConfig, APIResponse } from '../types';
 
-// Add Sentry types until package is installed
-declare module '@sentry/browser' {
-  export function init(config: any): void;
-  export function startTransaction(config: { name: string; op: string }): any;
-  export function captureException(error: Error): void;
+/**
+ * Extended request config with Sentry transaction
+ */
+interface RequestConfigWithSentry extends RequestConfig {
+  __sentry_transaction?: Sentry.Transaction;
+}
+
+/**
+ * Extended API response with Sentry transaction
+ */
+interface APIResponseWithSentry<T> extends APIResponse<T> {
+  __sentry_transaction?: Sentry.Transaction;
 }
 
 export class LoggingInterceptor implements RequestInterceptor, ResponseInterceptor {
   private static instance: LoggingInterceptor;
+  private initialized = false;
 
   private constructor() {
-    // Initialize Sentry if not in development
-    if (import.meta.env.PROD) {
+    this.initializeSentry();
+  }
+
+  private initializeSentry(): void {
+    // Only initialize once and only in production
+    if (this.initialized || !import.meta.env.PROD) {
+      return;
+    }
+
+    const dsn = import.meta.env.VITE_SENTRY_DSN;
+    if (!dsn) {
+      console.warn('Sentry DSN not provided. Error tracking disabled.');
+      return;
+    }
+
+    try {
       Sentry.init({
-        dsn: import.meta.env.VITE_SENTRY_DSN,
-        environment: import.meta.env.MODE,
+        dsn,
+        environment: import.meta.env.MODE || 'production',
         tracesSampleRate: 1.0,
       });
+      this.initialized = true;
+    } catch (error) {
+      console.error('Failed to initialize Sentry:', error);
     }
   }
 
@@ -30,61 +55,73 @@ export class LoggingInterceptor implements RequestInterceptor, ResponseIntercept
     return LoggingInterceptor.instance;
   }
 
-  private logRequest(config: RequestConfig): void {
-    const transaction = Sentry.startTransaction({
-      name: `HTTP ${config.method || 'GET'}`,
-      op: 'http.request',
-    });
+  private logRequest(config: RequestConfigWithSentry): void {
+    if (this.initialized) {
+      const transaction = Sentry.startTransaction({
+        name: `HTTP ${config.method || 'GET'}`,
+        op: 'http.request',
+      });
+      config.__sentry_transaction = transaction;
+    }
 
-    // Add transaction to config for later use
-    (config as any).__sentry_transaction = transaction;
-
-    console.debug('API Request:', {
-      endpoint: config.endpoint,
-      method: config.method,
-      headers: config.headers,
-      timestamp: new Date().toISOString(),
-    });
+    // Always log to console in development
+    if (import.meta.env.DEV) {
+      console.debug('API Request:', {
+        endpoint: config.endpoint,
+        method: config.method,
+        headers: config.headers,
+        timestamp: new Date().toISOString(),
+      });
+    }
   }
 
-  private logResponse<T>(response: APIResponse<T>): void {
-    console.debug('API Response:', {
-      status: response.status,
-      headers: Object.fromEntries(response.headers.entries()),
-      timestamp: new Date().toISOString(),
-    });
+  private logResponse<T>(response: APIResponseWithSentry<T>): void {
+    // Always log to console in development
+    if (import.meta.env.DEV) {
+      console.debug('API Response:', {
+        status: response.status,
+        headers: Object.fromEntries(response.headers.entries()),
+        timestamp: new Date().toISOString(),
+      });
+    }
   }
 
   private logError(error: Error): void {
-    console.error('API Error:', {
+    const errorDetails = {
       message: error.message,
       stack: error.stack,
       timestamp: new Date().toISOString(),
-    });
+    };
 
-    if (import.meta.env.PROD) {
+    // Always log to console in development
+    if (import.meta.env.DEV) {
+      console.error('API Error:', errorDetails);
+    }
+
+    // Log to Sentry in production if initialized
+    if (this.initialized && import.meta.env.PROD) {
       Sentry.captureException(error);
     }
   }
 
   async onRequest(config: RequestConfig): Promise<RequestConfig> {
-    this.logRequest(config);
+    this.logRequest(config as RequestConfigWithSentry);
     return config;
   }
 
-  async onRequestError(error: Error): Promise<Error> {
+  async onRequestError(error: Error): Promise<never> {
     this.logError(error);
     throw error;
   }
 
   async onResponse<T>(response: APIResponse<T>): Promise<APIResponse<T>> {
-    this.logResponse(response);
+    this.logResponse(response as APIResponseWithSentry<T>);
 
     // Finish Sentry transaction if it exists
-    const transaction = (response as any).__sentry_transaction;
-    if (transaction) {
-      transaction.finish();
-      delete (response as any).__sentry_transaction;
+    const typedResponse = response as APIResponseWithSentry<T>;
+    if (typedResponse.__sentry_transaction) {
+      typedResponse.__sentry_transaction.finish();
+      delete typedResponse.__sentry_transaction;
     }
 
     return response;

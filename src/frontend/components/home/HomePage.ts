@@ -1,8 +1,33 @@
 import { LitElement, html, css } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
+/**
+ * Home page component for the application's landing page
+ *
+ * @remarks
+ * This component provides the main entry point for users and displays
+ * key features of the application in a responsive grid layout.
+ *
+ * @example
+ * ```html
+ * <home-page></home-page>
+ * ```
+ *
+ * @csspart hero - The hero section container
+ * @csspart features - The features grid container
+ * @csspart feature-card - Individual feature card
+ *
+ * @slot - Default slot for additional content
+ *
+ * @category Pages
+ */
 @customElement('home-page')
 export class HomePage extends LitElement {
+    /**
+     * CSS styles for the component
+     * @remarks
+     * Uses system-wide CSS custom properties for consistent theming
+     */
     static override styles = css`
         :host {
             display: block;
@@ -134,6 +159,10 @@ export class HomePage extends LitElement {
         }
     `;
 
+    /**
+     * Renders the component's template
+     * @returns The component's template
+     */
     protected override render() {
         return html`
             <div class="container">

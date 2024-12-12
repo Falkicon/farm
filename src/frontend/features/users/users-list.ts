@@ -18,7 +18,7 @@ export class UsersList extends LitElement {
     pageSize: 10,
   };
 
-  render() {
+  override render() {
     return html`
       <h1>Users</h1>
       <data-table .config=${this.tableConfig}></data-table>

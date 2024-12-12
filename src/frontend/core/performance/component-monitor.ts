@@ -1,16 +1,35 @@
 import { LitElement } from 'lit';
 
-interface ComponentMetrics {
+/**
+ * Metrics collected for component performance monitoring
+ */
+export interface ComponentMetrics {
     renderTime: number;
     firstPaint: number;
     memoryUsage?: number;
     elementCount?: number;
 }
 
+/**
+ * Return type for the monitoring instance
+ */
+export interface MonitorInstance {
+    end: () => ComponentMetrics;
+}
+
+/**
+ * Monitors component performance and collects metrics
+ * @category Performance
+ */
 export class ComponentMonitor {
     private static metrics = new Map<string, ComponentMetrics[]>();
 
-    static startMonitoring(component: LitElement) {
+    /**
+     * Starts monitoring a component's performance
+     * @param component - The component to monitor
+     * @returns A monitoring instance with an end method
+     */
+    static startMonitoring(component: LitElement): MonitorInstance {
         const start = performance.now();
         const name = component.constructor.name;
 
@@ -37,11 +56,19 @@ export class ComponentMonitor {
         };
     }
 
+    /**
+     * Gets metrics for a specific component
+     * @param componentName - Name of the component
+     * @returns Array of collected metrics
+     */
     static getMetrics(componentName: string): ComponentMetrics[] {
         return this.metrics.get(componentName) || [];
     }
 
+    /**
+     * Clears all collected metrics
+     */
     static clearMetrics(): void {
         this.metrics.clear();
     }
-} 
+}

@@ -1,4 +1,4 @@
-import { APIError } from '../types';
+import { APIError, QueryParams } from '../types/index';
 
 export function isAPIError(error: unknown): error is APIError {
   return error instanceof Error && 'status' in error;
@@ -17,9 +17,10 @@ export function createAPIError(
   return error;
 }
 
-export function parseQueryParams(params: Record<string, unknown>): string {
-  const searchParams = new URLSearchParams();
+export function parseQueryParams(params: QueryParams): string {
+  if (!params) return '';
 
+  const searchParams = new URLSearchParams();
   Object.entries(params).forEach(([key, value]) => {
     if (value !== undefined && value !== null) {
       if (Array.isArray(value)) {
@@ -31,7 +32,6 @@ export function parseQueryParams(params: Record<string, unknown>): string {
       }
     }
   });
-
   return searchParams.toString();
 }
 
@@ -51,20 +51,34 @@ export function formatRequestBody(data: unknown): string | FormData | undefined 
   return String(data);
 }
 
-export function parseResponseData<T>(response: Response): Promise<T> {
+export async function parseResponseData(response: Response): Promise<unknown> {
   const contentType = response.headers.get('content-type');
 
-  if (contentType?.includes('application/json')) {
-    return response.json();
+  if (!contentType) {
+    return null;
   }
 
-  if (contentType?.includes('text/')) {
-    return response.text() as Promise<T>;
-  }
+  try {
+    if (contentType.includes('application/json')) {
+      return await response.json();
+    }
 
-  if (contentType?.includes('multipart/form-data')) {
-    return response.formData() as Promise<T>;
-  }
+    if (contentType.includes('text/')) {
+      return await response.text();
+    }
 
-  return response.blob() as Promise<T>;
+    if (contentType.includes('multipart/form-data')) {
+      return await response.formData();
+    }
+
+    // Default to text for unknown content types
+    return await response.text();
+  } catch (error) {
+    console.error('Failed to parse response:', error);
+    throw createAPIError(
+      'Failed to parse response data',
+      response.status,
+      'PARSE_ERROR'
+    );
+  }
 }
