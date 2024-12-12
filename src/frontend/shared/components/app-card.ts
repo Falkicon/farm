@@ -6,7 +6,7 @@ import { customElement } from 'lit/decorators.js';
  *
  * @remarks
  * Provides a styled card container with consistent padding, background,
- * and shadow effects. Uses Tailwind CSS classes for styling.
+ * and shadow effects.
  *
  * @example
  * ```html
@@ -27,9 +27,6 @@ export class AppCard extends LitElement {
         :host {
             display: block;
         }
-        .card {
-            @apply bg-white rounded-lg shadow-md p-6 mb-6;
-        }
     `;
 
     /**
@@ -38,7 +35,17 @@ export class AppCard extends LitElement {
      */
     protected override render() {
         return html`
-            <div class="card">
+            <div
+                class="card"
+                part="card"
+                style="
+                    background-color: rgb(255, 255, 255);
+                    border-radius: 0.5rem;
+                    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+                    padding: 1.5rem;
+                    margin-bottom: 1.5rem;
+                "
+            >
                 <slot></slot>
             </div>
         `;

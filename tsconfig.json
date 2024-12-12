@@ -24,6 +24,8 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitOverride": true,
     "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "plugins": [
       {
         "name": "ts-lit-plugin",
@@ -33,7 +35,8 @@
   },
   "include": [
     "src/**/*.ts",
-    "src/**/*.d.ts"
+    "src/**/*.d.ts",
+    "package.json"
   ],
   "exclude": [
     "node_modules",

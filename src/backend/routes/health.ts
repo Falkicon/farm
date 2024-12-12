@@ -1,6 +1,9 @@
 import { FastifyInstance } from 'fastify';
-import { version } from '../../../package.json';
 import { cpus } from 'os';
+
+// Get version from package.json
+const packageJson = await import('../../../package.json', { assert: { type: 'json' } });
+const { version } = packageJson.default;
 
 /**
  * Health status response interface for the /health endpoint.

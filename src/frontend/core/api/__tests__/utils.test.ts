@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, beforeEach, expect } from 'vitest';
 import {
   isAPIError,
   createAPIError,
@@ -7,7 +7,7 @@ import {
   parseResponseData,
 } from '../utils/transforms';
 import { APICache } from '../utils/cache';
-import { APIResponse } from '../types';
+import { APIResponse, QueryParams } from '../types';
 
 describe('API Utilities', () => {
   describe('Error Utilities', () => {
@@ -28,7 +28,7 @@ describe('API Utilities', () => {
 
   describe('Query Parameter Utilities', () => {
     it('should parse query parameters', () => {
-      const params: Record<string, unknown> = {
+      const params: QueryParams = {
         id: 1,
         name: 'test',
         tags: ['a', 'b'],
@@ -44,7 +44,7 @@ describe('API Utilities', () => {
     });
 
     it('should handle null and undefined values', () => {
-      const params: Record<string, unknown> = {
+      const params: QueryParams = {
         id: 1,
         name: null,
         description: undefined,
@@ -95,11 +95,26 @@ describe('API Utilities', () => {
     it('should handle form data response', async () => {
       const formData = new FormData();
       formData.append('test', 'data');
-      const response = new Response(formData, {
-        headers: { 'content-type': 'multipart/form-data' },
+
+      // Create a proper multipart form-data body
+      const boundary = '----WebKitFormBoundary7MA4YWxkTrZu0gW';
+      const body = [
+        `--${boundary}`,
+        'Content-Disposition: form-data; name="test"',
+        '',
+        'data',
+        `--${boundary}--`
+      ].join('\r\n');
+
+      const response = new Response(body, {
+        headers: {
+          'content-type': `multipart/form-data; boundary=${boundary}`
+        },
       });
-      const result = await parseResponseData(response);
-      expect(result).toBeInstanceOf(FormData);
+
+      const result = await parseResponseData(response) as FormData;
+      expect(result).toBeTruthy();
+      expect(result.get('test')).toBe('data');
     });
   });
 });

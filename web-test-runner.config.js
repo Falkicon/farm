@@ -5,6 +5,7 @@
 
 // Import the Playwright launcher which enables running tests in real browser environments
 import { playwrightLauncher } from '@web/test-runner-playwright';
+import { esbuildPlugin } from '@web/dev-server-esbuild';
 
 /**
  * @type {import('@web/test-runner').TestRunnerConfig}
@@ -60,7 +61,29 @@ export default {
              * Tests that take longer than this will fail
              * @type {string}
              */
-            timeout: '2000'
+            timeout: '2000',
+
+            rootHooks: {
+                beforeEach: ['import "@open-wc/testing"']
+            }
         }
-    }
+    },
+
+    plugins: [
+        esbuildPlugin({ ts: true })
+    ],
+
+    testRunnerHtml: testFramework => `
+        <html>
+            <head>
+                <script type="module">
+                    // Import test helpers
+                    import "@open-wc/testing";
+                </script>
+            </head>
+            <body>
+                <script type="module" src="${testFramework}"></script>
+            </body>
+        </html>
+    `
 };

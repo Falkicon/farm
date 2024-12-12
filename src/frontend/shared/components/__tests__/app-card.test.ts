@@ -17,9 +17,13 @@ describe('AppCard', () => {
 
     it('has correct styles', async () => {
         const el = await fixture<AppCard>(html`<app-card></app-card>`);
-        const card = el.shadowRoot?.querySelector('.card');
+        const card = el.shadowRoot?.querySelector('.card') as HTMLElement;
 
-        expect(getComputedStyle(card!).backgroundColor).to.equal('rgb(255, 255, 255)');
-        expect(getComputedStyle(card!).borderRadius).to.not.equal('0px');
+        // Check inline styles directly
+        const styles = card.getAttribute('style');
+        expect(styles).to.include('background-color: rgb(255, 255, 255)');
+        expect(styles).to.include('border-radius: 0.5rem');
+        expect(styles).to.include('padding: 1.5rem');
+        expect(styles).to.include('margin-bottom: 1.5rem');
     });
 });

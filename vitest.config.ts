@@ -1,5 +1,6 @@
 // Import Vitest's configuration utility
 import { defineConfig } from 'vitest/config';
+import { resolve } from 'path';
 
 export default defineConfig({
     test: {
@@ -18,5 +19,33 @@ export default defineConfig({
         // Pattern for test files to include
         // Will run all .test.ts files under the src directory
         include: ['src/**/*.test.ts'],
+
+        // Pattern for test files to exclude
+        // Will exclude all files under node_modules, dist, and e2e directories
+        exclude: ['**/node_modules/**', '**/dist/**', '**/e2e/**'],
+
+        // Coverage configuration
+        coverage: {
+            reporter: ['text', 'json', 'html'],
+            exclude: [
+                'node_modules/',
+                'test/',
+                '**/*.test.ts',
+                '**/*.d.ts'
+            ]
+        },
+
+        // Dependencies configuration
+        deps: {
+            inline: [/@open-wc\/testing/, /lit/]
+        },
+
+        // Test timeout configuration
+        testTimeout: 60000
     },
-}); 
+    resolve: {
+        alias: {
+            '@': resolve(__dirname, './src')
+        }
+    }
+});

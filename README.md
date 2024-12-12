@@ -8,14 +8,14 @@ Modern web application boilerplate with TypeScript, Lit, and Fastify.
 
 ## Features
 
-🚀 Fast and lightweight
-📦 Component-based architecture
-🔒 Type-safe end-to-end
-🎨 Modern UI with Tailwind CSS
-📝 Comprehensive documentation
-⚡ Hot module replacement
-🧪 Testing setup included
-🔍 TypeDoc API documentation
+- 🚀 Fast and lightweight
+- 📦 Component-based architecture
+- 🔒 Type-safe end-to-end
+- 🎨 Modern UI with Tailwind CSS
+- 📝 Comprehensive documentation
+- ⚡ Hot module replacement
+- 🧪 Testing setup included
+- 🔍 TypeDoc API documentation
 
 ## Quick Start
 

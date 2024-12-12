@@ -20,6 +20,14 @@ interface ValidationErrorDetail {
   expected?: unknown;
   /** Actual value received */
   received?: unknown;
+  /** Validation keyword */
+  keyword: string;
+  /** Instance path */
+  instancePath: string;
+  /** Schema path */
+  schemaPath: string;
+  /** Validation parameters */
+  params: Record<string, unknown>;
 }
 
 /**

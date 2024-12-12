@@ -1,5 +1,5 @@
 import { RequestInterceptor, ResponseInterceptor } from './index';
-import { RequestConfig, APIResponse, APIError } from '../types';
+import { RequestConfig, APIResponse } from '../types';
 
 interface RetryConfig {
   maxAttempts: number;
@@ -20,8 +20,8 @@ interface RequestConfigWithRetry extends RequestConfig {
  * Extended error with retry metadata
  */
 interface RetryableError extends Error {
-  __retry_original?: RequestConfig;
   status?: number;
+  __retry_original?: RequestConfig;
 }
 
 export class RetryInterceptor implements RequestInterceptor, ResponseInterceptor {
@@ -50,8 +50,8 @@ export class RetryInterceptor implements RequestInterceptor, ResponseInterceptor
       return false;
     }
 
-    if ('status' in error) {
-      return this.config.retryableStatuses.includes(error.status || 0);
+    if (error.status) {
+      return this.config.retryableStatuses.includes(error.status);
     }
 
     return error.name === 'AbortError' || error.name === 'TimeoutError';
@@ -85,11 +85,12 @@ export class RetryInterceptor implements RequestInterceptor, ResponseInterceptor
     return response;
   }
 
-  async onResponseError(error: Error, attempt = 0): Promise<never> {
+  async onResponseError(error: Error): Promise<Error> {
     const retryableError = error as RetryableError;
     const originalConfig = retryableError.__retry_original;
+    let attempt = 0;
 
-    if (originalConfig?.endpoint && this.shouldRetry(retryableError, attempt)) {
+    while (originalConfig?.endpoint && this.shouldRetry(retryableError, attempt)) {
       await this.delay(attempt);
 
       try {
@@ -100,20 +101,23 @@ export class RetryInterceptor implements RequestInterceptor, ResponseInterceptor
           body: originalConfig.body || null
         });
 
+        // Check response status before parsing JSON
         if (!response.ok) {
-          const apiError = new APIError(`HTTP error! status: ${response.status}`);
-          apiError.status = response.status;
+          const apiError = new Error(`HTTP error! status: ${response.status}`);
+          (apiError as RetryableError).status = response.status;
+          (apiError as RetryableError).__retry_original = originalConfig;
           throw apiError;
         }
 
-        const data = await response.json();
-        const successError = new APIError('Success after retry');
-        successError.status = response.status;
-        successError.data = data;
+        // Return success as error to maintain interface compatibility
+        const successError = new Error('Success after retry');
+        (successError as RetryableError).status = response.status;
         return successError;
       } catch (retryError) {
-        // Pass the attempt number for the next retry
-        return this.onResponseError(retryError as Error, attempt + 1);
+        attempt++;
+        if (attempt >= this.config.maxAttempts) {
+          throw retryError as Error;
+        }
       }
     }
 
