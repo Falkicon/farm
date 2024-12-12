@@ -1,5 +1,7 @@
 # FARM
 
+<img src="README-banner.png" alt="FARM - Full Stack • API-first • Reactive • Modern Web Platform" width="100%" />
+
 > ⚠️ **Alpha Status**: This project is currently in alpha. While the core features are functional, APIs and architecture may change significantly between versions. Use in production at your own risk.
 
 **F**ull Stack • **A**PI-first • **R**eactive • **M**odern Web Platform
