@@ -1,10 +1,8 @@
 # FARM
 
-<img src="README-banner.png" alt="FARM - Full Stack • API-first • Reactive • Modern Web Platform" width="100%" />
+**F**ull Stack • **A**PI-first • **R**eactive • **M**odern Web Platform
 
 > ⚠️ **Alpha Status**: This project is currently in alpha. While the core features are functional, APIs and architecture may change significantly between versions. Use in production at your own risk.
-
-**F**ull Stack • **A**PI-first • **R**eactive • **M**odern Web Platform
 
 <!-- Status -->
 [![Documentation](https://img.shields.io/badge/Documentation-passing-brightgreen.svg)](https://github.com/Falkicon/farm/actions/workflows/docs.yml)
@@ -30,6 +28,9 @@
 A production-ready full-stack TypeScript boilerplate combining Lit Web Components, Fastify, and modern web platform features. Built for developers who want a robust, scalable, and type-safe foundation for their web applications.
 
 <!-- [View Documentation](https://falkicon.github.io/farm/) -->
+
+
+<img src="README-banner.png" alt="FARM - Full Stack • API-first • Reactive • Modern Web Platform" width="100%" />
 
 ## Features
 
