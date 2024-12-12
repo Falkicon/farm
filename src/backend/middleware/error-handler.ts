@@ -6,6 +6,23 @@
 import { FastifyError, FastifyReply, FastifyRequest } from 'fastify';
 
 /**
+ * Validation error detail interface
+ * @category Error Handling
+ */
+interface ValidationErrorDetail {
+  /** Property that failed validation */
+  property: string;
+  /** Error message */
+  message: string;
+  /** Failed validation rule */
+  rule?: string;
+  /** Expected value or pattern */
+  expected?: unknown;
+  /** Actual value received */
+  received?: unknown;
+}
+
+/**
  * Extended error interface for custom error handling
  * @category Error Handling
  */
@@ -13,7 +30,7 @@ interface CustomError extends FastifyError {
   /** HTTP status code for the error */
   statusCode?: number;
   /** Validation error details */
-  validation?: any[];
+  validation?: ValidationErrorDetail[];
 }
 
 /**

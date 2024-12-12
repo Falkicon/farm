@@ -9,6 +9,21 @@ interface RetryConfig {
   retryableStatuses: number[];
 }
 
+/**
+ * Extended request config with retry metadata
+ */
+interface RequestConfigWithRetry extends RequestConfig {
+  __retry_original?: RequestConfig;
+}
+
+/**
+ * Extended error with retry metadata
+ */
+interface RetryableError extends Error {
+  __retry_original?: RequestConfig;
+  status?: number;
+}
+
 export class RetryInterceptor implements RequestInterceptor, ResponseInterceptor {
   private static instance: RetryInterceptor;
   private config: RetryConfig;
@@ -30,14 +45,13 @@ export class RetryInterceptor implements RequestInterceptor, ResponseInterceptor
     return RetryInterceptor.instance;
   }
 
-  private shouldRetry(error: Error, attempt: number): boolean {
+  private shouldRetry(error: RetryableError, attempt: number): boolean {
     if (attempt >= this.config.maxAttempts) {
       return false;
     }
 
-    if (error instanceof Error && 'status' in error) {
-      const status = (error as APIError).status;
-      return this.config.retryableStatuses.includes(status || 0);
+    if ('status' in error) {
+      return this.config.retryableStatuses.includes(error.status || 0);
     }
 
     return error.name === 'AbortError' || error.name === 'TimeoutError';
@@ -58,11 +72,12 @@ export class RetryInterceptor implements RequestInterceptor, ResponseInterceptor
 
   async onRequest(config: RequestConfig): Promise<RequestConfig> {
     // Store original request config for retries
-    (config as any).__retry_original = { ...config };
+    const configWithRetry = config as RequestConfigWithRetry;
+    configWithRetry.__retry_original = { ...config };
     return config;
   }
 
-  async onRequestError(error: Error): Promise<Error> {
+  async onRequestError(error: Error): Promise<never> {
     throw error;
   }
 
@@ -70,10 +85,11 @@ export class RetryInterceptor implements RequestInterceptor, ResponseInterceptor
     return response;
   }
 
-  async onResponseError(error: Error, attempt = 0): Promise<Error> {
-    const originalConfig = (error as any).__retry_original as RequestConfig;
+  async onResponseError(error: Error, attempt = 0): Promise<never> {
+    const retryableError = error as RetryableError;
+    const originalConfig = retryableError.__retry_original;
 
-    if (originalConfig?.endpoint && this.shouldRetry(error, attempt)) {
+    if (originalConfig?.endpoint && this.shouldRetry(retryableError, attempt)) {
       await this.delay(attempt);
 
       try {

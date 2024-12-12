@@ -1,4 +1,6 @@
 import { FastifyInstance } from 'fastify';
+import { version } from '../../../package.json';
+import { cpus } from 'os';
 
 /**
  * Health status response interface for the /health endpoint.
@@ -114,7 +116,7 @@ export async function healthRoutes(fastify: FastifyInstance) {
     const status: HealthStatus = {
       status: 'ok',
       timestamp: new Date().toISOString(),
-      version: '1.0.0',
+      version: version,
       environment: process.env.NODE_ENV || 'development',
       services: {
         database: {
@@ -142,7 +144,7 @@ export async function healthRoutes(fastify: FastifyInstance) {
         },
         cpu: {
           usage: process.cpuUsage().user / 1000000,
-          cores: require('os').cpus().length
+          cores: cpus().length
         },
         uptime: process.uptime()
       }

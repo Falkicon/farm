@@ -250,15 +250,13 @@ export async function registerAuthRoutes(fastify: FastifyInstance): Promise<void
 
     try {
       const decoded = jwt.verify(token, JWT_SECRET) as JWTPayload;
-      const newToken = jwt.sign(
-        { userId: decoded.userId, role: decoded.role, email: decoded.email },
-        JWT_SECRET,
-        { expiresIn: '1h' }
-      );
-
+      const newToken = jwt.sign(decoded, JWT_SECRET, { expiresIn: '1h' });
       return { token: newToken };
     } catch (error) {
-      throw { statusCode: 401, message: 'Invalid token' } as ErrorResponse;
+      throw {
+        statusCode: 401,
+        message: error instanceof Error ? error.message : 'Invalid token'
+      } as ErrorResponse;
     }
   });
 }

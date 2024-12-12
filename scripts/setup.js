@@ -41,7 +41,7 @@ function getNodeProcesses() {
                 pid !== parentPid &&
                 pid > 1000
             );
-    } catch (error) {
+    } catch {
         log('No Node.js processes found');
         return [];
     }
@@ -53,7 +53,7 @@ function killProcess(pid) {
         const cmd = isWindows ? `taskkill /F /PID ${pid}` : `kill -9 ${pid}`;
         execSync(cmd, { encoding: 'utf8' });
         log(`Process ${pid} stopped successfully`);
-    } catch (error) {
+    } catch {
         log(`Could not stop process ${pid}`);
     }
 }
@@ -73,7 +73,7 @@ function checkPort(port) {
         available = true;
 
         return available;
-    } catch (error) {
+    } catch {
         return false;
     }
 }
@@ -142,4 +142,4 @@ function setup() {
 }
 
 // Run setup
-setup(); 
+setup();
