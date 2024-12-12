@@ -1,3 +1,8 @@
+/**
+ * Authentication middleware implementation
+ * @module backend/middleware
+ */
+
 import { FastifyRequest } from 'fastify';
 import jwt from 'jsonwebtoken';
 
@@ -6,8 +11,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
 /**
  * JWT payload interface for decoded tokens
- * @group Authentication
- * @category Types
+ * @category Authentication
  */
 interface JWTPayload {
   /** User's unique identifier */
@@ -22,8 +26,7 @@ interface JWTPayload {
  * Authentication middleware for protecting routes
  * Verifies JWT tokens and adds user information to the request
  *
- * @group Authentication
- * @category Middleware
+ * @category Authentication
  *
  * @example
  * ```ts
@@ -90,8 +93,7 @@ export async function authenticate(request: FastifyRequest): Promise<void> {
  * Type declaration merging for Fastify request
  * Adds user property to request object
  *
- * @group Authentication
- * @category Types
+ * @category Authentication
  */
 declare module 'fastify' {
   interface FastifyRequest {

@@ -1,3 +1,9 @@
+/**
+ * @packageDocumentation
+ * Rate limiting middleware for API protection
+ * @module backend/middleware
+ */
+
 import { FastifyRequest, FastifyReply } from 'fastify';
 
 /**

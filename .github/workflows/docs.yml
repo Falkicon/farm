@@ -2,7 +2,7 @@ name: Documentation
 
 on:
   push:
-    branches: [ setup-jsdocs ]
+    branches: [ main ]
   workflow_dispatch:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
@@ -55,7 +55,7 @@ jobs:
       pages: write      # to deploy to Pages
       id-token: write   # to verify the deployment originates from an appropriate source
 
-    # Deploy to GitHub Pages environment
+    # Deploy to test environment for feature branch
     environment:
       name: github-pages
 

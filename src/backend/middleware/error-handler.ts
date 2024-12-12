@@ -1,9 +1,13 @@
+/**
+ * Error handling middleware implementation
+ * @module backend/middleware
+ */
+
 import { FastifyError, FastifyReply, FastifyRequest } from 'fastify';
 
 /**
  * Extended error interface for custom error handling
- * @group Error Handling
- * @category Types
+ * @category Error Handling
  */
 interface CustomError extends FastifyError {
   /** HTTP status code for the error */
@@ -16,8 +20,7 @@ interface CustomError extends FastifyError {
  * Global error handler middleware for consistent error responses
  * Handles validation errors, known errors, and unexpected errors
  *
- * @group Error Handling
- * @category Middleware
+ * @category Error Handling
  *
  * @example
  * ```ts

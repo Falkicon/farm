@@ -1,3 +1,9 @@
+/**
+ * @packageDocumentation
+ * Request validation middleware for enforcing API standards
+ * @module backend/middleware
+ */
+
 import { FastifyRequest } from 'fastify';
 
 /**
