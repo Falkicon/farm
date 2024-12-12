@@ -5,10 +5,10 @@
 **F**ull Stack • **A**PI-first • **R**eactive • **M**odern Web Platform
 
 [![Documentation Status](https://github.com/Falkicon/farm/actions/workflows/docs.yml/badge.svg)](https://github.com/Falkicon/farm/actions/workflows/docs.yml)
-[![Tests](https://img.shields.io/github/actions/workflow/status/Falkicon/farm/test.yml?branch=main)](https://github.com/Falkicon/farm/actions/workflows/test.yml)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/Falkicon/farm/build.yml?branch=main)](https://github.com/Falkicon/farm/actions/workflows/build.yml)
-[![E2E Tests](https://img.shields.io/github/actions/workflow/status/Falkicon/farm/e2e.yml?branch=main)](https://github.com/Falkicon/farm/actions/workflows/e2e.yml)
-[![CodeQL](https://img.shields.io/github/actions/workflow/status/Falkicon/farm/codeql.yml?branch=main)](https://github.com/Falkicon/farm/actions/workflows/codeql.yml)
+[![Tests](https://github.com/Falkicon/farm/workflows/test/badge.svg)](https://github.com/Falkicon/farm/actions/workflows/test.yml)
+[![Build](https://github.com/Falkicon/farm/workflows/build/badge.svg)](https://github.com/Falkicon/farm/actions/workflows/build.yml)
+[![E2E](https://github.com/Falkicon/farm/workflows/e2e/badge.svg)](https://github.com/Falkicon/farm/actions/workflows/e2e.yml)
+[![CodeQL](https://github.com/Falkicon/farm/workflows/codeql/badge.svg)](https://github.com/Falkicon/farm/actions/workflows/codeql.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![npm version](https://badge.fury.io/js/farm.svg)](https://badge.fury.io/js/farm)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue.svg)](https://www.typescriptlang.org/)
