@@ -45,7 +45,8 @@
     "db:seed": "prisma db seed",
     "kill-ports": "node scripts/kill-ports.js",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build -o storybook-static",
+    "serve-storybook": "serve storybook-static -p 6006"
   },
   "dependencies": {
     "@fastify/cors": "^10.0.1",

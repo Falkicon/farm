@@ -69,6 +69,7 @@ FARM comes with comprehensive documentation:
 - **[API Documentation](https://falkicon.github.io/farm/modules.html)** - Detailed API reference
 - **[Component Library](https://falkicon.github.io/farm/modules.html)** - UI component documentation
 - **[Architecture Guide](https://falkicon.github.io/farm/modules.html)** - System design and patterns
+- **[Storybook](http://localhost:6006)** - Interactive component development environment
 
 You can generate and serve the documentation locally:
 
@@ -76,8 +77,14 @@ You can generate and serve the documentation locally:
 # Generate and serve documentation
 npm run docs
 
-# Start Storybook for component development
+# Start Storybook development server (port 6006)
 npm run storybook
+
+# Build static Storybook site
+npm run build-storybook
+
+# Serve built Storybook (port 6006)
+npm run serve-storybook
 ```
 
 ## Development
@@ -85,6 +92,10 @@ npm run storybook
 FARM provides a comprehensive development environment:
 
 ```bash
+# Start development servers
+npm run dev          # Main app (port 3000)
+npm run storybook    # Storybook (port 6006)
+
 # Start development server with hot reload
 npm run dev
 
