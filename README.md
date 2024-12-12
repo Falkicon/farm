@@ -138,6 +138,69 @@ This project is designed to work consistently across all platforms:
 - Consistent formatting across platforms
 - Integrated terminal settings included
 
+## Platform-Specific Considerations
+
+### Windows (PowerShell)
+
+When running on Windows systems, consider the following best practices:
+
+- Suppress Node.js experimental warnings:
+```powershell
+$env:NODE_NO_WARNINGS = 1
+```
+
+- Handle npm output properly:
+```powershell
+$process = Start-Process -FilePath "npm" -ArgumentList "install" `
+    -NoNewWindow -PassThru -Wait `
+    -RedirectStandardOutput "output.log" `
+    -RedirectStandardError "error.log"
+
+if ($process.ExitCode -ne 0) {
+    $errorLog = Get-Content "error.log" -Raw
+    throw "Command failed with exit code $($process.ExitCode)`n$errorLog"
+}
+```
+
+- Clean up temporary files:
+```powershell
+try {
+    # Your code here
+}
+finally {
+    Remove-Item -ErrorAction SilentlyContinue "*.log"
+}
+```
+
+- Use proper string formatting:
+  - Use `$($variable)` for complex expressions
+  - Use backticks (\`) for line continuation
+  - Use here-strings for multiline text
+
+### Development Environment
+
+- Vite Configuration:
+  - No separate `@types/vite` package needed
+  - Path aliases in `vite.config.ts` should match `tsconfig.json`
+  - Use forward slashes in path configurations for cross-platform compatibility
+
+- TypeScript Configuration:
+  - Use `moduleResolution: "bundler"` for Vite projects
+  - Ensure path aliases are consistent across all config files
+  - Include necessary `types` array in tsconfig.json
+
+### Cross-Platform Compatibility
+
+- Use path separators appropriately:
+  - Configuration files: Always use forward slashes (/)
+  - Runtime path operations: Use `path.join()` or `path.resolve()`
+  - Scripts: Use platform-specific separators
+
+- Process execution:
+  - Windows: Use `Start-Process` with proper arguments
+  - Unix: Use direct command execution
+  - Consider using cross-platform npm scripts when possible
+
 ## Configuration Files
 
 - `.env` - Environment variables

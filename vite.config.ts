@@ -1,33 +1,82 @@
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig } from 'vite';
+import { resolve } from 'path';
 
-// Vite configuration using the defineConfig helper for better TypeScript support
-export default defineConfig(({ mode }) => {
-  // Load env files based on mode
-  const env = loadEnv(mode, process.cwd(), '');
-
-  return {
-    // Project root directory
-    root: '.',
-
-    // Build configuration
-    build: {
-      outDir: 'dist/frontend',
-    },
-
-    // Development server configuration
-    server: {
-      port: parseInt(env.VITE_DEV_SERVER_PORT || '3000'),
-      host: env.VITE_DEV_SERVER_HOST || 'localhost',
-    },
-
-    // Path resolution configuration
-    resolve: {
-      alias: {
-        '@': '/src'
+export default defineConfig(({ mode }) => ({
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, 'src'),
+      '@frontend': resolve(__dirname, 'src/frontend'),
+      '@backend': resolve(__dirname, 'src/backend')
+    }
+  },
+  css: {
+    devSourcemap: true,
+    modules: {
+      localsConvention: 'camelCase'
+    }
+  },
+  build: {
+    target: 'es2020',
+    minify: 'terser',
+    sourcemap: true,
+    outDir: 'dist',
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, 'index.html')
+      },
+      output: {
+        entryFileNames: '[name].js',
+        chunkFileNames: '[name]-[hash].js',
+        assetFileNames: '[name]-[hash][extname]',
+        manualChunks: {
+          lit: ['lit', 'lit/decorators.js'],
+        }
+      },
+      external: ['@backend/*']
+    }
+  },
+  server: {
+    port: 3000,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path
       }
-    },
-
-    // Environment variable configuration
-    envPrefix: 'VITE_', // Only expose VITE_ prefixed env variables to client
-  };
-});
+    }
+  },
+  optimizeDeps: {
+    exclude: ['@backend/*'],
+    esbuildOptions: {
+      target: 'es2020'
+    }
+  },
+  ssr: {
+    noExternal: true
+  },
+  esbuild: {
+    lineLimit: 80,
+    format: 'esm',
+    target: 'esnext',
+    charset: 'utf8',
+    legalComments: 'none',
+    minifyIdentifiers: false,
+    minifySyntax: false,
+    minifyWhitespace: false
+  },
+  define: {
+    'process.env.NODE_ENV': JSON.stringify(mode),
+    // Only enable Lit dev mode in development
+    ...(mode === 'development'
+      ? {
+          'globalThis.litIssuedWarnings': 'new Set()',
+          'window.litIssuedWarnings': 'new Set()'
+        }
+      : {
+          'globalThis.litIssuedWarnings': 'undefined',
+          'window.litIssuedWarnings': 'undefined'
+        }
+    )
+  }
+}));

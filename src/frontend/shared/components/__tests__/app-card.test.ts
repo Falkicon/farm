@@ -12,7 +12,7 @@ describe('AppCard', () => {
         `);
 
         expect(el.shadowRoot?.querySelector('.card')).to.exist;
-        expect(el).lightDom.to.equal('<h1>Test Content</h1>');
+        expect(el.innerHTML.trim()).to.equal('<h1>Test Content</h1>');
     });
 
     it('has correct styles', async () => {
@@ -22,4 +22,4 @@ describe('AppCard', () => {
         expect(getComputedStyle(card!).backgroundColor).to.equal('rgb(255, 255, 255)');
         expect(getComputedStyle(card!).borderRadius).to.not.equal('0px');
     });
-}); 
+});

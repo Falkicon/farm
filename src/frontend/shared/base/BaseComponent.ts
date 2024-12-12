@@ -26,7 +26,22 @@ export class BaseComponent extends LitElement {
             const focusableElements = this.shadowRoot?.querySelectorAll(
                 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
             );
-            // Implement focus trap if needed
+
+            if (focusableElements) {
+                const elements = Array.from(focusableElements);
+                if (elements.length > 0) {
+                    const firstElement = elements[0] as HTMLElement;
+                    const lastElement = elements[elements.length - 1] as HTMLElement;
+
+                    if (e.shiftKey && document.activeElement === firstElement) {
+                        lastElement.focus();
+                        e.preventDefault();
+                    } else if (!e.shiftKey && document.activeElement === lastElement) {
+                        firstElement.focus();
+                        e.preventDefault();
+                    }
+                }
+            }
         }
     }
 
@@ -43,4 +58,4 @@ export class BaseComponent extends LitElement {
         console.error('Component Error:', error, stack);
         this.dispatchCustomEvent('component-error', { error, stack });
     }
-} 
+}

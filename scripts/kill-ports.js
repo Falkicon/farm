@@ -34,25 +34,77 @@ async function killProcessOnPort(port) {
             return;
         }
 
-        const cmd = isWindows
-            ? `powershell -Command "Stop-Process -Id (Get-NetTCPConnection -LocalPort ${port}).OwningProcess -Force"`
-            : `lsof -ti:${port} | xargs -r kill -9`;
+        if (isWindows) {
+            try {
+                // First try graceful shutdown with PowerShell
+                const psCmd = `
+                    $process = Get-Process -Id (Get-NetTCPConnection -LocalPort ${port} -ErrorAction SilentlyContinue).OwningProcess -ErrorAction SilentlyContinue;
+                    if ($process) {
+                        $process | Stop-Process -Force;
+                        Write-Host "[INFO] Process on port ${port} terminated";
+                    } else {
+                        Write-Host "[INFO] No process found on port ${port}";
+                    }
+                `;
+                execSync(`powershell -Command "${psCmd}"`, { stdio: 'inherit' });
 
-        execSync(cmd, { stdio: 'pipe' });
-        console.log(`[SUCCESS] Cleared port ${port}`);
-    } catch (error) {
-        if (!error.message.includes('no process found') && !error.message.includes('not found')) {
-            console.error(`[ERROR] Failed to clear port ${port}:`, error.message);
+                // If port is still in use, try netstat and taskkill
+                if (await isPortInUse(port)) {
+                    const pid = execSync(`netstat -ano | findstr :${port} | findstr LISTENING`)
+                        .toString()
+                        .split(/\s+/)
+                        .filter(Boolean)
+                        .pop();
+
+                    if (pid) {
+                        execSync(`taskkill /F /PID ${pid}`, { stdio: 'inherit' });
+                    }
+                }
+            } catch (error) {
+                console.log(`[WARN] Could not terminate process on port ${port} gracefully`);
+            }
         } else {
-            console.log(`[INFO] No process found on port ${port}`);
+            try {
+                // Try SIGTERM first
+                execSync(`lsof -ti:${port} | xargs -r kill -15`, { stdio: 'inherit' });
+                console.log(`[INFO] Sent SIGTERM to process on port ${port}`);
+
+                // Give process time to shutdown gracefully
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
+                // Force kill if still running
+                if (await isPortInUse(port)) {
+                    execSync(`lsof -ti:${port} | xargs -r kill -9`, { stdio: 'inherit' });
+                }
+            } catch (error) {
+                console.log(`[WARN] Could not terminate process on port ${port}`);
+            }
         }
+
+        // Wait for port to be released
+        let retries = 5;
+        while (retries > 0 && await isPortInUse(port)) {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            retries--;
+        }
+
+        if (await isPortInUse(port)) {
+            console.warn(`[WARN] Port ${port} is still in use after multiple attempts`);
+        } else {
+            console.log(`[SUCCESS] Port ${port} is now available`);
+        }
+    } catch (error) {
+        console.warn(`[WARN] Error handling port ${port}:`, error.message);
     }
 }
 
 // Run checks and kill processes
 Promise.all(ports.map(killProcessOnPort))
-    .then(() => console.log('[DONE] Port check complete'))
+    .then(() => {
+        console.log('[DONE] Port check complete');
+        process.exit(0);
+    })
     .catch(error => {
-        console.error('[ERROR] Failed to check ports:', error);
-        process.exit(1);
+        console.warn('[WARN] Error during port check:', error);
+        process.exit(0); // Exit with success to not break the startup
     });
