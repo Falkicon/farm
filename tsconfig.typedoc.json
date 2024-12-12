@@ -1,0 +1,26 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "skipLibCheck": true,
+        "noEmit": true,
+        "experimentalDecorators": true,
+        "useDefineForClassFields": false,
+        "types": ["node"],
+        "moduleResolution": "bundler"
+    },
+    "exclude": [
+        "node_modules",
+        "dist",
+        "src/backend/**/*",
+        "**/*.test.ts",
+        "**/*.spec.ts",
+        "**/*.stories.ts"
+    ],
+    "include": [
+        "src/frontend/index.ts",
+        "src/frontend/components/**/*.ts",
+        "src/frontend/pages/**/*.ts",
+        "src/system/components/**/*.ts",
+        "src/system/pages/**/*.ts"
+    ]
+}

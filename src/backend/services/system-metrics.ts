@@ -1,50 +1,90 @@
 import si, { Systeminformation } from 'systeminformation';
 import os from 'os';
 
+/**
+ * Represents comprehensive system metrics data collected by the monitoring service.
+ * All numeric values are in their base units (bytes for memory/disk, milliseconds for time).
+ */
 export interface SystemMetrics {
+  /** ISO timestamp when metrics were collected */
   timestamp: string;
+  /** General system information */
   system: {
+    /** System uptime in seconds */
     uptime: number;
+    /** Operating system platform (win32, darwin, linux) */
     platform: string;
+    /** System hostname */
     hostname: string;
   };
+  /** CPU performance metrics */
   cpu: {
+    /** CPU usage percentage (0-100) */
     usage: number;
+    /** Number of CPU cores */
     cores: number;
+    /** CPU temperature in Celsius */
     temperature: number;
   };
+  /** Memory usage statistics */
   memory: {
+    /** Total physical memory in bytes */
     total: number;
+    /** Used memory in bytes */
     used: number;
+    /** Free memory in bytes */
     free: number;
+    /** Memory usage percentage (0-100) */
     usedPercent: number;
   };
+  /** Network interfaces and performance */
   network: {
+    /** List of network interfaces */
     interfaces: Array<{
+      /** Interface name */
       name: string;
+      /** Interface speed in Mbps */
       speed: number;
+      /** Interface type (ethernet, wireless, etc.) */
       type: string;
     }>;
+    /** Network traffic statistics */
     stats: {
+      /** Total bytes received */
       rx_bytes: number;
+      /** Total bytes transmitted */
       tx_bytes: number;
+      /** Bytes received per second */
       rx_sec: number;
+      /** Bytes transmitted per second */
       tx_sec: number;
     };
   };
+  /** Storage metrics */
   disk: {
+    /** Total disk space in bytes */
     total: number;
+    /** Used disk space in bytes */
     used: number;
+    /** Free disk space in bytes */
     free: number;
+    /** Disk usage percentage (0-100) */
     usedPercent: number;
   };
+  /** External service health checks */
   services: {
+    /** Database connection status */
     database: {
+      /** Whether database is currently connected */
       connected: boolean;
+      /** Database query latency in milliseconds (null if disconnected) */
       latency: number | null;
     };
+    /** API service status */
     api: {
+      /** Current API status */
       status: 'ok' | 'error';
+      /** API response time in milliseconds */
       responseTime: number;
     };
   };
@@ -54,6 +94,20 @@ interface ExtendedNetworkStats extends Systeminformation.NetworkStatsData {
   ts: number;
 }
 
+/**
+ * Service for collecting and managing system performance metrics.
+ * Implements the Singleton pattern to ensure only one instance is collecting metrics.
+ *
+ * @group System Monitoring
+ * @category Services
+ *
+ * @example
+ * ```typescript
+ * const metricsService = SystemMetricsService.getInstance();
+ * const metrics = await metricsService.getMetrics();
+ * console.log(`Memory usage: ${metrics.memory.usedPercent}%`);
+ * ```
+ */
 export class SystemMetricsService {
   private static instance: SystemMetricsService;
   private lastNetworkStats: ExtendedNetworkStats | null = null;

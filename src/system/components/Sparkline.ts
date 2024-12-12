@@ -1,6 +1,35 @@
 import { LitElement, html, css, PropertyValues } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
+/**
+ * SVG Sparkline component for visualizing time-series data
+ *
+ * @remarks
+ * Renders a responsive sparkline chart with smooth curves and optional area fill.
+ * Automatically scales to fit the data range and container size.
+ *
+ * @example
+ * ```html
+ * <system-sparkline
+ *   .data=${[
+ *     { value: 10, timestamp: new Date('2024-01-01') },
+ *     { value: 20, timestamp: new Date('2024-01-02') },
+ *     { value: 15, timestamp: new Date('2024-01-03') }
+ *   ]}
+ *   unit="%"
+ * ></system-sparkline>
+ * ```
+ *
+ * @csspart svg - The SVG container element
+ * @csspart line - The sparkline path
+ * @csspart area - The filled area below the line
+ *
+ * @cssprop --sparkline-line-color - Color of the sparkline (defaults to --color-accent)
+ * @cssprop --sparkline-line-width - Width of the sparkline path
+ * @cssprop --sparkline-fill-opacity - Opacity of the area fill
+ *
+ * @category Visualization
+ */
 @customElement('system-sparkline')
 export class Sparkline extends LitElement {
   static override styles = css`
@@ -29,20 +58,43 @@ export class Sparkline extends LitElement {
     }
   `;
 
+  /**
+   * Time series data points to visualize
+   * @type {{ value: number; timestamp: Date }[]}
+   * @default []
+   */
   @property({ type: Array })
   data: { value: number; timestamp: Date }[] = [];
 
+  /**
+   * Unit of measurement for the values
+   * @type {string}
+   * @default ''
+   */
   @property({ type: String })
   unit = '';
 
+  /**
+   * Cached path data for rendering
+   * @private
+   */
   private pathData = { linePath: '', areaPath: '' };
 
+  /**
+   * Lifecycle method to update path data when inputs change
+   * @param changedProperties - Map of changed properties
+   */
   protected override willUpdate(changedProperties: PropertyValues<this>): void {
     if (changedProperties.has('data')) {
       this.pathData = this.calculatePathData();
     }
   }
 
+  /**
+   * Calculates SVG path data for the sparkline and area
+   * @returns Object containing path data strings for line and area
+   * @private
+   */
   private calculatePathData() {
     if (!Array.isArray(this.data) || this.data.length < 2) {
       return { linePath: '', areaPath: '' };
@@ -116,6 +168,10 @@ export class Sparkline extends LitElement {
     return { linePath, areaPath };
   }
 
+  /**
+   * Renders the sparkline component
+   * @returns SVG template with sparkline visualization
+   */
   protected override render() {
     if (!this.pathData.linePath) {
       return html`
@@ -139,6 +195,9 @@ export class Sparkline extends LitElement {
   }
 }
 
+/**
+ * Type declaration for HTML element registry
+ */
 declare global {
   interface HTMLElementTagNameMap {
     'system-sparkline': Sparkline;

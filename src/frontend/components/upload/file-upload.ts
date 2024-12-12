@@ -22,7 +22,7 @@ interface FileWithPreview extends File {
 
 @customElement('file-upload')
 export class FileUpload extends LitElement {
-  static styles = css`
+  static override styles = css`
     :host {
       display: block;
       padding: 1rem;
@@ -289,7 +289,7 @@ export class FileUpload extends LitElement {
     }
   }
 
-  render() {
+  protected override render() {
     return html`
       <div
         class="upload-zone ${this.dragover ? 'dragover' : ''}"

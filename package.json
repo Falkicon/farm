@@ -3,6 +3,23 @@
   "version": "1.0.0",
   "description": "Modern web application boilerplate with TypeScript, Web Components, and Fastify",
   "type": "module",
+  "homepage": "https://yourusername.github.io/fabricmill",
+  "documentation": "https://yourusername.github.io/fabricmill",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/fabricmill.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/fabricmill/issues"
+  },
+  "keywords": [
+    "typescript",
+    "web-components",
+    "lit",
+    "fastify",
+    "boilerplate",
+    "fullstack"
+  ],
   "scripts": {
     "dev": "cross-env NODE_ENV=development run-p dev:backend dev:frontend",
     "dev:frontend": "vite --clearScreen false --logLevel debug",
@@ -17,7 +34,7 @@
     "test:coverage": "vitest run --coverage",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "format": "prettier --write 'src/**/*.{ts,tsx,css,md}'",
-    "docs:build": "typedoc",
+    "docs:build": "typedoc --tsconfig tsconfig.typedoc.json",
     "docs:serve": "vite preview --port 8080 --outDir docs",
     "docs": "run-s docs:build docs:serve",
     "clean": "run-s cleanup && rimraf dist docs .turbo .next coverage 'node_modules/.cache' 'node_modules/.vite' 'prisma/dev.db'",

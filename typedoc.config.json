@@ -1,0 +1,64 @@
+{
+    "$schema": "https://typedoc.org/schema.json",
+    "entryPoints": [
+        "./src/frontend/index.ts",
+        "./src/frontend/components/**/*.ts",
+        "./src/frontend/pages/**/*.ts",
+        "./src/system/components/**/*.ts",
+        "./src/system/pages/**/*.ts",
+        "./src/backend/index.ts",
+        "./src/backend/routes/**/*.ts",
+        "./src/backend/services/**/*.ts",
+        "./src/backend/middleware/**/*.ts",
+        "./src/backend/utils/**/*.ts",
+        "./src/backend/config/**/*.ts"
+    ],
+    "entryPointStrategy": "expand",
+    "out": "docs",
+    "name": "FabricMill Documentation",
+    "includeVersion": true,
+    "categorizeByGroup": true,
+    "searchInComments": true,
+    "navigationLinks": {
+        "GitHub": "https://github.com/yourusername/fabricmill",
+        "System Status": "/system",
+        "API Reference": "/backend"
+    },
+    "plugin": [
+        "typedoc-plugin-markdown"
+    ],
+    "theme": "default",
+    "excludePrivate": true,
+    "excludeProtected": false,
+    "excludeExternals": true,
+    "excludeInternal": true,
+    "skipErrorChecking": true,
+    "validation": {
+        "invalidLink": false,
+        "notDocumented": false
+    },
+    "tsconfig": "./tsconfig.typedoc.json",
+    "highlightLanguages": [
+        "typescript",
+        "javascript",
+        "html",
+        "css",
+        "shell",
+        "sh",
+        "ps1",
+        "text",
+        "properties",
+        "json",
+        "md",
+        "ini",
+        "bash",
+        "plaintext",
+        "powershell"
+    ],
+    "readme": "./README.md",
+    "copyCodeSnippets": true,
+    "exclude": [
+        "**/node_modules/**",
+        "**/dist/**"
+    ]
+}

@@ -1,0 +1,248 @@
+<!DOCTYPE html><html class="default" lang="en" data-base="."><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>Web App Boilerplate Documentation</title><meta name="description" content="Documentation for Web App Boilerplate Documentation"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script defer src="assets/main.js"></script><script async src="assets/icons.js" id="tsd-icons-script"></script><script async src="assets/search.js" id="tsd-search-script"></script><script async src="assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><div class="table-cell" id="tsd-search"><div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><use href="assets/icons.svg#icon-search"></use></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div><div class="field"><div id="tsd-toolbar-links"></div></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">Web App Boilerplate Documentation</a></div><div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><use href="assets/icons.svg#icon-menu"></use></svg></a></div></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><h1>Web App Boilerplate Documentation</h1></div><div class="tsd-panel tsd-typography"><a id="fabricmill" class="tsd-anchor"></a><h1 class="tsd-anchor-link">FabricMill<a href="#fabricmill" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1><p>Modern web application boilerplate with TypeScript, Web Components (Lit), and Fastify.</p>
+<a id="features" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Features<a href="#features" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><ul>
+<li>🚀 <strong>Frontend</strong>: Lit components with TypeScript and Vite</li>
+<li>🛠️ <strong>Backend</strong>: Fastify server with TypeScript</li>
+<li>🎨 <strong>Styling</strong>: TailwindCSS for utility-first styling</li>
+<li>📝 <strong>Type Safety</strong>: Full TypeScript support</li>
+<li>🧪 <strong>Testing</strong>: Vitest for unit tests, Playwright for E2E</li>
+<li>📚 <strong>Documentation</strong>: TypeDoc for API documentation</li>
+<li>🔒 <strong>Security</strong>: Helmet for HTTP security headers</li>
+<li>🌐 <strong>API</strong>: RESTful endpoints with Zod validation</li>
+<li>🗄️ <strong>Database</strong>: Prisma ORM for type-safe database access</li>
+</ul>
+<a id="prerequisites" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Prerequisites<a href="#prerequisites" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><ul>
+<li>Node.js &gt;= 18.0.0</li>
+<li>npm &gt;= 9.0.0</li>
+<li>A modern terminal:
+<ul>
+<li><strong>Windows</strong>: Windows Terminal with PowerShell 7+</li>
+<li><strong>macOS</strong>: Terminal.app or iTerm2</li>
+<li><strong>Linux</strong>: Any modern terminal emulator</li>
+</ul>
+</li>
+</ul>
+<a id="quick-start" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Quick Start<a href="#quick-start" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><ol>
+<li>Clone and install:</li>
+</ol>
+<pre><code class="bash"><span class="hl-0">git</span><span class="hl-1"> </span><span class="hl-2">clone</span><span class="hl-1"> </span><span class="hl-2">https://github.com/yourusername/fabricmill.git</span><br/><span class="hl-0">cd</span><span class="hl-1"> </span><span class="hl-2">fabricmill</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">install</span>
+</code><button type="button">Copy</button></pre>
+
+<ol start="2">
+<li>Start development servers:</li>
+</ol>
+<pre><code class="bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">dev</span>
+</code><button type="button">Copy</button></pre>
+
+<p>This will start:</p>
+<ul>
+<li>Frontend: <a href="http://localhost:3000" target="_blank" class="external">http://localhost:3000</a></li>
+<li>Backend: <a href="http://localhost:8000" target="_blank" class="external">http://localhost:8000</a></li>
+<li>API Health Check: <a href="http://localhost:8000/api/health" target="_blank" class="external">http://localhost:8000/api/health</a></li>
+</ul>
+<a id="development-workflow" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Development Workflow<a href="#development-workflow" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="common-commands" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Common Commands<a href="#common-commands" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><pre><code class="bash"><span class="hl-3"># Start development servers</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">dev</span><br/><br/><span class="hl-3"># If you encounter port conflicts</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">kill-ports</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">dev</span><br/><br/><span class="hl-3"># Build for production</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">build</span><br/><br/><span class="hl-3"># Run tests</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">test</span><span class="hl-1">                </span><span class="hl-3"># Unit tests</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">test:ui</span><span class="hl-1">        </span><span class="hl-3"># E2E tests</span><br/><br/><span class="hl-3"># Code quality</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">lint</span><span class="hl-1">          </span><span class="hl-3"># Check code</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">format</span><span class="hl-1">        </span><span class="hl-3"># Format code</span><br/><br/><span class="hl-3"># Documentation</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">docs</span><span class="hl-1">         </span><span class="hl-3"># Generate and serve docs</span>
+</code><button type="button">Copy</button></pre>
+
+<a id="documentation" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Documentation<a href="#documentation" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The project uses TypeDoc to generate comprehensive API documentation. Access the documentation in three ways:</p>
+<ol>
+<li><strong>Local Development</strong>:</li>
+</ol>
+<pre><code class="bash"><span class="hl-3"># Generate and serve documentation</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">docs</span><br/><br/><span class="hl-3"># Access at http://localhost:8080</span>
+</code><button type="button">Copy</button></pre>
+
+<ol start="2">
+<li><strong>Static Build</strong>:</li>
+</ol>
+<pre><code class="bash"><span class="hl-3"># Generate documentation only</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">docs:build</span><br/><br/><span class="hl-3"># Output in ./docs directory</span>
+</code><button type="button">Copy</button></pre>
+
+<ol start="3">
+<li><strong>Online Documentation</strong>:</li>
+</ol>
+<ul>
+<li>Visit <a href="https://yourusername.github.io/fabricmill" target="_blank" class="external">https://yourusername.github.io/fabricmill</a></li>
+<li>Updated automatically on main branch changes</li>
+</ul>
+<a id="documentation-structure" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Documentation Structure<a href="#documentation-structure" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><ul>
+<li>
+<p><strong>Frontend</strong></p>
+<ul>
+<li>Components API</li>
+<li>Router Configuration</li>
+<li>State Management</li>
+<li>Event System</li>
+</ul>
+</li>
+<li>
+<p><strong>Backend</strong></p>
+<ul>
+<li>API Routes</li>
+<li>Middleware</li>
+<li>Services</li>
+<li>Configuration</li>
+<li>Database Schema</li>
+</ul>
+</li>
+<li>
+<p><strong>System</strong></p>
+<ul>
+<li>Status Pages</li>
+<li>Monitoring</li>
+<li>Performance Metrics</li>
+</ul>
+</li>
+</ul>
+<a id="writing-documentation" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Writing Documentation<a href="#writing-documentation" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Follow these guidelines when documenting code:</p>
+<pre><code class="typescript"><span class="hl-3">/**</span><br/><span class="hl-3"> * Component/function description</span><br/><span class="hl-3"> *</span><br/><span class="hl-3"> * </span><span class="hl-4">@group</span><span class="hl-3"> Category</span><br/><span class="hl-3"> * </span><span class="hl-4">@category</span><span class="hl-3"> Subcategory</span><br/><span class="hl-3"> *</span><br/><span class="hl-3"> * </span><span class="hl-4">@example</span><br/><span class="hl-3"> * ```typescript</span><br/><span class="hl-3"> * // Usage example</span><br/><span class="hl-3"> * ```</span><br/><span class="hl-3"> *</span><br/><span class="hl-3"> * </span><span class="hl-4">@remarks</span><br/><span class="hl-3"> * Additional details or implementation notes</span><br/><span class="hl-3"> */</span>
+</code><button type="button">Copy</button></pre>
+
+<a id="port-management" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Port Management<a href="#port-management" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The project uses the following ports by default:</p>
+<ul>
+<li>3000: Frontend development server</li>
+<li>8000: Backend API server</li>
+<li>8080: Documentation server</li>
+</ul>
+<p>If you encounter port conflicts:</p>
+<ol>
+<li>Run <code>npm run kill-ports</code> to clear the ports</li>
+<li>Start again with <code>npm run dev</code></li>
+</ol>
+<p>The <code>kill-ports</code> utility is cross-platform compatible and works on:</p>
+<ul>
+<li>Windows (using PowerShell commands)</li>
+<li>macOS/Linux (using <code>lsof</code> and <code>kill</code>)</li>
+</ul>
+<a id="environment-setup" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Environment Setup<a href="#environment-setup" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><ol>
+<li>Copy the environment template:</li>
+</ol>
+<pre><code class="bash"><span class="hl-0">cp</span><span class="hl-1"> </span><span class="hl-2">.env.example</span><span class="hl-1"> </span><span class="hl-2">.env</span>
+</code><button type="button">Copy</button></pre>
+
+<ol start="2">
+<li>Update the following variables:</li>
+</ol>
+<pre><code class="ini">DATABASE_URL=postgresql://user:password@localhost:5432/fabricmill
+NODE_ENV=development
+</code><button type="button">Copy</button></pre>
+
+<a id="project-structure" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Project Structure<a href="#project-structure" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><pre><code><span class="hl-5">fabricmill</span><span class="hl-1">/</span><br/><span class="hl-1">├── </span><span class="hl-5">src</span><span class="hl-1">/</span><br/><span class="hl-1">│   ├── </span><span class="hl-5">frontend</span><span class="hl-1">/           # </span><span class="hl-5">Frontend</span><span class="hl-1"> </span><span class="hl-5">application</span><span class="hl-1"> </span><span class="hl-5">code</span><br/><span class="hl-1">│   │   ├── </span><span class="hl-5">components</span><span class="hl-1">/     # </span><span class="hl-5">Reusable</span><span class="hl-1"> </span><span class="hl-5">Lit</span><span class="hl-1"> </span><span class="hl-5">components</span><br/><span class="hl-1">│   │   ├── </span><span class="hl-5">features</span><span class="hl-1">/       # </span><span class="hl-5">Feature</span><span class="hl-1">-</span><span class="hl-5">specific</span><span class="hl-1"> </span><span class="hl-5">components</span><br/><span class="hl-1">│   │   ├── </span><span class="hl-5">shared</span><span class="hl-1">/        # </span><span class="hl-5">Shared</span><span class="hl-1"> </span><span class="hl-5">utilities</span><span class="hl-1"> </span><span class="hl-5">and</span><span class="hl-1"> </span><span class="hl-5">config</span><br/><span class="hl-1">│   │   └── </span><span class="hl-5">styles</span><span class="hl-1">/        # </span><span class="hl-5">Global</span><span class="hl-1"> </span><span class="hl-5">styles</span><span class="hl-1"> </span><span class="hl-5">and</span><span class="hl-1"> </span><span class="hl-5">Tailwind</span><br/><span class="hl-1">│   │</span><br/><span class="hl-1">│   └── </span><span class="hl-5">backend</span><span class="hl-1">/           # </span><span class="hl-5">Backend</span><span class="hl-1"> </span><span class="hl-5">application</span><span class="hl-1"> </span><span class="hl-5">code</span><br/><span class="hl-1">│       ├── </span><span class="hl-5">routes</span><span class="hl-1">/        # </span><span class="hl-6">API</span><span class="hl-1"> </span><span class="hl-5">route</span><span class="hl-1"> </span><span class="hl-5">handlers</span><br/><span class="hl-1">│       ├── </span><span class="hl-5">services</span><span class="hl-1">/      # </span><span class="hl-5">Business</span><span class="hl-1"> </span><span class="hl-5">logic</span><br/><span class="hl-1">│       └── </span><span class="hl-5">utils</span><span class="hl-1">/         # </span><span class="hl-5">Utility</span><span class="hl-1"> </span><span class="hl-5">functions</span><br/><span class="hl-1">│</span><br/><span class="hl-1">├── </span><span class="hl-5">scripts</span><span class="hl-1">/              # </span><span class="hl-5">Development</span><span class="hl-1"> </span><span class="hl-5">and</span><span class="hl-1"> </span><span class="hl-5">build</span><span class="hl-1"> </span><span class="hl-5">scripts</span><br/><span class="hl-1">├── </span><span class="hl-5">public</span><span class="hl-1">/              # </span><span class="hl-5">Static</span><span class="hl-1"> </span><span class="hl-5">assets</span><br/><span class="hl-1">├── </span><span class="hl-5">docs</span><span class="hl-1">/               # </span><span class="hl-5">Generated</span><span class="hl-1"> </span><span class="hl-5">documentation</span><br/><span class="hl-1">└── </span><span class="hl-5">tests</span><span class="hl-1">/              # </span><span class="hl-5">Test</span><span class="hl-1"> </span><span class="hl-5">files</span>
+</code><button>Copy</button></pre>
+
+<a id="cross-platform-development" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Cross-Platform Development<a href="#cross-platform-development" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>This project is designed to work consistently across all platforms:</p>
+<a id="windows" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Windows<a href="#windows" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><ul>
+<li>Use Windows Terminal with PowerShell 7+ for best experience</li>
+<li>All scripts are PowerShell-compatible</li>
+<li>Line endings are automatically handled</li>
+</ul>
+<a id="macoslinux" class="tsd-anchor"></a><h3 class="tsd-anchor-link">macOS/Linux<a href="#macoslinux" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><ul>
+<li>Use your preferred terminal</li>
+<li>All scripts work with bash/zsh</li>
+<li>Native package management supported</li>
+</ul>
+<a id="vscode-configuration" class="tsd-anchor"></a><h3 class="tsd-anchor-link">VSCode Configuration<a href="#vscode-configuration" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><ul>
+<li>Recommended extensions are pre-configured</li>
+<li>Consistent formatting across platforms</li>
+<li>Integrated terminal settings included</li>
+</ul>
+<a id="platform-specific-considerations" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Platform-Specific Considerations<a href="#platform-specific-considerations" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="windows-powershell" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Windows (PowerShell)<a href="#windows-powershell" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>When running on Windows systems, consider the following best practices:</p>
+<ul>
+<li>Suppress Node.js experimental warnings:</li>
+</ul>
+<pre><code class="powershell">$env:NODE_NO_WARNINGS = 1
+</code><button type="button">Copy</button></pre>
+
+<ul>
+<li>Handle npm output properly:</li>
+</ul>
+<pre><code class="powershell">$process = Start-Process -FilePath "npm" -ArgumentList "install" `
+    -NoNewWindow -PassThru -Wait `
+    -RedirectStandardOutput "output.log" `
+    -RedirectStandardError "error.log"
+
+if ($process.ExitCode -ne 0) {
+    $errorLog = Get-Content "error.log" -Raw
+    throw "Command failed with exit code $($process.ExitCode)`n$errorLog"
+}
+</code><button type="button">Copy</button></pre>
+
+<ul>
+<li>Clean up temporary files:</li>
+</ul>
+<pre><code class="powershell">try {
+    # Your code here
+}
+finally {
+    Remove-Item -ErrorAction SilentlyContinue "*.log"
+}
+</code><button type="button">Copy</button></pre>
+
+<ul>
+<li>Use proper string formatting:
+<ul>
+<li>Use <code>$($variable)</code> for complex expressions</li>
+<li>Use backticks (`) for line continuation</li>
+<li>Use here-strings for multiline text</li>
+</ul>
+</li>
+</ul>
+<a id="development-environment" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Development Environment<a href="#development-environment" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><ul>
+<li>
+<p>Vite Configuration:</p>
+<ul>
+<li>No separate <code>@types/vite</code> package needed</li>
+<li>Path aliases in <code>vite.config.ts</code> should match <code>tsconfig.json</code></li>
+<li>Use forward slashes in path configurations for cross-platform compatibility</li>
+</ul>
+</li>
+<li>
+<p>TypeScript Configuration:</p>
+<ul>
+<li>Use <code>moduleResolution: &quot;bundler&quot;</code> for Vite projects</li>
+<li>Ensure path aliases are consistent across all config files</li>
+<li>Include necessary <code>types</code> array in tsconfig.json</li>
+</ul>
+</li>
+</ul>
+<a id="cross-platform-compatibility" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Cross-Platform Compatibility<a href="#cross-platform-compatibility" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><ul>
+<li>
+<p>Use path separators appropriately:</p>
+<ul>
+<li>Configuration files: Always use forward slashes (/)</li>
+<li>Runtime path operations: Use <code>path.join()</code> or <code>path.resolve()</code></li>
+<li>Scripts: Use platform-specific separators</li>
+</ul>
+</li>
+<li>
+<p>Process execution:</p>
+<ul>
+<li>Windows: Use <code>Start-Process</code> with proper arguments</li>
+<li>Unix: Use direct command execution</li>
+<li>Consider using cross-platform npm scripts when possible</li>
+</ul>
+</li>
+</ul>
+<a id="configuration-files" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Configuration Files<a href="#configuration-files" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><ul>
+<li><code>.env</code> - Environment variables</li>
+<li><code>vite.config.ts</code> - Vite configuration</li>
+<li><code>tailwind.config.js</code> - Tailwind CSS configuration</li>
+<li><code>tsconfig.json</code> - TypeScript configuration</li>
+<li><code>.vscode/settings.json</code> - Editor settings</li>
+<li><code>.cursorrules</code> - Cursor IDE configuration</li>
+</ul>
+<a id="contributing" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Contributing<a href="#contributing" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><ol>
+<li>Fork the repository</li>
+<li>Create your feature branch (<code>git checkout -b feature/amazing-feature</code>)</li>
+<li>Commit your changes (<code>git commit -m 'Add some amazing feature'</code>)</li>
+<li>Push to the branch (<code>git push origin feature/amazing-feature</code>)</li>
+<li>Open a Pull Request</li>
+</ol>
+<a id="troubleshooting" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Troubleshooting<a href="#troubleshooting" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="port-conflicts" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Port Conflicts<a href="#port-conflicts" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><pre><code class="bash"><span class="hl-3"># Clear any processes using the development ports</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">kill-ports</span><br/><br/><span class="hl-3"># If still having issues, check manually:</span><br/><span class="hl-3"># Windows (PowerShell):</span><br/><span class="hl-0">Get-NetTCPConnection</span><span class="hl-1"> </span><span class="hl-4">-LocalPort</span><span class="hl-1"> </span><span class="hl-2">3000,8000</span><br/><br/><span class="hl-3"># macOS/Linux:</span><br/><span class="hl-0">lsof</span><span class="hl-1"> </span><span class="hl-4">-i</span><span class="hl-1"> </span><span class="hl-2">:3000,8000</span>
+</code><button type="button">Copy</button></pre>
+
+<a id="development-server-issues" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Development Server Issues<a href="#development-server-issues" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><ol>
+<li>Clear ports (as above)</li>
+<li>Remove node_modules: <code>npm clean-install</code></li>
+<li>Clear Vite cache: <code>npm run clean</code></li>
+<li>Restart development servers</li>
+</ol>
+<a id="license" class="tsd-anchor"></a><h2 class="tsd-anchor-link">License<a href="#license" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>This project is licensed under the MIT License - see the <a href="/LICENSE">LICENSE</a> file for details.</p>
+</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><use href="assets/icons.svg#icon-chevronDown"></use></svg>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><use href="assets/icons.svg#icon-chevronDown"></use></svg>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#fabricmill"><span>Fabric<wbr/>Mill</span></a><ul><li><a href="#features"><span>Features</span></a></li><li><a href="#prerequisites"><span>Prerequisites</span></a></li><li><a href="#quick-start"><span>Quick <wbr/>Start</span></a></li><li><a href="#development-workflow"><span>Development <wbr/>Workflow</span></a></li><li><ul><li><a href="#common-commands"><span>Common <wbr/>Commands</span></a></li><li><a href="#documentation"><span>Documentation</span></a></li><li><a href="#documentation-structure"><span>Documentation <wbr/>Structure</span></a></li><li><a href="#writing-documentation"><span>Writing <wbr/>Documentation</span></a></li><li><a href="#port-management"><span>Port <wbr/>Management</span></a></li><li><a href="#environment-setup"><span>Environment <wbr/>Setup</span></a></li></ul></li><li><a href="#project-structure"><span>Project <wbr/>Structure</span></a></li><li><a href="#cross-platform-development"><span>Cross-<wbr/>Platform <wbr/>Development</span></a></li><li><ul><li><a href="#windows"><span>Windows</span></a></li><li><a href="#macoslinux"><span>macOS/<wbr/>Linux</span></a></li><li><a href="#vscode-configuration"><span>VSCode <wbr/>Configuration</span></a></li></ul></li><li><a href="#platform-specific-considerations"><span>Platform-<wbr/>Specific <wbr/>Considerations</span></a></li><li><ul><li><a href="#windows-powershell"><span>Windows (<wbr/>Power<wbr/>Shell)</span></a></li><li><a href="#development-environment"><span>Development <wbr/>Environment</span></a></li><li><a href="#cross-platform-compatibility"><span>Cross-<wbr/>Platform <wbr/>Compatibility</span></a></li></ul></li><li><a href="#configuration-files"><span>Configuration <wbr/>Files</span></a></li><li><a href="#contributing"><span>Contributing</span></a></li><li><a href="#troubleshooting"><span>Troubleshooting</span></a></li><li><ul><li><a href="#port-conflicts"><span>Port <wbr/>Conflicts</span></a></li><li><a href="#development-server-issues"><span>Development <wbr/>Server <wbr/>Issues</span></a></li></ul></li><li><a href="#license"><span>License</span></a></li></ul></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="modules.html">Web App Boilerplate Documentation</a><ul class="tsd-small-nested-navigation" id="tsd-nav-container"><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>

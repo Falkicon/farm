@@ -1,5 +1,7 @@
 # FabricMill
 
+[![Documentation Status](https://github.com/yourusername/fabricmill/actions/workflows/docs.yml/badge.svg)](https://github.com/yourusername/fabricmill/actions/workflows/docs.yml)
+
 Modern web application boilerplate with TypeScript, Web Components (Lit), and Fastify.
 
 ## Features
@@ -69,6 +71,71 @@ npm run format        # Format code
 npm run docs         # Generate and serve docs
 ```
 
+### Documentation
+
+The project uses TypeDoc to generate comprehensive API documentation. Access the documentation in three ways:
+
+1. **Local Development**:
+```bash
+# Generate and serve documentation
+npm run docs
+
+# Access at http://localhost:8080
+```
+
+2. **Static Build**:
+```bash
+# Generate documentation only
+npm run docs:build
+
+# Output in ./docs directory
+```
+
+3. **Online Documentation**:
+- Visit [https://yourusername.github.io/fabricmill](https://yourusername.github.io/fabricmill)
+- Updated automatically on main branch changes
+
+### Documentation Structure
+
+- **Frontend**
+  - Components API
+  - Router Configuration
+  - State Management
+  - Event System
+
+- **Backend**
+  - API Routes
+  - Middleware
+  - Services
+  - Configuration
+  - Database Schema
+
+- **System**
+  - Status Pages
+  - Monitoring
+  - Performance Metrics
+
+### Writing Documentation
+
+Follow these guidelines when documenting code:
+
+```typescript
+/**
+ * Component/function description
+ *
+ * @group Category
+ * @category Subcategory
+ *
+ * @example
+ * ```typescript
+ * // Usage example
+ * ```
+ *
+ * @remarks
+ * Additional details or implementation notes
+ */
+```
+
 ### Port Management
 
 The project uses the following ports by default:
@@ -92,9 +159,9 @@ cp .env.example .env
 ```
 
 2. Update the following variables:
-```env
+```ini
+DATABASE_URL=postgresql://user:password@localhost:5432/fabricmill
 NODE_ENV=development
-DATABASE_URL="your-database-url"
 ```
 
 ## Project Structure
@@ -105,8 +172,8 @@ fabricmill/
 │   ├── frontend/           # Frontend application code
 │   │   ├── components/     # Reusable Lit components
 │   │   ├── features/       # Feature-specific components
-│   │   ├── shared/        # Shared utilities and config
-│   │   └── styles/        # Global styles and Tailwind
+│   │   ├── shared/         # Shared utilities and config
+│   │   └── styles/         # Global styles and Tailwind
 │   │
 │   └── backend/           # Backend application code
 │       ├── routes/        # API route handlers
@@ -241,4 +308,4 @@ lsof -i :3000,8000
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](/LICENSE) file for details.

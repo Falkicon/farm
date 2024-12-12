@@ -5,12 +5,46 @@ import '../components/Sparkline';
 import type { SystemMetrics } from '../../backend/services/system-metrics';
 import { metricsApi } from '../../frontend/shared/api/metrics';
 
+/**
+ * Error response structure for metrics API
+ * @internal
+ */
 interface MetricsError {
   error: string;
   message: string;
   details?: unknown;
 }
 
+/**
+ * System status dashboard component
+ *
+ * @remarks
+ * Provides a real-time dashboard view of system metrics including CPU usage,
+ * memory utilization, and service status. Automatically updates metrics
+ * and displays historical data using sparklines.
+ *
+ * @example
+ * ```html
+ * <system-status-page></system-status-page>
+ * ```
+ *
+ * @csspart dashboard - The main dashboard container
+ * @csspart section - Individual metric section container
+ * @csspart section-header - Section header with title
+ * @csspart status-card - Individual status card
+ * @csspart feature-list - List of system features
+ *
+ * @fires {CustomEvent} feature-toggle - When a feature is toggled
+ * @fires {CustomEvent} metric-update - When metrics are updated
+ *
+ * @cssprop --color-bg-primary - Background color of the dashboard
+ * @cssprop --color-text-primary - Primary text color
+ * @cssprop --color-accent - Accent color for highlights
+ * @cssprop --system-spacing-4 - Base spacing unit
+ * @cssprop --system-radius-lg - Border radius for cards
+ *
+ * @category System
+ */
 @customElement('system-status-page')
 export class SystemStatusPage extends LitElement {
   static override styles = css`
@@ -335,14 +369,26 @@ export class SystemStatusPage extends LitElement {
     }
   `;
 
+  /**
+   * Current system metrics data
+   * @internal
+   */
   @state()
-  private metrics?: SystemMetrics;
+  private metrics: SystemMetrics | null = null;
 
-  @state()
-  private error?: MetricsError;
-
+  /**
+   * Historical metrics data
+   * @internal
+   */
   @state()
   private metricsHistory: SystemMetrics[] = [];
+
+  /**
+   * Error state for metrics loading
+   * @internal
+   */
+  @state()
+  private error: MetricsError | null = null;
 
   private updateInterval: number | undefined;
   private retryCount = 0;
@@ -370,7 +416,7 @@ export class SystemStatusPage extends LitElement {
       if (this.isValidMetricData(data)) {
         this.metricsHistory = [...this.metricsHistory, data].slice(-50);
       }
-      this.error = undefined;
+      this.error = null;
       this.retryCount = 0;
     } catch (err) {
       console.error('Error fetching metrics:', err);
@@ -378,6 +424,12 @@ export class SystemStatusPage extends LitElement {
     }
   }
 
+  /**
+   * Validates metric data for visualization
+   * @param metrics - Metrics data to validate
+   * @returns Whether the metrics data is valid
+   * @private
+   */
   private isValidMetricData(data: SystemMetrics): boolean {
     return Boolean(
       data &&
@@ -433,6 +485,13 @@ export class SystemStatusPage extends LitElement {
     }
   }
 
+  /**
+   * Gets threshold class based on metric value
+   * @param value - Current metric value
+   * @param type - Type of metric
+   * @returns CSS class name for threshold
+   * @private
+   */
   private getThresholdClass(value: number, type: 'cpu' | 'memory'): string {
     const thresholds = {
       cpu: { warning: 70, critical: 90 },
@@ -445,6 +504,13 @@ export class SystemStatusPage extends LitElement {
     return 'threshold-normal';
   }
 
+  /**
+   * Calculates trend direction for a metric
+   * @param current - Current metric value
+   * @param history - Historical values
+   * @returns Trend indicator string
+   * @private
+   */
   private calculateTrend(current: number, history: number[]): TemplateResult | '' {
     if (history.length < 2) return '';
     const previous = history[history.length - 2];
@@ -464,6 +530,12 @@ export class SystemStatusPage extends LitElement {
     this.dispatchEvent(event);
   }
 
+  /**
+   * Handles sparkline hover events
+   * @param e - Mouse event
+   * @param data - Data points for the sparkline
+   * @private
+   */
   private handleSparklineHover(e: MouseEvent, data: { value: number; timestamp: Date }[]) {
     const container = e.currentTarget as HTMLElement;
     const tooltip = container.querySelector('.sparkline-tooltip') as HTMLElement;
@@ -482,6 +554,10 @@ export class SystemStatusPage extends LitElement {
     }
   }
 
+  /**
+   * Handles sparkline mouse leave events
+   * @private
+   */
   private handleSparklineLeave(e: MouseEvent) {
     const container = e.currentTarget as HTMLElement;
     const tooltip = container.querySelector('.sparkline-tooltip') as HTMLElement;
@@ -490,6 +566,10 @@ export class SystemStatusPage extends LitElement {
     }
   }
 
+  /**
+   * Renders the system status dashboard
+   * @returns Dashboard template with current metrics
+   */
   protected override render() {
     if (this.error) {
       return html`
@@ -732,6 +812,12 @@ export class SystemStatusPage extends LitElement {
     `;
   }
 
+  /**
+   * Formats byte values to human-readable string
+   * @param bytes - Value in bytes
+   * @returns Formatted string with appropriate unit
+   * @private
+   */
   private formatBytes(bytes: number): string {
     const units = ['B', 'KB', 'MB', 'GB', 'TB'];
     let value = bytes;

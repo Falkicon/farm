@@ -1,13 +1,54 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
+/**
+ * Input field component with label and change event handling
+ *
+ * @remarks
+ * Provides a styled input field with optional label and placeholder.
+ * Uses Tailwind CSS classes for consistent styling and focus states.
+ *
+ * @example
+ * ```html
+ * <app-input
+ *   label="Username"
+ *   placeholder="Enter username"
+ *   @change=${(e) => console.log(e.detail)}
+ * ></app-input>
+ * ```
+ *
+ * @csspart input-wrapper - The container for input and label
+ * @csspart input - The input element
+ * @csspart label - The label element
+ *
+ * @fires {CustomEvent} change - Fired when input value changes, detail contains the new value
+ *
+ * @category Form Controls
+ */
 @customElement('app-input')
 export class AppInput extends LitElement {
+    /**
+     * Label text for the input
+     * @type {string}
+     * @default ''
+     */
     @property({ type: String }) label = '';
+
+    /**
+     * Placeholder text for the input
+     * @type {string}
+     * @default ''
+     */
     @property({ type: String }) placeholder = '';
+
+    /**
+     * Current value of the input
+     * @type {string}
+     * @default ''
+     */
     @property({ type: String }) value = '';
 
-    static styles = css`
+    static override styles = css`
         :host {
             display: block;
         }
@@ -22,7 +63,11 @@ export class AppInput extends LitElement {
         }
     `;
 
-    render() {
+    /**
+     * Renders the input component
+     * @returns The input template with optional label
+     */
+    protected override render() {
         return html`
             <div class="input-wrapper">
                 ${this.label ? html`<label>${this.label}</label>` : ''}
@@ -36,6 +81,12 @@ export class AppInput extends LitElement {
         `;
     }
 
+    /**
+     * Handles input changes and dispatches change event
+     * @param e - The input event
+     * @fires {CustomEvent} change - Contains the new input value
+     * @private
+     */
     private _handleInput(e: Event) {
         const input = e.target as HTMLInputElement;
         this.value = input.value;
