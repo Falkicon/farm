@@ -1,6 +1,7 @@
 {
     "$schema": "https://typedoc.org/schema.json",
     "entryPoints": [
+        "src/docs/getting-started.ts",
         "src/backend/middleware/index.ts",
         "src/backend/routes/health.ts",
         "src/backend/routes/metrics.ts",
@@ -26,7 +27,7 @@
         "src/system/components/Sparkline.ts"
     ],
     "out": "docs",
-    "name": "FabricMill Documentation",
+    "name": "FARM Documentation",
     "includeVersion": true,
     "excludePrivate": true,
     "excludeExternals": false,

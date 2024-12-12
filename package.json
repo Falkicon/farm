@@ -1,16 +1,16 @@
 {
-  "name": "fabricmill",
+  "name": "farm",
   "version": "1.0.0",
   "description": "Modern web application boilerplate with TypeScript, Web Components, and Fastify",
   "type": "module",
-  "homepage": "https://falkicon.github.io/fabricmill",
-  "documentation": "https://falkicon.github.io/fabricmill",
+  "homepage": "https://falkicon.github.io/farm",
+  "documentation": "https://falkicon.github.io/farm",
   "repository": {
     "type": "git",
-    "url": "https://github.com/falkicon/fabricmill.git"
+    "url": "https://github.com/falkicon/farm.git"
   },
   "bugs": {
-    "url": "https://github.com/falkicon/fabricmill/issues"
+    "url": "https://github.com/falkicon/farm/issues"
   },
   "keywords": [
     "typescript",
