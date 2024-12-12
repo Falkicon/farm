@@ -38,7 +38,7 @@ describe('API Integration', () => {
         json: () => Promise.resolve(mockResponse),
         headers: new Headers({
           'content-type': 'application/json',
-          'cache-control': 'max-age=60'
+          'cache-control': 'max-age=60',
         }),
       });
       global.fetch = mockFetch;

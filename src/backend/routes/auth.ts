@@ -109,45 +109,49 @@ export async function registerAuthRoutes(fastify: FastifyInstance): Promise<void
    * }
    * ```
    */
-  fastify.post<{ Body: LoginRequest; Reply: TokenResponse }>('/auth/login', {
-    schema: {
-      body: {
-        type: 'object',
-        required: ['email', 'password'],
-        properties: {
-          email: { type: 'string', format: 'email' },
-          password: { type: 'string', minLength: 6 }
-        }
-      },
-      response: {
-        200: {
+  fastify.post<{ Body: LoginRequest; Reply: TokenResponse }>(
+    '/auth/login',
+    {
+      schema: {
+        body: {
           type: 'object',
+          required: ['email', 'password'],
           properties: {
-            token: { type: 'string' }
-          }
+            email: { type: 'string', format: 'email' },
+            password: { type: 'string', minLength: 6 },
+          },
         },
-        401: {
-          type: 'object',
-          properties: {
-            statusCode: { type: 'number' },
-            message: { type: 'string' }
-          }
-        }
+        response: {
+          200: {
+            type: 'object',
+            properties: {
+              token: { type: 'string' },
+            },
+          },
+          401: {
+            type: 'object',
+            properties: {
+              statusCode: { type: 'number' },
+              message: { type: 'string' },
+            },
+          },
+        },
+      },
+    },
+    async (request): Promise<TokenResponse> => {
+      const { email, password } = request.body;
+
+      // TODO: Implement actual user authentication
+      // This is just a mock implementation
+      if (email === 'test@example.com' && password === 'password123') {
+        const payload: JWTPayload = { userId: '1', role: 'user', email };
+        const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
+        return { token };
       }
-    }
-  }, async (request): Promise<TokenResponse> => {
-    const { email, password } = request.body;
 
-    // TODO: Implement actual user authentication
-    // This is just a mock implementation
-    if (email === 'test@example.com' && password === 'password123') {
-      const payload: JWTPayload = { userId: '1', role: 'user', email };
-      const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
-      return { token };
+      throw { statusCode: 401, message: 'Invalid credentials' } as ErrorResponse;
     }
-
-    throw { statusCode: 401, message: 'Invalid credentials' } as ErrorResponse;
-  });
+  );
 
   /**
    * User logout endpoint
@@ -174,21 +178,25 @@ export async function registerAuthRoutes(fastify: FastifyInstance): Promise<void
    * }
    * ```
    */
-  fastify.post<{ Reply: SuccessResponse }>('/auth/logout', {
-    schema: {
-      response: {
-        200: {
-          type: 'object',
-          properties: {
-            success: { type: 'boolean' }
-          }
-        }
-      }
+  fastify.post<{ Reply: SuccessResponse }>(
+    '/auth/logout',
+    {
+      schema: {
+        response: {
+          200: {
+            type: 'object',
+            properties: {
+              success: { type: 'boolean' },
+            },
+          },
+        },
+      },
+    },
+    async (): Promise<SuccessResponse> => {
+      // TODO: Implement token invalidation
+      return { success: true };
     }
-  }, async (): Promise<SuccessResponse> => {
-    // TODO: Implement token invalidation
-    return { success: true };
-  });
+  );
 
   /**
    * Token refresh endpoint
@@ -217,46 +225,50 @@ export async function registerAuthRoutes(fastify: FastifyInstance): Promise<void
    * }
    * ```
    */
-  fastify.post<{ Reply: TokenResponse }>('/auth/refresh', {
-    schema: {
-      headers: {
-        type: 'object',
-        required: ['authorization'],
-        properties: {
-          authorization: { type: 'string', pattern: '^Bearer ' }
-        }
-      },
-      response: {
-        200: {
+  fastify.post<{ Reply: TokenResponse }>(
+    '/auth/refresh',
+    {
+      schema: {
+        headers: {
           type: 'object',
+          required: ['authorization'],
           properties: {
-            token: { type: 'string' }
-          }
+            authorization: { type: 'string', pattern: '^Bearer ' },
+          },
         },
-        401: {
-          type: 'object',
-          properties: {
-            statusCode: { type: 'number' },
-            message: { type: 'string' }
-          }
-        }
+        response: {
+          200: {
+            type: 'object',
+            properties: {
+              token: { type: 'string' },
+            },
+          },
+          401: {
+            type: 'object',
+            properties: {
+              statusCode: { type: 'number' },
+              message: { type: 'string' },
+            },
+          },
+        },
+      },
+    },
+    async (request): Promise<TokenResponse> => {
+      const token = request.headers.authorization?.replace('Bearer ', '');
+      if (!token) {
+        throw { statusCode: 401, message: 'No token provided' } as ErrorResponse;
+      }
+
+      try {
+        const decoded = jwt.verify(token, JWT_SECRET) as JWTPayload;
+        const newToken = jwt.sign(decoded, JWT_SECRET, { expiresIn: '1h' });
+        return { token: newToken };
+      } catch (error) {
+        throw {
+          statusCode: 401,
+          message: error instanceof Error ? error.message : 'Invalid token',
+        } as ErrorResponse;
       }
     }
-  }, async (request): Promise<TokenResponse> => {
-    const token = request.headers.authorization?.replace('Bearer ', '');
-    if (!token) {
-      throw { statusCode: 401, message: 'No token provided' } as ErrorResponse;
-    }
-
-    try {
-      const decoded = jwt.verify(token, JWT_SECRET) as JWTPayload;
-      const newToken = jwt.sign(decoded, JWT_SECRET, { expiresIn: '1h' });
-      return { token: newToken };
-    } catch (error) {
-      throw {
-        statusCode: 401,
-        message: error instanceof Error ? error.message : 'Invalid token'
-      } as ErrorResponse;
-    }
-  });
+  );
 }

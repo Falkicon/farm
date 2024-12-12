@@ -129,7 +129,7 @@ export class SystemMetricsService {
 
   private async measureApiResponseTime(): Promise<number> {
     const start = process.hrtime();
-    await new Promise(resolve => setTimeout(resolve, 1)); // Minimal operation
+    await new Promise((resolve) => setTimeout(resolve, 1)); // Minimal operation
     const [seconds, nanoseconds] = process.hrtime(start);
     return Math.round((seconds * 1000 + nanoseconds / 1000000) * 100) / 100;
   }
@@ -152,7 +152,7 @@ export class SystemMetricsService {
 
   private async getCpuLoad(): Promise<Systeminformation.CurrentLoadData> {
     const now = Date.now();
-    if (this.lastCpuLoad && (now - this.lastCpuLoadTime) < this.CPU_LOAD_CACHE_TIME) {
+    if (this.lastCpuLoad && now - this.lastCpuLoadTime < this.CPU_LOAD_CACHE_TIME) {
       return this.lastCpuLoad;
     }
 
@@ -181,7 +181,7 @@ export class SystemMetricsService {
         rawCurrentLoadIrq: 0,
         rawCurrentLoadSteal: 0,
         rawCurrentLoadGuest: 0,
-        cpus: []
+        cpus: [],
       };
     }
   }
@@ -198,42 +198,46 @@ export class SystemMetricsService {
         diskData,
         networkInterfacesData,
         osInfo,
-        cpuTemp
+        cpuTemp,
       ] = await Promise.all([
-        this.getCpuLoad().catch(err => {
+        this.getCpuLoad().catch((err) => {
           console.error('[SystemMetricsService] CPU load error:', err);
           return null;
         }),
-        si.mem().catch(err => {
+        si.mem().catch((err) => {
           console.error('[SystemMetricsService] Memory error:', err);
           return null;
         }),
-        si.networkStats().catch(err => {
+        si.networkStats().catch((err) => {
           console.error('[SystemMetricsService] Network stats error:', err);
           return null;
         }),
-        si.fsSize().catch(err => {
+        si.fsSize().catch((err) => {
           console.error('[SystemMetricsService] Disk error:', err);
           return null;
         }),
-        si.networkInterfaces().catch(err => {
+        si.networkInterfaces().catch((err) => {
           console.error('[SystemMetricsService] Network interfaces error:', err);
           return null;
         }),
-        si.osInfo().catch(err => {
+        si.osInfo().catch((err) => {
           console.error('[SystemMetricsService] OS info error:', err);
           return null;
         }),
-        si.cpuTemperature().catch(err => {
+        si.cpuTemperature().catch((err) => {
           console.error('[SystemMetricsService] CPU temperature error:', err);
           return null;
-        })
+        }),
       ]);
 
       // Ensure we have array data and handle null values
-      const networkStats = Array.isArray(networkStatsArray) ? networkStatsArray : [networkStatsArray];
-      const networkInterfaces = Array.isArray(networkInterfacesData) ? networkInterfacesData : [networkInterfacesData];
-      const firstNetworkStat = networkStats[0] as ExtendedNetworkStats || null;
+      const networkStats = Array.isArray(networkStatsArray)
+        ? networkStatsArray
+        : [networkStatsArray];
+      const networkInterfaces = Array.isArray(networkInterfacesData)
+        ? networkInterfacesData
+        : [networkInterfacesData];
+      const firstNetworkStat = (networkStats[0] as ExtendedNetworkStats) || null;
 
       // Calculate network speed with null checks
       let rxSec = 0;
@@ -250,13 +254,13 @@ export class SystemMetricsService {
       if (firstNetworkStat) {
         this.lastNetworkStats = {
           ...firstNetworkStat,
-          ts: Date.now()
+          ts: Date.now(),
         };
       }
 
       const [dbStatus, apiResponseTime] = await Promise.all([
         this.getDatabaseStatus(),
-        this.measureApiResponseTime()
+        this.measureApiResponseTime(),
       ]);
 
       // Create metrics object with safe fallbacks
@@ -265,49 +269,54 @@ export class SystemMetricsService {
         system: {
           uptime: os.uptime(),
           platform: osInfo?.platform || os.platform(),
-          hostname: osInfo?.hostname || os.hostname()
+          hostname: osInfo?.hostname || os.hostname(),
         },
         cpu: {
           usage: cpuData?.currentLoad || 0,
           cores: cpuData?.cpus?.length || os.cpus().length,
-          temperature: cpuTemp?.main || 0
+          temperature: cpuTemp?.main || 0,
         },
         memory: {
           total: memData?.total || 0,
           used: memData?.used || 0,
           free: memData?.free || 0,
-          usedPercent: memData ? (memData.used / memData.total) * 100 : 0
+          usedPercent: memData ? (memData.used / memData.total) * 100 : 0,
         },
         network: {
-          interfaces: networkInterfaces?.map(iface => iface ? {
-            name: iface.iface || 'unknown',
-            speed: iface.speed || 0,
-            type: iface.type || 'unknown'
-          } : {
-            name: 'unknown',
-            speed: 0,
-            type: 'unknown'
-          }) || [],
+          interfaces:
+            networkInterfaces?.map((iface) =>
+              iface
+                ? {
+                    name: iface.iface || 'unknown',
+                    speed: iface.speed || 0,
+                    type: iface.type || 'unknown',
+                  }
+                : {
+                    name: 'unknown',
+                    speed: 0,
+                    type: 'unknown',
+                  }
+            ) || [],
           stats: {
             rx_bytes: firstNetworkStat?.rx_bytes || 0,
             tx_bytes: firstNetworkStat?.tx_bytes || 0,
             rx_sec: rxSec,
-            tx_sec: txSec
-          }
+            tx_sec: txSec,
+          },
         },
         disk: {
           total: diskData?.[0]?.size || 0,
           used: diskData?.[0]?.used || 0,
           free: diskData?.[0]?.available || 0,
-          usedPercent: diskData?.[0]?.use || 0
+          usedPercent: diskData?.[0]?.use || 0,
         },
         services: {
           database: dbStatus,
           api: {
             status: 'ok',
-            responseTime: apiResponseTime
-          }
-        }
+            responseTime: apiResponseTime,
+          },
+        },
       };
 
       console.log('[SystemMetricsService] Successfully collected metrics');

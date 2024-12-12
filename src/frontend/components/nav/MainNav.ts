@@ -26,7 +26,7 @@ import { customElement } from 'lit/decorators.js';
  */
 @customElement('main-nav')
 export class MainNav extends LitElement {
-    static override styles = css`
+  static override styles = css`
     nav {
       padding: 1rem;
       background: var(--surface-color, #fff);
@@ -60,12 +60,12 @@ export class MainNav extends LitElement {
     }
   `;
 
-    /**
-     * Renders the navigation component
-     * @returns The navigation template with home and system links
-     */
-    protected override render() {
-        return html`
+  /**
+   * Renders the navigation component
+   * @returns The navigation template with home and system links
+   */
+  protected override render() {
+    return html`
       <nav>
         <ul>
           <li><a href="/">Home</a></li>
@@ -73,5 +73,5 @@ export class MainNav extends LitElement {
         </ul>
       </nav>
     `;
-    }
+  }
 }

@@ -173,7 +173,7 @@ export class FileUpload extends LitElement {
     }
 
     const filesWithPreviews = await Promise.all(
-      newFiles.map(async file => {
+      newFiles.map(async (file) => {
         const fileWithPreview = file as FileWithPreview;
         if (this.config.preview && file.type.startsWith('image/')) {
           fileWithPreview.preview = await this.createPreview(file);
@@ -195,16 +195,22 @@ export class FileUpload extends LitElement {
   private validateFiles(files: File[]): boolean {
     for (const file of files) {
       if (this.config.maxSize && file.size > this.config.maxSize) {
-        this.dispatchEvent(new CustomEvent('upload-error', {
-          detail: { error: `File ${file.name} exceeds maximum size of ${this.formatSize(this.config.maxSize)}` }
-        }));
+        this.dispatchEvent(
+          new CustomEvent('upload-error', {
+            detail: {
+              error: `File ${file.name} exceeds maximum size of ${this.formatSize(this.config.maxSize)}`,
+            },
+          })
+        );
         return false;
       }
 
       if (this.config.allowedTypes && !this.config.allowedTypes.includes(file.type)) {
-        this.dispatchEvent(new CustomEvent('upload-error', {
-          detail: { error: `File type ${file.type} is not allowed` }
-        }));
+        this.dispatchEvent(
+          new CustomEvent('upload-error', {
+            detail: { error: `File type ${file.type} is not allowed` },
+          })
+        );
         return false;
       }
     }
@@ -254,9 +260,9 @@ export class FileUpload extends LitElement {
       xhr.upload.addEventListener('progress', (e) => {
         if (e.lengthComputable) {
           const progress = (e.loaded / e.total) * 100;
-          this.files = this.files.map(file => ({
+          this.files = this.files.map((file) => ({
             ...file,
-            progress
+            progress,
           }));
         }
       });
@@ -264,26 +270,30 @@ export class FileUpload extends LitElement {
       const response = await this.api.post(this.config.endpoint, formData, {
         headers: {
           // Let browser set content type with boundary by omitting it
-          ...this.config.headers
-        }
+          ...this.config.headers,
+        },
       });
 
-      this.dispatchEvent(new CustomEvent('upload-success', {
-        detail: { response }
-      }));
+      this.dispatchEvent(
+        new CustomEvent('upload-success', {
+          detail: { response },
+        })
+      );
 
       if (!this.config.multiple) {
         this.files = [];
       }
     } catch (error) {
-      this.files = this.files.map(file => ({
+      this.files = this.files.map((file) => ({
         ...file,
-        error: error instanceof Error ? error.message : 'Upload failed'
+        error: error instanceof Error ? error.message : 'Upload failed',
       }));
 
-      this.dispatchEvent(new CustomEvent('upload-error', {
-        detail: { error }
-      }));
+      this.dispatchEvent(
+        new CustomEvent('upload-error', {
+          detail: { error },
+        })
+      );
     } finally {
       this.uploading = false;
     }
@@ -314,56 +324,56 @@ export class FileUpload extends LitElement {
         <p>
           Drag and drop files here or click to select
           ${this.config.allowedTypes
-            ? html`<br><small>(Allowed: ${this.config.allowedTypes.join(', ')})</small>`
+            ? html`<br /><small>(Allowed: ${this.config.allowedTypes.join(', ')})</small>`
             : ''}
           ${this.config.maxSize
-            ? html`<br><small>(Max size: ${this.formatSize(this.config.maxSize)})</small>`
+            ? html`<br /><small>(Max size: ${this.formatSize(this.config.maxSize)})</small>`
             : ''}
         </p>
       </div>
 
-      ${this.files.length > 0 ? html`
-        <div class="files">
-          ${this.files.map((file, index) => html`
-            <div class="file">
-              ${file.preview ? html`
-                <img src=${file.preview} alt=${file.name} />
-              ` : html`
-                <div class="file-icon">📄</div>
-              `}
-              <button
-                class="remove"
-                @click=${() => this.removeFile(index)}
-                ?disabled=${this.uploading}
-              >×</button>
-              <div class="file-info">
-                <div class="file-name">${file.name}</div>
-                <div class="file-size">${this.formatSize(file.size)}</div>
-              </div>
-              ${file.progress !== undefined && file.progress < 100 ? html`
-                <div class="progress">
-                  <div
-                    class="progress-bar"
-                    style="width: ${file.progress}%"
-                  ></div>
-                </div>
-              ` : ''}
-              ${file.error ? html`
-                <div class="error">${file.error}</div>
-              ` : ''}
+      ${this.files.length > 0
+        ? html`
+            <div class="files">
+              ${this.files.map(
+                (file, index) => html`
+                  <div class="file">
+                    ${file.preview
+                      ? html` <img src=${file.preview} alt=${file.name} /> `
+                      : html` <div class="file-icon">📄</div> `}
+                    <button
+                      class="remove"
+                      @click=${() => this.removeFile(index)}
+                      ?disabled=${this.uploading}
+                    >
+                      ×
+                    </button>
+                    <div class="file-info">
+                      <div class="file-name">${file.name}</div>
+                      <div class="file-size">${this.formatSize(file.size)}</div>
+                    </div>
+                    ${file.progress !== undefined && file.progress < 100
+                      ? html`
+                          <div class="progress">
+                            <div class="progress-bar" style="width: ${file.progress}%"></div>
+                          </div>
+                        `
+                      : ''}
+                    ${file.error ? html` <div class="error">${file.error}</div> ` : ''}
+                  </div>
+                `
+              )}
             </div>
-          `)}
-        </div>
 
-        ${!this.config.autoUpload ? html`
-          <button
-            @click=${this.uploadFiles}
-            ?disabled=${this.uploading}
-          >
-            ${this.uploading ? 'Uploading...' : 'Upload Files'}
-          </button>
-        ` : ''}
-      ` : ''}
+            ${!this.config.autoUpload
+              ? html`
+                  <button @click=${this.uploadFiles} ?disabled=${this.uploading}>
+                    ${this.uploading ? 'Uploading...' : 'Upload Files'}
+                  </button>
+                `
+              : ''}
+          `
+        : ''}
     `;
   }
 }

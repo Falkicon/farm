@@ -23,31 +23,31 @@ import { customElement } from 'lit/decorators.js';
  */
 @customElement('app-card')
 export class AppCard extends LitElement {
-    static override styles = css`
-        :host {
-            display: block;
-        }
-    `;
+  static override styles = css`
+    :host {
+      display: block;
+    }
+  `;
 
-    /**
-     * Renders the card component
-     * @returns The card template with content slot
-     */
-    protected override render() {
-        return html`
-            <div
-                class="card"
-                part="card"
-                style="
+  /**
+   * Renders the card component
+   * @returns The card template with content slot
+   */
+  protected override render() {
+    return html`
+      <div
+        class="card"
+        part="card"
+        style="
                     background-color: rgb(255, 255, 255);
                     border-radius: 0.5rem;
                     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
                     padding: 1.5rem;
                     margin-bottom: 1.5rem;
                 "
-            >
-                <slot></slot>
-            </div>
-        `;
-    }
+      >
+        <slot></slot>
+      </div>
+    `;
+  }
 }

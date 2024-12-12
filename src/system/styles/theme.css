@@ -1,15 +1,15 @@
 /* System Theme - Design Tokens */
 :root {
   /* Colors */
-  --color-bg-primary: #0f172a;    /* slate-900 */
-  --color-bg-secondary: #1e293b;  /* slate-800 */
-  --color-text-primary: #f1f5f9;  /* slate-100 */
+  --color-bg-primary: #0f172a; /* slate-900 */
+  --color-bg-secondary: #1e293b; /* slate-800 */
+  --color-text-primary: #f1f5f9; /* slate-100 */
   --color-text-secondary: #94a3b8; /* slate-400 */
-  --color-border: #334155;        /* slate-700 */
-  --color-accent: #22d3ee;        /* cyan-400 */
-  --color-success: #10b981;       /* emerald-500 */
-  --color-error: #ef4444;         /* rose-500 */
-  --color-warning: #f59e0b;       /* amber-500 */
+  --color-border: #334155; /* slate-700 */
+  --color-accent: #22d3ee; /* cyan-400 */
+  --color-success: #10b981; /* emerald-500 */
+  --color-error: #ef4444; /* rose-500 */
+  --color-warning: #f59e0b; /* amber-500 */
   --color-error-light: rgba(239, 68, 68, 0.1); /* rose-500 with opacity */
   --color-success-light: rgba(16, 185, 129, 0.1); /* emerald-500 with opacity */
   --color-warning-light: rgba(245, 158, 11, 0.1); /* amber-500 with opacity */
@@ -180,7 +180,8 @@ body {
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {

@@ -14,9 +14,9 @@ beforeAll(async () => {
     env: {
       ...process.env,
       NODE_ENV: 'test',
-      PORT: '8000' // Explicitly set port for tests
+      PORT: '8000', // Explicitly set port for tests
     },
-    cwd: process.cwd()
+    cwd: process.cwd(),
   });
 
   // Log backend output for debugging
@@ -48,15 +48,15 @@ afterAll(() => {
 
 // Add custom matchers if needed
 expect.extend({
-    // Add custom matchers here
+  // Add custom matchers here
 });
 
 // Export test hooks for global usage
 export const hooks = {
-    beforeAll: test.beforeAll,
-    afterAll: test.afterAll,
-    beforeEach: test.beforeEach,
-    afterEach: test.afterEach
+  beforeAll: test.beforeAll,
+  afterAll: test.afterAll,
+  beforeEach: test.beforeEach,
+  afterEach: test.afterEach,
 };
 
 // Make hooks available globally

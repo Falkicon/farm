@@ -67,7 +67,7 @@ export class RetryInterceptor implements RequestInterceptor, ResponseInterceptor
     const jitter = Math.random() * 100;
     const finalDelay = backoffDelay + jitter;
 
-    await new Promise(resolve => setTimeout(resolve, finalDelay));
+    await new Promise((resolve) => setTimeout(resolve, finalDelay));
   }
 
   async onRequest(config: RequestConfig): Promise<RequestConfig> {
@@ -98,7 +98,7 @@ export class RetryInterceptor implements RequestInterceptor, ResponseInterceptor
         const response = await fetch(originalConfig.endpoint, {
           method: originalConfig.method || 'GET',
           headers: originalConfig.headers,
-          body: originalConfig.body || null
+          body: originalConfig.body || null,
         });
 
         // Check response status before parsing JSON

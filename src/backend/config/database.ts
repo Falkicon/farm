@@ -9,14 +9,14 @@ import { config } from './environment';
  * @category Configuration
  */
 const logConfig: Prisma.LogDefinition[] = [
-    {
-        level: 'error',
-        emit: 'stdout',
-    },
-    {
-        level: 'warn',
-        emit: 'stdout',
-    }
+  {
+    level: 'error',
+    emit: 'stdout',
+  },
+  {
+    level: 'warn',
+    emit: 'stdout',
+  },
 ];
 
 /**
@@ -27,22 +27,22 @@ const logConfig: Prisma.LogDefinition[] = [
  * @category Configuration
  */
 const prismaClientOptions: Prisma.PrismaClientOptions = {
-    datasources: {
-        db: {
-            url: config.database.url
-        }
+  datasources: {
+    db: {
+      url: config.database.url,
     },
-    log: logConfig
+  },
+  log: logConfig,
 };
 
 // Add SSL configuration for production
 if (config.isProduction && prismaClientOptions.datasources?.db) {
-    prismaClientOptions.datasources.db = {
-        url: config.database.url,
-        ssl: {
-            rejectUnauthorized: false
-        }
-    } as Prisma.Datasources['db'];
+  prismaClientOptions.datasources.db = {
+    url: config.database.url,
+    ssl: {
+      rejectUnauthorized: false,
+    },
+  } as Prisma.Datasources['db'];
 }
 
 /**
@@ -86,6 +86,6 @@ export const prisma = new PrismaClient(prismaClientOptions);
  * @category Lifecycle
  */
 process.on('SIGINT', async () => {
-    await prisma.$disconnect();
-    process.exit(0);
+  await prisma.$disconnect();
+  process.exit(0);
 });

@@ -40,7 +40,7 @@ const envSchema = z.object({
 
   // Security
   /** Allowed CORS origins (comma-separated) */
-  CORS_ORIGINS: z.string().transform(str => str.split(',')),
+  CORS_ORIGINS: z.string().transform((str) => str.split(',')),
 
   // Logging
   /** Application log level */
@@ -98,9 +98,8 @@ export const config = {
   /** Database configuration */
   database: {
     /** Active database URL (uses TEST_DATABASE_URL in test environment if available) */
-    url: env.NODE_ENV === 'test' && env.TEST_DATABASE_URL
-      ? env.TEST_DATABASE_URL
-      : env.DATABASE_URL,
+    url:
+      env.NODE_ENV === 'test' && env.TEST_DATABASE_URL ? env.TEST_DATABASE_URL : env.DATABASE_URL,
   },
 
   /** Security configuration */

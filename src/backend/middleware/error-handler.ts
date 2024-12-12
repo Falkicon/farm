@@ -92,7 +92,7 @@ export const errorHandler = async (
       statusCode: 400,
       error: 'Bad Request',
       message: 'Validation error',
-      details: customError.validation
+      details: customError.validation,
     });
     return;
   }
@@ -102,7 +102,7 @@ export const errorHandler = async (
     await reply.status(customError.statusCode).send({
       statusCode: customError.statusCode,
       error: error.name,
-      message: error.message
+      message: error.message,
     });
     return;
   }
@@ -111,6 +111,6 @@ export const errorHandler = async (
   await reply.status(500).send({
     statusCode: 500,
     error: 'Internal Server Error',
-    message: 'An unexpected error occurred'
+    message: 'An unexpected error occurred',
   });
-}
+};

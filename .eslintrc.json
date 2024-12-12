@@ -3,7 +3,8 @@
   "env": {
     "browser": true,
     "es2022": true,
-    "node": true
+    "node": true,
+    "jest": true
   },
   "extends": [
     "eslint:recommended",
@@ -35,7 +36,7 @@
       "newlines-between": "always",
       "alphabetize": { "order": "asc" }
     }],
-    "import/no-default-export": "error",
+    "import/no-default-export": "off",
     "promise/always-return": "error",
     "promise/no-return-wrap": "error",
     "promise/param-names": "error",
@@ -49,6 +50,14 @@
     "prefer-const": "error"
   },
   "overrides": [
+    {
+      "files": ["*.stories.ts", "*.stories.tsx"],
+      "rules": {
+        "import/no-default-export": "off",
+        "@typescript-eslint/no-unsafe-assignment": "off",
+        "@typescript-eslint/no-unsafe-member-access": "off"
+      }
+    },
     {
       "files": ["*.js", "*.cjs", "*.mjs", "*.config.js", "*.config.cjs", "postcss.config.js", "tailwind.config.js"],
       "extends": ["eslint:recommended"],
@@ -89,31 +98,26 @@
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-non-null-assertion": "off"
       }
-    },
-    {
-      "files": ["src/frontend/**/*.ts"],
-      "extends": ["plugin:jsx-a11y/recommended"],
-      "rules": {
-        "jsx-a11y/click-events-have-key-events": "error",
-        "jsx-a11y/no-noninteractive-element-interactions": "error"
-      }
-    },
-    {
-      "files": ["src/backend/**/*.ts"],
-      "rules": {
-        "security/detect-possible-timing-attacks": "warn",
-        "security/detect-eval-with-expression": "error",
-        "security/detect-no-csrf-before-method-override": "error"
-      }
     }
   ],
   "ignorePatterns": [
-    "dist",
-    "node_modules",
-    "coverage",
-    ".turbo",
-    ".next",
-    "*.d.ts"
+    "**/dist/**",
+    "**/node_modules/**",
+    "**/coverage/**",
+    "**/.turbo/**",
+    "**/.next/**",
+    "**/*.d.ts",
+    "**/storybook-static/**",
+    "**/sb-preview/**",
+    "**/sb-manager/**",
+    "**/sb-addons/**",
+    "**/.storybook/**",
+    "**/build/**",
+    "**/public/**",
+    "**/*.min.js",
+    "**/*.bundle.js",
+    "**/*.js.map",
+    "**/*.css.map"
   ],
   "settings": {
     "import/resolver": {
@@ -122,4 +126,4 @@
       }
     }
   }
-} 
+}

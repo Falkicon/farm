@@ -10,7 +10,10 @@ export interface Feature {
 interface Route {
   path: string;
   children?: Route[];
-  action?: (context: RouteContext<unknown, RouterContext>, params: RouteParams) => Promise<string | typeof HTMLElement> | string | typeof HTMLElement;
+  action?: (
+    context: RouteContext<unknown, RouterContext>,
+    params: RouteParams
+  ) => Promise<string | typeof HTMLElement> | string | typeof HTMLElement;
 }
 
 export const routes: Route[] = [
@@ -19,8 +22,9 @@ export const routes: Route[] = [
     children: [
       {
         path: '',
-        action: (context: RouteContext<unknown, RouterContext>, params: RouteParams) => homeFeature.routes[0].action?.(context, params) || ''
-      }
-    ]
-  }
+        action: (context: RouteContext<unknown, RouterContext>, params: RouteParams) =>
+          homeFeature.routes[0].action?.(context, params) || '',
+      },
+    ],
+  },
 ];

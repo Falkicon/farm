@@ -67,13 +67,12 @@ export async function authenticate(request: FastifyRequest): Promise<void> {
 
     // Add user info to request
     request.user = decoded;
-
   } catch (error) {
     if (error instanceof jwt.JsonWebTokenError) {
       throw {
         statusCode: 401,
         error: 'Unauthorized',
-        message: 'Invalid token'
+        message: 'Invalid token',
       };
     }
 
@@ -81,7 +80,7 @@ export async function authenticate(request: FastifyRequest): Promise<void> {
       throw {
         statusCode: 401,
         error: 'Unauthorized',
-        message: 'Token expired'
+        message: 'Token expired',
       };
     }
 

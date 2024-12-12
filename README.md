@@ -5,6 +5,18 @@
 **F**ull Stack • **A**PI-first • **R**eactive • **M**odern Web Platform
 
 [![Documentation Status](https://github.com/Falkicon/farm/actions/workflows/docs.yml/badge.svg)](https://github.com/Falkicon/farm/actions/workflows/docs.yml)
+[![Tests](https://github.com/Falkicon/farm/actions/workflows/test.yml/badge.svg)](https://github.com/Falkicon/farm/actions/workflows/test.yml)
+[![Build Status](https://github.com/Falkicon/farm/actions/workflows/build.yml/badge.svg)](https://github.com/Falkicon/farm/actions/workflows/build.yml)
+[![E2E Tests](https://github.com/Falkicon/farm/actions/workflows/e2e.yml/badge.svg)](https://github.com/Falkicon/farm/actions/workflows/e2e.yml)
+[![CodeQL](https://github.com/Falkicon/farm/actions/workflows/codeql.yml/badge.svg)](https://github.com/Falkicon/farm/actions/workflows/codeql.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![npm version](https://badge.fury.io/js/farm.svg)](https://badge.fury.io/js/farm)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue.svg)](https://www.typescriptlang.org/)
+[![Node Version](https://img.shields.io/badge/node-%3E%3D22.0.0-brightgreen.svg)](https://nodejs.org/)
+[![codecov](https://codecov.io/gh/Falkicon/farm/branch/main/graph/badge.svg)](https://codecov.io/gh/Falkicon/farm)
+[![Storybook](https://img.shields.io/badge/Storybook-FF4785?logo=storybook&logoColor=white)](https://falkicon.github.io/farm/storybook)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
 A production-ready full-stack TypeScript boilerplate combining Lit Web Components, Fastify, and modern web platform features. Built for developers who want a robust, scalable, and type-safe foundation for their web applications.
 
@@ -69,6 +81,7 @@ FARM comes with comprehensive documentation:
 - **[API Documentation](https://falkicon.github.io/farm/modules.html)** - Detailed API reference
 - **[Component Library](https://falkicon.github.io/farm/modules.html)** - UI component documentation
 - **[Architecture Guide](https://falkicon.github.io/farm/modules.html)** - System design and patterns
+- **[Storybook](http://localhost:6006)** - Interactive component development environment
 
 You can generate and serve the documentation locally:
 
@@ -76,8 +89,14 @@ You can generate and serve the documentation locally:
 # Generate and serve documentation
 npm run docs
 
-# Start Storybook for component development
+# Start Storybook development server (port 6006)
 npm run storybook
+
+# Build static Storybook site
+npm run build-storybook
+
+# Serve built Storybook (port 6006)
+npm run serve-storybook
 ```
 
 ## Development
@@ -85,6 +104,10 @@ npm run storybook
 FARM provides a comprehensive development environment:
 
 ```bash
+# Start development servers
+npm run dev          # Main app (port 3000)
+npm run storybook    # Storybook (port 6006)
+
 # Start development server with hot reload
 npm run dev
 
