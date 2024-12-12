@@ -124,7 +124,7 @@ export async function healthRoutes(fastify: FastifyInstance) {
       services: {
         database: {
           status: 'connected',
-          latency: 50.00
+          latency: 50.0,
         },
         api: {
           status: 'ok',
@@ -135,22 +135,24 @@ export async function healthRoutes(fastify: FastifyInstance) {
             rateLimit: true,
             multipart: false,
             cache: true,
-            jwt: true
-          }
-        }
+            jwt: true,
+          },
+        },
       },
       metrics: {
         memory: {
           used: process.memoryUsage().heapUsed / 1024 / 1024,
           total: process.memoryUsage().heapTotal / 1024 / 1024,
-          free: process.memoryUsage().heapTotal / 1024 / 1024 - process.memoryUsage().heapUsed / 1024 / 1024
+          free:
+            process.memoryUsage().heapTotal / 1024 / 1024 -
+            process.memoryUsage().heapUsed / 1024 / 1024,
         },
         cpu: {
           usage: process.cpuUsage().user / 1000000,
-          cores: cpus().length
+          cores: cpus().length,
         },
-        uptime: process.uptime()
-      }
+        uptime: process.uptime(),
+      },
     };
 
     return status;

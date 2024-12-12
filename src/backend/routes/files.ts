@@ -116,75 +116,76 @@ export async function registerFileRoutes(fastify: FastifyInstance): Promise<void
    * }
    * ```
    */
-  fastify.post<{ Reply: FileUploadResponse }>('/files/upload', {
-    schema: {
-      response: {
-        200: {
-          type: 'object',
-          required: ['id', 'filename', 'mimetype', 'filepath', 'size', 'uploadedAt'],
-          properties: {
-            id: { type: 'string', format: 'uuid' },
-            filename: { type: 'string' },
-            mimetype: { type: 'string' },
-            filepath: { type: 'string' },
-            size: { type: 'number' },
-            uploadedAt: { type: 'string', format: 'date-time' }
-          }
+  fastify.post<{ Reply: FileUploadResponse }>(
+    '/files/upload',
+    {
+      schema: {
+        response: {
+          200: {
+            type: 'object',
+            required: ['id', 'filename', 'mimetype', 'filepath', 'size', 'uploadedAt'],
+            properties: {
+              id: { type: 'string', format: 'uuid' },
+              filename: { type: 'string' },
+              mimetype: { type: 'string' },
+              filepath: { type: 'string' },
+              size: { type: 'number' },
+              uploadedAt: { type: 'string', format: 'date-time' },
+            },
+          },
+          400: {
+            type: 'object',
+            properties: {
+              statusCode: { type: 'number' },
+              message: { type: 'string' },
+            },
+          },
+          500: {
+            type: 'object',
+            properties: {
+              statusCode: { type: 'number' },
+              message: { type: 'string' },
+            },
+          },
         },
-        400: {
-          type: 'object',
-          properties: {
-            statusCode: { type: 'number' },
-            message: { type: 'string' }
-          }
-        },
-        500: {
-          type: 'object',
-          properties: {
-            statusCode: { type: 'number' },
-            message: { type: 'string' }
-          }
+      },
+    },
+    async (request): Promise<FileUploadResponse> => {
+      try {
+        const data = await request.file();
+        if (!data) {
+          throw { statusCode: 400, message: 'No file uploaded' } as ErrorResponse;
         }
+
+        const fileId = randomUUID();
+        const extension = path.extname(data.filename);
+        const filename = `${fileId}${extension}`;
+        const filepath = path.join(UPLOAD_DIR, filename);
+
+        await pipeline(data.file, createWriteStream(filepath));
+
+        const stats = await fs.stat(filepath);
+
+        return {
+          id: fileId,
+          filename: data.filename,
+          mimetype: data.mimetype,
+          filepath: `/files/${filename}`,
+          size: stats.size,
+          uploadedAt: new Date().toISOString(),
+        };
+      } catch (error) {
+        if ((error as ErrorResponse).statusCode) {
+          throw error;
+        }
+        fastify.log.error('File upload failed:', error);
+        throw {
+          statusCode: 500,
+          message: 'File upload failed',
+        } as ErrorResponse;
       }
     }
-  }, async (request): Promise<FileUploadResponse> => {
-    try {
-      const data = await request.file();
-      if (!data) {
-        throw { statusCode: 400, message: 'No file uploaded' } as ErrorResponse;
-      }
-
-      const fileId = randomUUID();
-      const extension = path.extname(data.filename);
-      const filename = `${fileId}${extension}`;
-      const filepath = path.join(UPLOAD_DIR, filename);
-
-      await pipeline(
-        data.file,
-        createWriteStream(filepath)
-      );
-
-      const stats = await fs.stat(filepath);
-
-      return {
-        id: fileId,
-        filename: data.filename,
-        mimetype: data.mimetype,
-        filepath: `/files/${filename}`,
-        size: stats.size,
-        uploadedAt: new Date().toISOString()
-      };
-    } catch (error) {
-      if ((error as ErrorResponse).statusCode) {
-        throw error;
-      }
-      fastify.log.error('File upload failed:', error);
-      throw {
-        statusCode: 500,
-        message: 'File upload failed'
-      } as ErrorResponse;
-    }
-  });
+  );
 
   /**
    * Get file metadata by ID
@@ -203,29 +204,33 @@ export async function registerFileRoutes(fastify: FastifyInstance): Promise<void
    * const metadata = await response.json();
    * ```
    */
-  fastify.get<{ Params: { id: string }; Reply: FileMetadata }>('/files/:id', {
-    schema: {
-      params: {
-        type: 'object',
-        required: ['id'],
-        properties: {
-          id: { type: 'string', format: 'uuid' }
-        }
-      },
-      response: {
-        501: {
+  fastify.get<{ Params: { id: string }; Reply: FileMetadata }>(
+    '/files/:id',
+    {
+      schema: {
+        params: {
           type: 'object',
+          required: ['id'],
           properties: {
-            statusCode: { type: 'number' },
-            message: { type: 'string' }
-          }
-        }
-      }
+            id: { type: 'string', format: 'uuid' },
+          },
+        },
+        response: {
+          501: {
+            type: 'object',
+            properties: {
+              statusCode: { type: 'number' },
+              message: { type: 'string' },
+            },
+          },
+        },
+      },
+    },
+    async (): Promise<never> => {
+      // TODO: Implement file metadata retrieval from database
+      throw { statusCode: 501, message: 'Not implemented' } as ErrorResponse;
     }
-  }, async (): Promise<never> => {
-    // TODO: Implement file metadata retrieval from database
-    throw { statusCode: 501, message: 'Not implemented' } as ErrorResponse;
-  });
+  );
 
   /**
    * Delete a file by ID
@@ -249,27 +254,31 @@ export async function registerFileRoutes(fastify: FastifyInstance): Promise<void
    * }
    * ```
    */
-  fastify.delete<{ Params: { id: string }; Reply: void }>('/files/:id', {
-    schema: {
-      params: {
-        type: 'object',
-        required: ['id'],
-        properties: {
-          id: { type: 'string', format: 'uuid' }
-        }
-      },
-      response: {
-        501: {
+  fastify.delete<{ Params: { id: string }; Reply: void }>(
+    '/files/:id',
+    {
+      schema: {
+        params: {
           type: 'object',
+          required: ['id'],
           properties: {
-            statusCode: { type: 'number' },
-            message: { type: 'string' }
-          }
-        }
-      }
+            id: { type: 'string', format: 'uuid' },
+          },
+        },
+        response: {
+          501: {
+            type: 'object',
+            properties: {
+              statusCode: { type: 'number' },
+              message: { type: 'string' },
+            },
+          },
+        },
+      },
+    },
+    async (): Promise<never> => {
+      // TODO: Implement file deletion
+      throw { statusCode: 501, message: 'Not implemented' } as ErrorResponse;
     }
-  }, async (): Promise<never> => {
-    // TODO: Implement file deletion
-    throw { statusCode: 501, message: 'Not implemented' } as ErrorResponse;
-  });
+  );
 }

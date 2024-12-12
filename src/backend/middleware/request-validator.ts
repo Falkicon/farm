@@ -50,7 +50,7 @@ export async function requestValidator(request: FastifyRequest): Promise<void> {
       throw {
         statusCode: 415,
         error: 'Unsupported Media Type',
-        message: 'Content-Type must be application/json'
+        message: 'Content-Type must be application/json',
       };
     }
   }
@@ -61,7 +61,7 @@ export async function requestValidator(request: FastifyRequest): Promise<void> {
     throw {
       statusCode: 406,
       error: 'Not Acceptable',
-      message: 'Only application/json is supported'
+      message: 'Only application/json is supported',
     };
   }
 }

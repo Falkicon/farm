@@ -20,11 +20,7 @@ export class APICache {
     return APICache.instance;
   }
 
-  set<T>(
-    key: string,
-    data: APIResponse<T>,
-    ttl: number = this.defaultTTL
-  ): void {
+  set<T>(key: string, data: APIResponse<T>, ttl: number = this.defaultTTL): void {
     const timestamp = Date.now();
     const expiresAt = timestamp + ttl;
 
@@ -77,7 +73,9 @@ export class APICache {
   }
 
   getCacheKey(endpoint: string, params?: Record<string, unknown>): string {
-    const queryString = params ? new URLSearchParams(params as Record<string, string>).toString() : '';
+    const queryString = params
+      ? new URLSearchParams(params as Record<string, string>).toString()
+      : '';
     return `${endpoint}${queryString ? `?${queryString}` : ''}`;
   }
 }

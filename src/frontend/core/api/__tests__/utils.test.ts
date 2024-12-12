@@ -103,16 +103,16 @@ describe('API Utilities', () => {
         'Content-Disposition: form-data; name="test"',
         '',
         'data',
-        `--${boundary}--`
+        `--${boundary}--`,
       ].join('\r\n');
 
       const response = new Response(body, {
         headers: {
-          'content-type': `multipart/form-data; boundary=${boundary}`
+          'content-type': `multipart/form-data; boundary=${boundary}`,
         },
       });
 
-      const result = await parseResponseData(response) as FormData;
+      const result = (await parseResponseData(response)) as FormData;
       expect(result).toBeTruthy();
       expect(result.get('test')).toBe('data');
     });
@@ -156,7 +156,7 @@ describe('APICache', () => {
     cache.set(key, data, 100); // 100ms TTL
     expect(cache.get(key)).toEqual(data);
 
-    await new Promise(resolve => setTimeout(resolve, 150));
+    await new Promise((resolve) => setTimeout(resolve, 150));
     expect(cache.get(key)).toBeNull();
   });
 

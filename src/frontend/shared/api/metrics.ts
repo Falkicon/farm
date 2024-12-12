@@ -12,5 +12,5 @@ export const metricsApi = {
 
   getMetricHistory(metric: string): Promise<SystemMetrics[]> {
     return apiClient.get<SystemMetrics[]>(`/api/metrics/${metric}/history`);
-  }
+  },
 };

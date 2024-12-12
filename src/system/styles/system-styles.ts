@@ -37,7 +37,7 @@ export const systemStyles = css`
     grid-column: span var(--system-card-columns, 12);
     background: var(--system-card-bg, #fff);
     border-radius: var(--system-card-radius, 4px);
-    box-shadow: var(--system-card-shadow, 0 2px 4px rgba(0,0,0,0.1));
+    box-shadow: var(--system-card-shadow, 0 2px 4px rgba(0, 0, 0, 0.1));
     padding: var(--system-card-padding, 1rem);
     box-sizing: border-box;
   }
@@ -52,17 +52,17 @@ export const systemStyles = css`
   }
 
   .system-status-success {
-    background: var(--system-status-success-bg, #10B981);
+    background: var(--system-status-success-bg, #10b981);
     color: var(--system-status-success-color, white);
   }
 
   .system-status-error {
-    background: var(--system-status-error-bg, #EF4444);
+    background: var(--system-status-error-bg, #ef4444);
     color: var(--system-status-error-color, white);
   }
 
   .system-status-warning {
-    background: var(--system-status-warning-bg, #F59E0B);
+    background: var(--system-status-warning-bg, #f59e0b);
     color: var(--system-status-warning-color, white);
   }
 `;

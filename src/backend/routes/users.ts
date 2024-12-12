@@ -46,7 +46,7 @@ interface SuccessResponse {
 // Mock user data for development
 const users: User[] = [
   { id: '1', name: 'John Doe', email: 'john@example.com', role: 'user' },
-  { id: '2', name: 'Jane Smith', email: 'jane@example.com', role: 'admin' }
+  { id: '2', name: 'Jane Smith', email: 'jane@example.com', role: 'admin' },
 ];
 
 /**
@@ -85,31 +85,35 @@ export async function registerUserRoutes(fastify: FastifyInstance): Promise<void
    * console.log('Total users:', users.length);
    * ```
    */
-  fastify.get<{ Reply: UserListResponse }>('/users', {
-    schema: {
-      response: {
-        200: {
-          type: 'object',
-          properties: {
-            users: {
-              type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  id: { type: 'string' },
-                  name: { type: 'string' },
-                  email: { type: 'string', format: 'email' },
-                  role: { type: 'string', enum: ['user', 'admin'] }
-                }
-              }
-            }
-          }
-        }
-      }
+  fastify.get<{ Reply: UserListResponse }>(
+    '/users',
+    {
+      schema: {
+        response: {
+          200: {
+            type: 'object',
+            properties: {
+              users: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    id: { type: 'string' },
+                    name: { type: 'string' },
+                    email: { type: 'string', format: 'email' },
+                    role: { type: 'string', enum: ['user', 'admin'] },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    async (): Promise<UserListResponse> => {
+      return { users };
     }
-  }, async (): Promise<UserListResponse> => {
-    return { users };
-  });
+  );
 
   /**
    * Get user by ID
@@ -131,49 +135,53 @@ export async function registerUserRoutes(fastify: FastifyInstance): Promise<void
    * }
    * ```
    */
-  fastify.get<{ Params: { id: string }; Reply: UserResponse }>('/users/:id', {
-    schema: {
-      params: {
-        type: 'object',
-        required: ['id'],
-        properties: {
-          id: { type: 'string' }
-        }
-      },
-      response: {
-        200: {
+  fastify.get<{ Params: { id: string }; Reply: UserResponse }>(
+    '/users/:id',
+    {
+      schema: {
+        params: {
           type: 'object',
+          required: ['id'],
           properties: {
-            user: {
-              type: 'object',
-              properties: {
-                id: { type: 'string' },
-                name: { type: 'string' },
-                email: { type: 'string', format: 'email' },
-                role: { type: 'string', enum: ['user', 'admin'] }
-              }
-            }
-          }
+            id: { type: 'string' },
+          },
         },
-        404: {
-          type: 'object',
-          properties: {
-            statusCode: { type: 'number' },
-            message: { type: 'string' }
-          }
-        }
+        response: {
+          200: {
+            type: 'object',
+            properties: {
+              user: {
+                type: 'object',
+                properties: {
+                  id: { type: 'string' },
+                  name: { type: 'string' },
+                  email: { type: 'string', format: 'email' },
+                  role: { type: 'string', enum: ['user', 'admin'] },
+                },
+              },
+            },
+          },
+          404: {
+            type: 'object',
+            properties: {
+              statusCode: { type: 'number' },
+              message: { type: 'string' },
+            },
+          },
+        },
+      },
+    },
+    async (request): Promise<UserResponse> => {
+      const { id } = request.params;
+      const user = users.find((u) => u.id === id);
+
+      if (!user) {
+        throw { statusCode: 404, message: 'User not found' } as ErrorResponse;
       }
-    }
-  }, async (request): Promise<UserResponse> => {
-    const { id } = request.params;
-    const user = users.find(u => u.id === id);
 
-    if (!user) {
-      throw { statusCode: 404, message: 'User not found' } as ErrorResponse;
+      return { user };
     }
-
-    return { user };
-  });
+  );
 
   /**
    * Create a new user
@@ -208,47 +216,51 @@ export async function registerUserRoutes(fastify: FastifyInstance): Promise<void
   fastify.post<{
     Body: { name: string; email: string; role?: 'user' | 'admin' };
     Reply: UserResponse;
-  }>('/users', {
-    schema: {
-      body: {
-        type: 'object',
-        required: ['name', 'email'],
-        properties: {
-          name: { type: 'string' },
-          email: { type: 'string', format: 'email' },
-          role: { type: 'string', enum: ['user', 'admin'], default: 'user' }
-        }
-      },
-      response: {
-        200: {
+  }>(
+    '/users',
+    {
+      schema: {
+        body: {
           type: 'object',
+          required: ['name', 'email'],
           properties: {
-            user: {
-              type: 'object',
-              properties: {
-                id: { type: 'string' },
-                name: { type: 'string' },
-                email: { type: 'string', format: 'email' },
-                role: { type: 'string', enum: ['user', 'admin'] }
-              }
-            }
-          }
-        }
-      }
+            name: { type: 'string' },
+            email: { type: 'string', format: 'email' },
+            role: { type: 'string', enum: ['user', 'admin'], default: 'user' },
+          },
+        },
+        response: {
+          200: {
+            type: 'object',
+            properties: {
+              user: {
+                type: 'object',
+                properties: {
+                  id: { type: 'string' },
+                  name: { type: 'string' },
+                  email: { type: 'string', format: 'email' },
+                  role: { type: 'string', enum: ['user', 'admin'] },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    async (request): Promise<UserResponse> => {
+      const { name, email, role = 'user' } = request.body;
+
+      const newUser: User = {
+        id: String(users.length + 1),
+        name,
+        email,
+        role,
+      };
+
+      users.push(newUser);
+      return { user: newUser };
     }
-  }, async (request): Promise<UserResponse> => {
-    const { name, email, role = 'user' } = request.body;
-
-    const newUser: User = {
-      id: String(users.length + 1),
-      name,
-      email,
-      role
-    };
-
-    users.push(newUser);
-    return { user: newUser };
-  });
+  );
 
   /**
    * Update user details
@@ -286,59 +298,63 @@ export async function registerUserRoutes(fastify: FastifyInstance): Promise<void
     Params: { id: string };
     Body: Partial<User>;
     Reply: UserResponse;
-  }>('/users/:id', {
-    schema: {
-      params: {
-        type: 'object',
-        required: ['id'],
-        properties: {
-          id: { type: 'string' }
-        }
-      },
-      body: {
-        type: 'object',
-        properties: {
-          name: { type: 'string' },
-          email: { type: 'string', format: 'email' },
-          role: { type: 'string', enum: ['user', 'admin'] }
-        }
-      },
-      response: {
-        200: {
+  }>(
+    '/users/:id',
+    {
+      schema: {
+        params: {
           type: 'object',
+          required: ['id'],
           properties: {
-            user: {
-              type: 'object',
-              properties: {
-                id: { type: 'string' },
-                name: { type: 'string' },
-                email: { type: 'string', format: 'email' },
-                role: { type: 'string', enum: ['user', 'admin'] }
-              }
-            }
-          }
+            id: { type: 'string' },
+          },
         },
-        404: {
+        body: {
           type: 'object',
           properties: {
-            statusCode: { type: 'number' },
-            message: { type: 'string' }
-          }
-        }
+            name: { type: 'string' },
+            email: { type: 'string', format: 'email' },
+            role: { type: 'string', enum: ['user', 'admin'] },
+          },
+        },
+        response: {
+          200: {
+            type: 'object',
+            properties: {
+              user: {
+                type: 'object',
+                properties: {
+                  id: { type: 'string' },
+                  name: { type: 'string' },
+                  email: { type: 'string', format: 'email' },
+                  role: { type: 'string', enum: ['user', 'admin'] },
+                },
+              },
+            },
+          },
+          404: {
+            type: 'object',
+            properties: {
+              statusCode: { type: 'number' },
+              message: { type: 'string' },
+            },
+          },
+        },
+      },
+    },
+    async (request): Promise<UserResponse> => {
+      const { id } = request.params;
+      const updates = request.body;
+      const userIndex = users.findIndex((u) => u.id === id);
+
+      if (userIndex === -1) {
+        throw { statusCode: 404, message: 'User not found' } as ErrorResponse;
       }
-    }
-  }, async (request): Promise<UserResponse> => {
-    const { id } = request.params;
-    const updates = request.body;
-    const userIndex = users.findIndex(u => u.id === id);
 
-    if (userIndex === -1) {
-      throw { statusCode: 404, message: 'User not found' } as ErrorResponse;
+      users[userIndex] = { ...users[userIndex], ...updates };
+      return { user: users[userIndex] };
     }
-
-    users[userIndex] = { ...users[userIndex], ...updates };
-    return { user: users[userIndex] };
-  });
+  );
 
   /**
    * Delete a user
@@ -366,40 +382,44 @@ export async function registerUserRoutes(fastify: FastifyInstance): Promise<void
   fastify.delete<{
     Params: { id: string };
     Reply: SuccessResponse;
-  }>('/users/:id', {
-    schema: {
-      params: {
-        type: 'object',
-        required: ['id'],
-        properties: {
-          id: { type: 'string' }
-        }
-      },
-      response: {
-        200: {
+  }>(
+    '/users/:id',
+    {
+      schema: {
+        params: {
           type: 'object',
+          required: ['id'],
           properties: {
-            success: { type: 'boolean' }
-          }
+            id: { type: 'string' },
+          },
         },
-        404: {
-          type: 'object',
-          properties: {
-            statusCode: { type: 'number' },
-            message: { type: 'string' }
-          }
-        }
+        response: {
+          200: {
+            type: 'object',
+            properties: {
+              success: { type: 'boolean' },
+            },
+          },
+          404: {
+            type: 'object',
+            properties: {
+              statusCode: { type: 'number' },
+              message: { type: 'string' },
+            },
+          },
+        },
+      },
+    },
+    async (request): Promise<SuccessResponse> => {
+      const { id } = request.params;
+      const userIndex = users.findIndex((u) => u.id === id);
+
+      if (userIndex === -1) {
+        throw { statusCode: 404, message: 'User not found' } as ErrorResponse;
       }
-    }
-  }, async (request): Promise<SuccessResponse> => {
-    const { id } = request.params;
-    const userIndex = users.findIndex(u => u.id === id);
 
-    if (userIndex === -1) {
-      throw { statusCode: 404, message: 'User not found' } as ErrorResponse;
+      users.splice(userIndex, 1);
+      return { success: true };
     }
-
-    users.splice(userIndex, 1);
-    return { success: true };
-  });
+  );
 }

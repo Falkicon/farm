@@ -32,7 +32,7 @@ export const statusStyles = css`
     justify-content: space-between;
     align-items: center;
     padding: 0.25rem 0;
-    border-bottom: 1px solid var(--system-status-metric-border, rgba(0,0,0,0.1));
+    border-bottom: 1px solid var(--system-status-metric-border, rgba(0, 0, 0, 0.1));
   }
 
   .status-metric:last-child {
@@ -40,7 +40,7 @@ export const statusStyles = css`
   }
 
   .status-label {
-    color: var(--system-status-label-color, #6B7280);
+    color: var(--system-status-label-color, #6b7280);
     font-size: var(--system-status-label-size, 0.875rem);
   }
 

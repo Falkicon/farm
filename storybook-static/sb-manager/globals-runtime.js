@@ -40319,7 +40319,7 @@ var { VERSIONCHECK: r0e } = H, fM = (0, dM.default)(1)(() => {
       if (i) {
         if (!i.version || !s.version)
           return !0;
-        let u = !!on.default.prerelease(s.version) ? `${on.default.major(s.version)}.${on.default.minor(s.version)}.${on.default.patch(
+        let u = on.default.prerelease(s.version) ? `${on.default.major(s.version)}.${on.default.minor(s.version)}.${on.default.patch(
           s.version
         )}` : s.version, c = on.default.diff(u, i.version);
         return on.default.gt(i.version, u) && c !== "patch" && !c.includes("pre");

@@ -6,17 +6,15 @@ import './nav/MainNav';
 const meta: Meta = {
   title: 'Shell/AppShell',
   tags: ['autodocs'],
-  render: () => html`
-    <app-shell></app-shell>
-  `,
+  render: () => html` <app-shell></app-shell> `,
   parameters: {
     layout: 'fullscreen',
     docs: {
       description: {
-        component: 'Main application shell component that handles routing and layout.'
-      }
-    }
-  }
+        component: 'Main application shell component that handles routing and layout.',
+      },
+    },
+  },
 };
 
 export default meta;
@@ -32,5 +30,5 @@ export const WithCustomContent: Story = {
         <p>This is a custom content example for the app shell.</p>
       </div>
     </app-shell>
-  `
+  `,
 };

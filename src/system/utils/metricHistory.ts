@@ -32,7 +32,7 @@ export class MetricHistoryManager {
     for (let i = this.maxPoints; i > 0; i--) {
       this.history.push({
         value: this.generateValue(),
-        timestamp: new Date(now.getTime() - (i * this.updateInterval))
+        timestamp: new Date(now.getTime() - i * this.updateInterval),
       });
     }
   }
@@ -49,7 +49,7 @@ export class MetricHistoryManager {
     this.intervalId = window.setInterval(() => {
       this.history.push({
         value: this.generateValue(),
-        timestamp: new Date()
+        timestamp: new Date(),
       });
 
       if (this.history.length > this.maxPoints) {

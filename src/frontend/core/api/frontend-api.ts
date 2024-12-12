@@ -139,19 +139,11 @@ export class FrontendAPI {
     return this.request<T>('GET', endpoint, config);
   }
 
-  async post<T>(
-    endpoint: string,
-    data?: unknown,
-    config?: RequestConfig
-  ): Promise<APIResponse<T>> {
+  async post<T>(endpoint: string, data?: unknown, config?: RequestConfig): Promise<APIResponse<T>> {
     return this.request<T>('POST', endpoint, config, data);
   }
 
-  async put<T>(
-    endpoint: string,
-    data?: unknown,
-    config?: RequestConfig
-  ): Promise<APIResponse<T>> {
+  async put<T>(endpoint: string, data?: unknown, config?: RequestConfig): Promise<APIResponse<T>> {
     return this.request<T>('PUT', endpoint, config, data);
   }
 

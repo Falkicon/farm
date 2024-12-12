@@ -4,30 +4,30 @@ import '../app-input';
 import { AppInput } from '../app-input';
 
 describe('AppInput', () => {
-    it('renders with label', async () => {
-        const el = await fixture<AppInput>(html`<app-input label="Test Label"></app-input>`);
-        const label = el.shadowRoot?.querySelector('label');
+  it('renders with label', async () => {
+    const el = await fixture<AppInput>(html`<app-input label="Test Label"></app-input>`);
+    const label = el.shadowRoot?.querySelector('label');
 
-        expect(label?.textContent).to.equal('Test Label');
-    });
+    expect(label?.textContent).to.equal('Test Label');
+  });
 
-    it('renders without label when not provided', async () => {
-        const el = await fixture<AppInput>(html`<app-input></app-input>`);
-        const label = el.shadowRoot?.querySelector('label');
+  it('renders without label when not provided', async () => {
+    const el = await fixture<AppInput>(html`<app-input></app-input>`);
+    const label = el.shadowRoot?.querySelector('label');
 
-        expect(label).to.be.null;
-    });
+    expect(label).to.be.null;
+  });
 
-    it('handles input changes', async () => {
-        const el = await fixture<AppInput>(html`<app-input></app-input>`);
-        const input = el.shadowRoot?.querySelector('input');
+  it('handles input changes', async () => {
+    const el = await fixture<AppInput>(html`<app-input></app-input>`);
+    const input = el.shadowRoot?.querySelector('input');
 
-        let changedValue = '';
-        el.addEventListener('change', ((e: CustomEvent) => {
-            changedValue = e.detail;
-        }) as EventListener);
+    let changedValue = '';
+    el.addEventListener('change', ((e: CustomEvent) => {
+      changedValue = e.detail;
+    }) as EventListener);
 
-        input?.dispatchEvent(new Event('input'));
-        expect(changedValue).to.equal(input?.value);
-    });
-}); 
+    input?.dispatchEvent(new Event('input'));
+    expect(changedValue).to.equal(input?.value);
+  });
+});

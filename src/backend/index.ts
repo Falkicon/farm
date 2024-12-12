@@ -52,7 +52,7 @@ const start = async () => {
     await server.listen({
       port: PORT,
       host: HOST,
-      listenTextResolver: () => ''
+      listenTextResolver: () => '',
     });
 
     // Display startup banner
@@ -60,7 +60,7 @@ const start = async () => {
       mode: NODE_ENV,
       backendPort: PORT,
       frontendPort: FRONTEND_PORT,
-      localIP: getLocalIP()
+      localIP: getLocalIP(),
     });
 
     // Log startup message directly to stdout

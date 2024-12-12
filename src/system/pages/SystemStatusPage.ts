@@ -433,16 +433,16 @@ export class SystemStatusPage extends LitElement {
   private isValidMetricData(data: SystemMetrics): boolean {
     return Boolean(
       data &&
-      typeof data.timestamp === 'string' &&
-      data.services?.api?.responseTime !== undefined &&
-      typeof data.services?.api?.responseTime === 'number' &&
-      !isNaN(data.services.api.responseTime) &&
-      data.memory?.usedPercent !== undefined &&
-      typeof data.memory?.usedPercent === 'number' &&
-      !isNaN(data.memory.usedPercent) &&
-      data.cpu?.usage !== undefined &&
-      typeof data.cpu?.usage === 'number' &&
-      !isNaN(data.cpu.usage)
+        typeof data.timestamp === 'string' &&
+        data.services?.api?.responseTime !== undefined &&
+        typeof data.services?.api?.responseTime === 'number' &&
+        !isNaN(data.services.api.responseTime) &&
+        data.memory?.usedPercent !== undefined &&
+        typeof data.memory?.usedPercent === 'number' &&
+        !isNaN(data.memory.usedPercent) &&
+        data.cpu?.usage !== undefined &&
+        typeof data.cpu?.usage === 'number' &&
+        !isNaN(data.cpu.usage)
     );
   }
 
@@ -454,7 +454,7 @@ export class SystemStatusPage extends LitElement {
       } else {
         this.error = {
           error: 'Connection Error',
-          message: err instanceof Error ? err.message : 'Failed to connect to metrics service'
+          message: err instanceof Error ? err.message : 'Failed to connect to metrics service',
         };
       }
 
@@ -467,7 +467,7 @@ export class SystemStatusPage extends LitElement {
     } catch {
       this.error = {
         error: 'Connection Error',
-        message: err instanceof Error ? err.message : 'Failed to connect to metrics service'
+        message: err instanceof Error ? err.message : 'Failed to connect to metrics service',
       };
     }
   }
@@ -495,7 +495,7 @@ export class SystemStatusPage extends LitElement {
   private getThresholdClass(value: number, type: 'cpu' | 'memory'): string {
     const thresholds = {
       cpu: { warning: 70, critical: 90 },
-      memory: { warning: 80, critical: 95 }
+      memory: { warning: 80, critical: 95 },
     };
 
     const limits = thresholds[type];
@@ -525,7 +525,7 @@ export class SystemStatusPage extends LitElement {
     const event = new CustomEvent('feature-toggle', {
       detail: { name, enabled },
       bubbles: true,
-      composed: true
+      composed: true,
     });
     this.dispatchEvent(event);
   }
@@ -576,14 +576,12 @@ export class SystemStatusPage extends LitElement {
         <div class="error">
           <h2>${this.error.error}</h2>
           <p>${this.error.message}</p>
-          ${this.error.details ? html`
-            <pre>${JSON.stringify(this.error.details, null, 2)}</pre>
-          ` : ''}
-          ${this.retryCount < this.maxRetries ? html`
-            <p>Retrying... (Attempt ${this.retryCount} of ${this.maxRetries})</p>
-          ` : html`
-            <p>Max retries reached. Please refresh the page to try again.</p>
-          `}
+          ${this.error.details
+            ? html` <pre>${JSON.stringify(this.error.details, null, 2)}</pre> `
+            : ''}
+          ${this.retryCount < this.maxRetries
+            ? html` <p>Retrying... (Attempt ${this.retryCount} of ${this.maxRetries})</p> `
+            : html` <p>Max retries reached. Please refresh the page to try again.</p> `}
         </div>
       `;
     }
@@ -596,32 +594,38 @@ export class SystemStatusPage extends LitElement {
       `;
     }
 
-    const validHistory = this.metricsHistory.filter(m => this.isValidMetricData(m));
+    const validHistory = this.metricsHistory.filter((m) => this.isValidMetricData(m));
 
     const cpuTrend = this.calculateTrend(
       this.metrics.cpu?.usage ?? 0,
-      validHistory.map(m => m.cpu?.usage ?? 0)
+      validHistory.map((m) => m.cpu?.usage ?? 0)
     );
 
     const memoryTrend = this.calculateTrend(
       this.metrics.memory?.usedPercent ?? 0,
-      validHistory.map(m => m.memory?.usedPercent ?? 0)
+      validHistory.map((m) => m.memory?.usedPercent ?? 0)
     );
 
-    const apiResponseTimeData = validHistory.map(m => ({
-      value: m.services?.api?.responseTime ?? 0,
-      timestamp: new Date(m.timestamp)
-    })).filter(d => !isNaN(d.value) && d.timestamp instanceof Date);
+    const apiResponseTimeData = validHistory
+      .map((m) => ({
+        value: m.services?.api?.responseTime ?? 0,
+        timestamp: new Date(m.timestamp),
+      }))
+      .filter((d) => !isNaN(d.value) && d.timestamp instanceof Date);
 
-    const memoryUsageData = validHistory.map(m => ({
-      value: Math.round(m.memory?.usedPercent ?? 0),
-      timestamp: new Date(m.timestamp)
-    })).filter(d => !isNaN(d.value) && d.timestamp instanceof Date);
+    const memoryUsageData = validHistory
+      .map((m) => ({
+        value: Math.round(m.memory?.usedPercent ?? 0),
+        timestamp: new Date(m.timestamp),
+      }))
+      .filter((d) => !isNaN(d.value) && d.timestamp instanceof Date);
 
-    const cpuUsageData = validHistory.map(m => ({
-      value: Math.round(m.cpu?.usage ?? 0),
-      timestamp: new Date(m.timestamp)
-    })).filter(d => !isNaN(d.value) && d.timestamp instanceof Date);
+    const cpuUsageData = validHistory
+      .map((m) => ({
+        value: Math.round(m.cpu?.usage ?? 0),
+        timestamp: new Date(m.timestamp),
+      }))
+      .filter((d) => !isNaN(d.value) && d.timestamp instanceof Date);
 
     const responseTime = this.metrics.services?.api?.responseTime ?? 0;
     const memoryUsedPercent = this.metrics.memory?.usedPercent ?? 0;
@@ -660,14 +664,20 @@ export class SystemStatusPage extends LitElement {
             </div>
             <div class="status-row">
               <span class="status-label">Last Updated</span>
-              <span class="status-value">${new Date(this.metrics.timestamp).toLocaleTimeString()}</span>
+              <span class="status-value"
+                >${new Date(this.metrics.timestamp).toLocaleTimeString()}</span
+              >
             </div>
           </div>
 
           <div class="status-card">
             <div class="status-row">
               <span class="status-label">
-                <span class="threshold-indicator ${dbConnected ? 'threshold-normal' : 'threshold-critical'}"></span>
+                <span
+                  class="threshold-indicator ${dbConnected
+                    ? 'threshold-normal'
+                    : 'threshold-critical'}"
+                ></span>
                 Database Status
               </span>
               <span class="status-value ${dbConnected ? 'status-enabled' : 'status-disabled'}">
@@ -678,9 +688,9 @@ export class SystemStatusPage extends LitElement {
               <span class="status-label">Latency</span>
               <span class="status-value">
                 ${dbLatency ?? 'N/A'}ms
-                ${dbLatency && dbLatency > 100 ? html`
-                  <span class="tooltip">High latency detected</span>
-                ` : ''}
+                ${dbLatency && dbLatency > 100
+                  ? html` <span class="tooltip">High latency detected</span> `
+                  : ''}
               </span>
             </div>
           </div>
@@ -689,41 +699,48 @@ export class SystemStatusPage extends LitElement {
         <section class="section" role="region" aria-label="API Features Status">
           <div class="section-header">
             <h2 class="section-title">API Features</h2>
-            <span class="info-icon" role="tooltip" aria-label="Status of API features and middleware">ⓘ</span>
+            <span
+              class="info-icon"
+              role="tooltip"
+              aria-label="Status of API features and middleware"
+              >ⓘ</span
+            >
           </div>
 
           <div class="feature-list" role="list">
-            ${this.renderFeature('cors', true)}
-            ${this.renderFeature('helmet', true)}
-            ${this.renderFeature('rateLimit', true)}
-            ${this.renderFeature('multipart', false)}
-            ${this.renderFeature('cache', true)}
-            ${this.renderFeature('jwt', true)}
+            ${this.renderFeature('cors', true)} ${this.renderFeature('helmet', true)}
+            ${this.renderFeature('rateLimit', true)} ${this.renderFeature('multipart', false)}
+            ${this.renderFeature('cache', true)} ${this.renderFeature('jwt', true)}
           </div>
         </section>
 
         <section class="section" role="region" aria-label="Performance Metrics">
           <div class="section-header">
             <h2 class="section-title">Performance Metrics</h2>
-            <span class="info-icon" role="tooltip" aria-label="Real-time system performance metrics">ⓘ</span>
+            <span class="info-icon" role="tooltip" aria-label="Real-time system performance metrics"
+              >ⓘ</span
+            >
           </div>
 
           <div class="status-card">
             <div class="metric-value">
               ${responseTime.toFixed(2)}ms
-              ${responseTime > 100 ? html`
-                <span class="tooltip" role="tooltip">Response time is higher than recommended</span>
-              ` : ''}
+              ${responseTime > 100
+                ? html`
+                    <span class="tooltip" role="tooltip"
+                      >Response time is higher than recommended</span
+                    >
+                  `
+                : ''}
             </div>
             <div class="metric-label">API Response Time</div>
-            <div class="sparkline-container"
-                 @mousemove="${(e: MouseEvent) => this.handleSparklineHover(e, apiResponseTimeData)}"
-                 @mouseleave="${this.handleSparklineLeave}">
+            <div
+              class="sparkline-container"
+              @mousemove="${(e: MouseEvent) => this.handleSparklineHover(e, apiResponseTimeData)}"
+              @mouseleave="${this.handleSparklineLeave}"
+            >
               <div class="sparkline-tooltip"></div>
-              <system-sparkline
-                .data="${apiResponseTimeData}"
-                .unit="ms"
-              ></system-sparkline>
+              <system-sparkline .data="${apiResponseTimeData}" .unit="ms"></system-sparkline>
               <div class="sparkline-overlay">
                 <span>Last 5m</span>
                 <span>Now</span>
@@ -733,16 +750,14 @@ export class SystemStatusPage extends LitElement {
 
           <div class="status-card">
             <div class="metric-value">
-              <span class="threshold-indicator ${this.getThresholdClass(memoryUsedPercent, 'memory')}"></span>
-              ${Math.round(memoryUsedPercent)}%
-              ${memoryTrend}
+              <span
+                class="threshold-indicator ${this.getThresholdClass(memoryUsedPercent, 'memory')}"
+              ></span>
+              ${Math.round(memoryUsedPercent)}% ${memoryTrend}
             </div>
             <div class="metric-label">Memory Usage</div>
             <div class="sparkline-container">
-              <system-sparkline
-                .data="${memoryUsageData}"
-                .unit="%"
-              ></system-sparkline>
+              <system-sparkline .data="${memoryUsageData}" .unit="%"></system-sparkline>
               <div class="sparkline-overlay">
                 <span>Last 5m</span>
                 <span>Now</span>
@@ -763,15 +778,11 @@ export class SystemStatusPage extends LitElement {
           <div class="status-card">
             <div class="metric-value">
               <span class="threshold-indicator ${this.getThresholdClass(cpuUsage, 'cpu')}"></span>
-              ${Math.round(cpuUsage)}%
-              ${cpuTrend}
+              ${Math.round(cpuUsage)}% ${cpuTrend}
             </div>
             <div class="metric-label">CPU Usage</div>
             <div class="sparkline-container">
-              <system-sparkline
-                .data="${cpuUsageData}"
-                .unit="%"
-              ></system-sparkline>
+              <system-sparkline .data="${cpuUsageData}" .unit="%"></system-sparkline>
               <div class="sparkline-overlay">
                 <span>Last 5m</span>
                 <span>Now</span>
@@ -784,7 +795,9 @@ export class SystemStatusPage extends LitElement {
               </div>
               <div class="status-row">
                 <span class="status-label">Temperature</span>
-                <span class="status-value ${cpuTemp > 80 ? 'status-warning' : ''}">${cpuTemp}°C</span>
+                <span class="status-value ${cpuTemp > 80 ? 'status-warning' : ''}"
+                  >${cpuTemp}°C</span
+                >
               </div>
             </div>
           </div>
@@ -795,14 +808,19 @@ export class SystemStatusPage extends LitElement {
 
   private renderFeature(name: string, enabled: boolean) {
     return html`
-      <div class="feature-item"
-           role="listitem"
-           tabindex="0"
-           @click="${() => this.handleFeatureClick(name, enabled)}"
-           @keydown="${(e: KeyboardEvent) => e.key === 'Enter' && this.handleFeatureClick(name, enabled)}"
-           aria-label="${name} feature is ${enabled ? 'enabled' : 'disabled'}">
+      <div
+        class="feature-item"
+        role="listitem"
+        tabindex="0"
+        @click="${() => this.handleFeatureClick(name, enabled)}"
+        @keydown="${(e: KeyboardEvent) =>
+          e.key === 'Enter' && this.handleFeatureClick(name, enabled)}"
+        aria-label="${name} feature is ${enabled ? 'enabled' : 'disabled'}"
+      >
         <div class="feature-name">
-          <span class="threshold-indicator ${enabled ? 'threshold-normal' : 'threshold-critical'}"></span>
+          <span
+            class="threshold-indicator ${enabled ? 'threshold-normal' : 'threshold-critical'}"
+          ></span>
           <span>${name}</span>
         </div>
         <span class="feature-status ${enabled ? 'status-enabled' : 'status-disabled'}">

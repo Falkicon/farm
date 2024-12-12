@@ -27,7 +27,7 @@ const colors: BannerColors = {
   warning: chalk.yellow,
   link: chalk.blue,
   heading: chalk.bold,
-  dim: chalk.dim
+  dim: chalk.dim,
 };
 
 /**
@@ -109,7 +109,7 @@ export function createStartupBanner(info: ServerInfo): void {
     '',
     colors.dim('  Press Ctrl+C to stop'),
     '',
-    ''  // Extra newline at the end
+    '', // Extra newline at the end
   ].join('\n');
 
   // Direct console output for banner with proper line ending

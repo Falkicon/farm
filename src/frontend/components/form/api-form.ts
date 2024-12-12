@@ -52,7 +52,9 @@ export class ApiForm extends LitElement {
       font-weight: 500;
     }
 
-    input, select, textarea {
+    input,
+    select,
+    textarea {
       padding: 0.5rem;
       border: 1px solid #ddd;
       border-radius: 4px;
@@ -176,7 +178,7 @@ export class ApiForm extends LitElement {
   private validate(): boolean {
     const errors: Record<string, string> = {};
 
-    this.config.fields.forEach(field => {
+    this.config.fields.forEach((field) => {
       const value = this.formData[field.name] || '';
       const error = this.validateField(field, value);
       if (error) {
@@ -200,26 +202,32 @@ export class ApiForm extends LitElement {
     this.success = false;
 
     try {
-      const method = this.config.method.toLowerCase() as 'get' | 'post' | 'put' | 'delete' | 'patch';
-      await this.api[method](
-        this.config.endpoint,
-        this.formData
-      );
+      const method = this.config.method.toLowerCase() as
+        | 'get'
+        | 'post'
+        | 'put'
+        | 'delete'
+        | 'patch';
+      await this.api[method](this.config.endpoint, this.formData);
 
       this.success = true;
       this.formData = {};
 
       // Emit success event
-      this.dispatchEvent(new CustomEvent('submit-success', {
-        detail: { data: this.formData }
-      }));
+      this.dispatchEvent(
+        new CustomEvent('submit-success', {
+          detail: { data: this.formData },
+        })
+      );
     } catch (error) {
       this.error = error instanceof Error ? error.message : 'Submission failed';
 
       // Emit error event
-      this.dispatchEvent(new CustomEvent('submit-error', {
-        detail: { error }
-      }));
+      this.dispatchEvent(
+        new CustomEvent('submit-error', {
+          detail: { error },
+        })
+      );
     } finally {
       this.loading = false;
     }
@@ -227,73 +235,70 @@ export class ApiForm extends LitElement {
 
   protected override render() {
     return html`
-      <form
-        @submit=${this.handleSubmit}
-        class=${this.loading ? 'loading' : ''}
-      >
-        ${this.error ? html`
-          <div class="error">
-            ${this.config.errorMessage || this.error}
-          </div>
-        ` : ''}
+      <form @submit=${this.handleSubmit} class=${this.loading ? 'loading' : ''}>
+        ${this.error
+          ? html` <div class="error">${this.config.errorMessage || this.error}</div> `
+          : ''}
+        ${this.success
+          ? html`
+              <div class="success">
+                ${this.config.successMessage || 'Form submitted successfully'}
+              </div>
+            `
+          : ''}
+        ${this.config.fields.map(
+          (field) => html`
+            <div class="field">
+              <label for=${field.name}>${field.label}</label>
 
-        ${this.success ? html`
-          <div class="success">
-            ${this.config.successMessage || 'Form submitted successfully'}
-          </div>
-        ` : ''}
+              ${field.type === 'select'
+                ? html`
+                    <select
+                      id=${field.name}
+                      name=${field.name}
+                      ?required=${field.required}
+                      @input=${this.handleInput}
+                      .value=${this.formData[field.name] || ''}
+                    >
+                      <option value="">Select ${field.label}</option>
+                      ${field.options?.map(
+                        (option) => html` <option value=${option.value}>${option.label}</option> `
+                      )}
+                    </select>
+                  `
+                : field.type === 'textarea'
+                  ? html`
+                      <textarea
+                        id=${field.name}
+                        name=${field.name}
+                        ?required=${field.required}
+                        @input=${this.handleInput}
+                        .value=${this.formData[field.name] || ''}
+                      ></textarea>
+                    `
+                  : html`
+                      <input
+                        type=${field.type}
+                        id=${field.name}
+                        name=${field.name}
+                        ?required=${field.required}
+                        @input=${this.handleInput}
+                        .value=${this.formData[field.name] || ''}
+                        pattern=${field.validation?.pattern || ''}
+                        minlength=${field.validation?.minLength || ''}
+                        maxlength=${field.validation?.maxLength || ''}
+                        min=${field.validation?.min || ''}
+                        max=${field.validation?.max || ''}
+                      />
+                    `}
+              ${this.errors[field.name]
+                ? html` <span class="error">${this.errors[field.name]}</span> `
+                : ''}
+            </div>
+          `
+        )}
 
-        ${this.config.fields.map(field => html`
-          <div class="field">
-            <label for=${field.name}>${field.label}</label>
-
-            ${field.type === 'select' ? html`
-              <select
-                id=${field.name}
-                name=${field.name}
-                ?required=${field.required}
-                @input=${this.handleInput}
-                .value=${this.formData[field.name] || ''}
-              >
-                <option value="">Select ${field.label}</option>
-                ${field.options?.map(option => html`
-                  <option value=${option.value}>${option.label}</option>
-                `)}
-              </select>
-            ` : field.type === 'textarea' ? html`
-              <textarea
-                id=${field.name}
-                name=${field.name}
-                ?required=${field.required}
-                @input=${this.handleInput}
-                .value=${this.formData[field.name] || ''}
-              ></textarea>
-            ` : html`
-              <input
-                type=${field.type}
-                id=${field.name}
-                name=${field.name}
-                ?required=${field.required}
-                @input=${this.handleInput}
-                .value=${this.formData[field.name] || ''}
-                pattern=${field.validation?.pattern || ''}
-                minlength=${field.validation?.minLength || ''}
-                maxlength=${field.validation?.maxLength || ''}
-                min=${field.validation?.min || ''}
-                max=${field.validation?.max || ''}
-              />
-            `}
-
-            ${this.errors[field.name] ? html`
-              <span class="error">${this.errors[field.name]}</span>
-            ` : ''}
-          </div>
-        `)}
-
-        <button
-          type="submit"
-          ?disabled=${this.loading}
-        >
+        <button type="submit" ?disabled=${this.loading}>
           ${this.loading ? 'Submitting...' : this.config.submitLabel || 'Submit'}
         </button>
       </form>

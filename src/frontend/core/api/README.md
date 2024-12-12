@@ -9,6 +9,7 @@ This module implements a standardized interface between UI components and backen
 ✅ = Implemented | 🚧 = In Progress | ❌ = Not Started
 
 ### Core Features
+
 - ✅ HTTP Methods (GET, POST, PUT, DELETE, PATCH)
 - ✅ Error Handling
 - ✅ Type Safety
@@ -18,18 +19,21 @@ This module implements a standardized interface between UI components and backen
 - ✅ Caching System
 
 ### Interceptors
+
 - ✅ Interceptor System
 - ✅ Authentication Interceptor
 - ✅ Logging Interceptor
 - ✅ Retry Interceptor
 
 ### Testing
+
 - ✅ Unit Tests
 - ✅ Integration Tests
 - ✅ Utility Tests
 - 🚧 E2E Tests
 
 ### Components
+
 - ✅ Data Table Component
 - ✅ Form Component
 - ✅ File Upload Component
@@ -95,13 +99,13 @@ const api = FrontendAPI.getInstance();
 
 // GET request with query parameters
 const users = await api.get<User[]>('/api/users', {
-  query: { role: 'admin', status: 'active' }
+  query: { role: 'admin', status: 'active' },
 });
 
 // POST request with data
 const newUser = await api.post<User>('/api/users', {
   name: 'John Doe',
-  email: 'john@example.com'
+  email: 'john@example.com',
 });
 ```
 
@@ -218,16 +222,19 @@ npm run test:e2e
 ## TODO
 
 1. Implement remaining interceptors:
+
    - Logging interceptor
    - Retry interceptor
    - Rate limiting interceptor
 
 2. Add more components:
+
    - Form components
    - File upload components
    - Error boundary components
 
 3. Enhance testing:
+
    - Add more E2E tests
    - Add performance tests
    - Add load tests

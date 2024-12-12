@@ -25,9 +25,9 @@ const server = fastify<Server, IncomingMessage, ServerResponse>({
         ignore: 'pid,hostname',
         messageFormat: '{msg}',
         errorLikeObjectKeys: ['err', 'error'],
-        levelFirst: true
-      }
-    }
+        levelFirst: true,
+      },
+    },
   },
   disableRequestLogging: false,
   ajv: {
@@ -35,8 +35,8 @@ const server = fastify<Server, IncomingMessage, ServerResponse>({
       removeAdditional: 'all',
       coerceTypes: true,
       useDefaults: true,
-    }
-  }
+    },
+  },
 }).withTypeProvider<TypeBoxTypeProvider>();
 
 // Register plugins
@@ -44,12 +44,12 @@ server.register(fastifyCors, {
   origin: true,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
 });
 
 server.register(fastifyHelmet, {
   contentSecurityPolicy: false,
-  crossOriginEmbedderPolicy: false
+  crossOriginEmbedderPolicy: false,
 });
 
 server.register(fastifyMultipart, {
@@ -59,8 +59,8 @@ server.register(fastifyMultipart, {
     fields: 10,
     fileSize: 1000000,
     files: 1,
-    headerPairs: 2000
-  }
+    headerPairs: 2000,
+  },
 });
 
 // Register global middleware
@@ -69,46 +69,58 @@ server.addHook('preHandler', requestValidator);
 
 // Add request logging
 server.addHook('onRequest', async (request) => {
-  request.log.info({
-    url: request.url,
-    method: request.method,
-    id: request.id
-  }, 'Incoming request');
+  request.log.info(
+    {
+      url: request.url,
+      method: request.method,
+      id: request.id,
+    },
+    'Incoming request'
+  );
 });
 
 server.addHook('onResponse', async (request, reply) => {
-  request.log.info({
-    url: request.url,
-    method: request.method,
-    statusCode: reply.statusCode,
-    elapsed: reply.elapsedTime
-  }, 'Request completed');
+  request.log.info(
+    {
+      url: request.url,
+      method: request.method,
+      statusCode: reply.statusCode,
+      elapsed: reply.elapsedTime,
+    },
+    'Request completed'
+  );
 });
 
 // Register error handler
 server.setErrorHandler(errorHandler);
 
 // Register public routes
-server.register(async function publicRoutes(fastify: FastifyInstance) {
-  // Register health check route
-  healthRoutes(fastify);
-}, { prefix: '' });  // Empty prefix for root-level routes
+server.register(
+  async function publicRoutes(fastify: FastifyInstance) {
+    // Register health check route
+    healthRoutes(fastify);
+  },
+  { prefix: '' }
+); // Empty prefix for root-level routes
 
 // Register API routes
-server.register(async function apiRoutes(fastify: FastifyInstance) {
-  // Register metrics routes (unprotected)
-  await metricsRoutes(fastify);
+server.register(
+  async function apiRoutes(fastify: FastifyInstance) {
+    // Register metrics routes (unprotected)
+    await metricsRoutes(fastify);
 
-  // Protected routes
-  fastify.register(async function protectedRoutes(fastify: FastifyInstance) {
-    // Add authentication to all routes in this context
-    fastify.addHook('preHandler', authenticate);
+    // Protected routes
+    fastify.register(async function protectedRoutes(fastify: FastifyInstance) {
+      // Add authentication to all routes in this context
+      fastify.addHook('preHandler', authenticate);
 
-    // Register protected route handlers
-    await registerAuthRoutes(fastify);
-    await registerUserRoutes(fastify);
-    await registerFileRoutes(fastify);
-  });
-}, { prefix: '/api' });
+      // Register protected route handlers
+      await registerAuthRoutes(fastify);
+      await registerUserRoutes(fastify);
+      await registerFileRoutes(fastify);
+    });
+  },
+  { prefix: '/api' }
+);
 
 export default server;

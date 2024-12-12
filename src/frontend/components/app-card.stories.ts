@@ -6,10 +6,7 @@ const meta: Meta = {
   title: 'Components/AppCard',
   tags: ['autodocs'],
   render: (args) => html`
-    <app-card
-      .title=${args.title}
-      .description=${args.description}
-    ></app-card>
+    <app-card .title=${args.title} .description=${args.description}></app-card>
   `,
   argTypes: {
     title: { control: 'text' },

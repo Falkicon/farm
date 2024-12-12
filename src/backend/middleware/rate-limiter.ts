@@ -96,7 +96,7 @@ export async function rateLimiter(request: FastifyRequest, reply: FastifyReply):
     const error: RateLimitError = {
       statusCode: 429,
       error: 'Too Many Requests',
-      message: 'Rate limit exceeded. Please try again later.'
+      message: 'Rate limit exceeded. Please try again later.',
     };
     throw error;
   }
@@ -123,7 +123,7 @@ function initializeRateLimit(ip: string, now: number): void {
   if (!store[ip] || store[ip].resetTime < now) {
     store[ip] = {
       count: 0,
-      resetTime: now + WINDOW_MS
+      resetTime: now + WINDOW_MS,
     };
   }
 }

@@ -54,6 +54,7 @@ Styles must be loaded in the following order to ensure proper variable inheritan
 ### Theme Variables (`theme.css`)
 
 Design tokens and semantic variables for:
+
 - Colors (prefixed with `--color-`)
 - Typography (prefixed with `--system-font-`)
 - Spacing (prefixed with `--system-spacing-`)
@@ -63,6 +64,7 @@ Design tokens and semantic variables for:
 ### Component Styles (`components.css`)
 
 Reusable component styles that depend on theme variables:
+
 - Cards
 - Status indicators
 - Metrics
@@ -72,6 +74,7 @@ Reusable component styles that depend on theme variables:
 ### Layout Utilities (`layouts.css`)
 
 Layout patterns and utilities that depend on theme variables:
+
 - Grid systems
 - Section layouts
 - Flex utilities
@@ -89,9 +92,12 @@ Every system component must follow this structure:
 export class MySystemComponent extends SystemComponent {
   render() {
     return html`
-      <div class="system-layout">  <!-- Required wrapper -->
-        <div class="system-grid">  <!-- Optional grid container -->
-          <div class="system-card">  <!-- Content container -->
+      <div class="system-layout">
+        <!-- Required wrapper -->
+        <div class="system-grid">
+          <!-- Optional grid container -->
+          <div class="system-card">
+            <!-- Content container -->
             <!-- Component content -->
           </div>
         </div>

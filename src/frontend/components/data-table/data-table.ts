@@ -35,7 +35,8 @@ export class DataTable extends LitElement {
       margin: 1rem 0;
     }
 
-    th, td {
+    th,
+    td {
       padding: 0.5rem;
       border: 1px solid #ddd;
       text-align: left;
@@ -140,18 +141,14 @@ export class DataTable extends LitElement {
         <table>
           <thead>
             <tr>
-              ${this.config.columns.map(
-                column => html`<th>${column.label}</th>`
-              )}
+              ${this.config.columns.map((column) => html`<th>${column.label}</th>`)}
             </tr>
           </thead>
           <tbody>
             ${this.data.map(
-              item => html`
+              (item) => html`
                 <tr>
-                  ${this.config.columns.map(
-                    column => html`<td>${item[column.key]}</td>`
-                  )}
+                  ${this.config.columns.map((column) => html`<td>${item[column.key]}</td>`)}
                 </tr>
               `
             )}

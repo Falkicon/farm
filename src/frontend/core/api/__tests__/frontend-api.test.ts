@@ -88,7 +88,9 @@ describe('FrontendAPI', () => {
       });
 
       const interceptor = {
-        onRequest: vi.fn().mockImplementation((config) => ({ ...config, headers: { 'X-Test': 'test' } })),
+        onRequest: vi
+          .fn()
+          .mockImplementation((config) => ({ ...config, headers: { 'X-Test': 'test' } })),
         onResponse: vi.fn().mockImplementation((response) => response),
       };
 

@@ -56,11 +56,7 @@ export class MetricCard extends LitElement {
     }
 
     .metric-card {
-      background: linear-gradient(
-        165deg,
-        rgba(30, 41, 59, 0.8),
-        rgba(30, 41, 59, 0.6)
-      );
+      background: linear-gradient(165deg, rgba(30, 41, 59, 0.8), rgba(30, 41, 59, 0.6));
       border-radius: var(--system-radius-lg);
       padding: var(--system-spacing-6);
       border: 1px solid rgba(255, 255, 255, 0.03);
@@ -217,15 +213,11 @@ export class MetricCard extends LitElement {
         <div class="metric-content">
           <div class="metric-header">
             <div class="metric-label">${this.label}</div>
-            ${trend !== 'neutral' ? html`
-              <div class="status ${trend}">
-                ${trend === 'up' ? '↑' : '↓'} ${trend}
-              </div>
-            ` : ''}
+            ${trend !== 'neutral'
+              ? html` <div class="status ${trend}">${trend === 'up' ? '↑' : '↓'} ${trend}</div> `
+              : ''}
           </div>
-          <div class="metric-value">
-            ${this.value}<span class="unit">${this.unit}</span>
-          </div>
+          <div class="metric-value">${this.value}<span class="unit">${this.unit}</span></div>
           <slot name="subtitle"></slot>
         </div>
         <div class="sparkline-container">

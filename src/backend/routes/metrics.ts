@@ -7,12 +7,15 @@ export async function metricsRoutes(fastify: FastifyInstance) {
 
   // Get current metrics
   fastify.get('/metrics', async (request, reply) => {
-    fastify.log.info({
-      path: request.url,
-      method: request.method,
-      params: request.params,
-      query: request.query
-    }, 'Metrics request received');
+    fastify.log.info(
+      {
+        path: request.url,
+        method: request.method,
+        params: request.params,
+        query: request.query,
+      },
+      'Metrics request received'
+    );
 
     try {
       fastify.log.info('Starting metrics collection...');
@@ -22,7 +25,7 @@ export async function metricsRoutes(fastify: FastifyInstance) {
         fastify.log.error('Metrics service not initialized');
         return reply.status(500).send({
           error: 'Metrics service not available',
-          message: 'Internal service initialization error'
+          message: 'Internal service initialization error',
         });
       }
 
@@ -43,7 +46,7 @@ export async function metricsRoutes(fastify: FastifyInstance) {
       if (error instanceof Error && error.message === 'Metrics collection timeout') {
         return reply.status(504).send({
           error: 'Metrics collection timeout',
-          message: 'The operation took too long to complete'
+          message: 'The operation took too long to complete',
         });
       }
 
@@ -51,14 +54,14 @@ export async function metricsRoutes(fastify: FastifyInstance) {
       if (error instanceof Error && error.message.includes('not supported')) {
         return reply.status(501).send({
           error: 'Platform not supported',
-          message: 'Some metrics are not available on this platform'
+          message: 'Some metrics are not available on this platform',
         });
       }
 
       return reply.status(500).send({
         error: 'Failed to collect metrics',
         message: error instanceof Error ? error.message : 'Unknown error occurred',
-        details: process.env.NODE_ENV === 'development' ? error : undefined
+        details: process.env.NODE_ENV === 'development' ? error : undefined,
       });
     }
   });
@@ -68,13 +71,13 @@ export async function metricsRoutes(fastify: FastifyInstance) {
     try {
       fastify.log.info('Fetching metrics history...');
       return reply.status(501).send({
-        message: 'Metrics history not implemented yet'
+        message: 'Metrics history not implemented yet',
       });
     } catch (error) {
       fastify.log.error('Error fetching metrics history:', error);
       return reply.status(500).send({
         error: 'Failed to fetch metrics history',
-        message: error instanceof Error ? error.message : 'Unknown error'
+        message: error instanceof Error ? error.message : 'Unknown error',
       });
     }
   });
@@ -104,13 +107,13 @@ export async function metricsRoutes(fastify: FastifyInstance) {
     try {
       fastify.log.info(`Fetching history for metric: ${metric}`);
       return reply.status(501).send({
-        message: `History for ${metric} not implemented yet`
+        message: `History for ${metric} not implemented yet`,
       });
     } catch (error) {
       fastify.log.error(`Error fetching history for metric ${metric}:`, error);
       return reply.status(500).send({
         error: `Failed to fetch history for metric ${metric}`,
-        message: error instanceof Error ? error.message : 'Unknown error'
+        message: error instanceof Error ? error.message : 'Unknown error',
       });
     }
   });

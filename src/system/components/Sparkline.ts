@@ -101,12 +101,13 @@ export class Sparkline extends LitElement {
     }
 
     // Filter out any invalid data points
-    const validData = this.data.filter(d =>
-      d &&
-      typeof d.value === 'number' &&
-      !isNaN(d.value) &&
-      isFinite(d.value) &&
-      d.timestamp instanceof Date
+    const validData = this.data.filter(
+      (d) =>
+        d &&
+        typeof d.value === 'number' &&
+        !isNaN(d.value) &&
+        isFinite(d.value) &&
+        d.timestamp instanceof Date
     );
 
     if (validData.length < 2) {
@@ -116,10 +117,10 @@ export class Sparkline extends LitElement {
     const width = 100;
     const height = 50;
     const padding = 2;
-    const effectiveWidth = width - (padding * 2);
-    const effectiveHeight = height - (padding * 2);
+    const effectiveWidth = width - padding * 2;
+    const effectiveHeight = height - padding * 2;
 
-    const values = validData.map(d => d.value);
+    const values = validData.map((d) => d.value);
     const minValue = Math.min(...values);
     const maxValue = Math.max(...values);
     const valueRange = Math.max(maxValue - minValue, 1);
@@ -132,12 +133,12 @@ export class Sparkline extends LitElement {
 
       return {
         x: Number(x.toFixed(3)),
-        y: Number(y.toFixed(3))
+        y: Number(y.toFixed(3)),
       };
     });
 
     // Validate all points
-    if (points.some(p => !isFinite(p.x) || !isFinite(p.y))) {
+    if (points.some((p) => !isFinite(p.x) || !isFinite(p.y))) {
       console.warn('Invalid points in sparkline data', { points, validData });
       return { linePath: '', areaPath: '' };
     }
@@ -176,12 +177,17 @@ export class Sparkline extends LitElement {
     if (!this.pathData.linePath) {
       return html`
         <svg viewBox="0 0 100 50" preserveAspectRatio="none">
-          <line x1="0" y1="25" x2="100" y2="25"
-                stroke="var(--sparkline-line-color, var(--color-accent))"
-                stroke-opacity="0.2"
-                stroke-width="var(--sparkline-line-width, 1.5px)"
-                stroke-dasharray="4 2"
-                vector-effect="non-scaling-stroke" />
+          <line
+            x1="0"
+            y1="25"
+            x2="100"
+            y2="25"
+            stroke="var(--sparkline-line-color, var(--color-accent))"
+            stroke-opacity="0.2"
+            stroke-width="var(--sparkline-line-width, 1.5px)"
+            stroke-dasharray="4 2"
+            vector-effect="non-scaling-stroke"
+          />
         </svg>
       `;
     }

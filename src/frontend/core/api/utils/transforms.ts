@@ -24,7 +24,7 @@ export function parseQueryParams(params: QueryParams): string {
   Object.entries(params).forEach(([key, value]) => {
     if (value !== undefined && value !== null) {
       if (Array.isArray(value)) {
-        value.forEach(v => searchParams.append(key, String(v)));
+        value.forEach((v) => searchParams.append(key, String(v)));
       } else if (typeof value === 'object') {
         searchParams.append(key, JSON.stringify(value));
       } else {
@@ -75,10 +75,6 @@ export async function parseResponseData(response: Response): Promise<unknown> {
     return await response.text();
   } catch (error) {
     console.error('Failed to parse response:', error);
-    throw createAPIError(
-      'Failed to parse response data',
-      response.status,
-      'PARSE_ERROR'
-    );
+    throw createAPIError('Failed to parse response data', response.status, 'PARSE_ERROR');
   }
 }
