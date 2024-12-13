@@ -1,0 +1,196 @@
+$schema: http://json-schema.org/draft-07/schema#
+title: FARM Stack Specification Schema
+description: Schema for validating FARM Stack specification files
+type: object
+
+definitions:
+  metadata:
+    type: object
+    properties:
+      "@feature":
+        type: string
+        description: "Feature name"
+      "@module":
+        type: string
+        enum: ["frontend", "backend", "shared"]
+        description: "Module name"
+      "@priority":
+        type: string
+        enum: ["High", "Medium", "Low"]
+        description: "Feature priority"
+      "@status":
+        type: string
+        enum: ["planned", "in-progress", "implemented", "deprecated"]
+        description: "Implementation status"
+      "@dependencies":
+        type: array
+        items:
+          type: string
+        description: "Feature dependencies"
+      "@meta":
+        type: boolean
+        description: "Whether this is a meta-specification"
+    required: ["@module", "@priority", "@status"]
+
+  overview:
+    type: string
+    description: "Feature overview description"
+
+  component:
+    type: object
+    properties:
+      tag_name:
+        type: string
+        pattern: "^[a-z](?:[a-z0-9-]*[a-z0-9])?$"
+        description: "Custom element tag name"
+      extends:
+        type: string
+        description: "Parent class"
+      description:
+        type: string
+        description: "Component description"
+      purpose:
+        type: string
+        description: "Component purpose"
+    required: ["tag_name", "description"]
+
+  api_endpoint:
+    type: object
+    properties:
+      path:
+        type: string
+        pattern: "^/[a-zA-Z0-9-_/{}]*$"
+        description: "API endpoint path"
+      method:
+        type: string
+        enum: ["GET", "POST", "PUT", "DELETE", "PATCH"]
+        description: "HTTP method"
+      description:
+        type: string
+        description: "Endpoint description"
+      authentication:
+        type: boolean
+        description: "Whether authentication is required"
+      rate_limiting:
+        type: boolean
+        description: "Whether rate limiting is applied"
+    required: ["path", "method", "description"]
+
+  validation:
+    type: object
+    properties:
+      tools:
+        type: array
+        items:
+          type: object
+          properties:
+            name:
+              type: string
+            purpose:
+              type: string
+          required: ["name", "purpose"]
+      requirements:
+        type: array
+        items:
+          type: string
+    required: ["requirements"]
+
+  documentation:
+    type: object
+    properties:
+      standards:
+        type: array
+        items:
+          type: string
+      generation:
+        type: object
+        properties:
+          tool:
+            type: string
+          output:
+            type: string
+          options:
+            type: array
+            items:
+              type: string
+        required: ["tool"]
+
+  testing:
+    type: object
+    properties:
+      approaches:
+        type: array
+        items:
+          type: object
+          properties:
+            name:
+              type: string
+            description:
+              type: string
+            tool:
+              type: string
+          required: ["name", "description"]
+      coverage:
+        type: object
+        properties:
+          target:
+            type: string
+          critical_paths:
+            type: array
+            items:
+              type: string
+    required: ["approaches"]
+
+  future_enhancements:
+    type: array
+    items:
+      type: string
+    description: "Future planned enhancements"
+
+# Main schema properties
+properties:
+  # Include metadata definition
+  metadata:
+    $ref: "#/definitions/metadata"
+
+  # Overview is required
+  overview:
+    $ref: "#/definitions/overview"
+
+  # Component definitions (for frontend specs)
+  components:
+    type: object
+    patternProperties:
+      "^[a-z][a-zA-Z0-9_]*$":
+        $ref: "#/definitions/component"
+
+  # API endpoints (for backend specs)
+  endpoints:
+    type: object
+    patternProperties:
+      "^[a-z][a-zA-Z0-9_]*$":
+        $ref: "#/definitions/api_endpoint"
+
+  # Validation requirements
+  validation:
+    $ref: "#/definitions/validation"
+
+  # Documentation requirements
+  documentation:
+    $ref: "#/definitions/documentation"
+
+  # Testing requirements
+  testing:
+    $ref: "#/definitions/testing"
+
+  # Future enhancements
+  future_enhancements:
+    $ref: "#/definitions/future_enhancements"
+
+required:
+  - overview
+  - validation
+  - documentation
+  - testing
+
+additionalProperties: true

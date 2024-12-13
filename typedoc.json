@@ -1,32 +1,61 @@
 {
-  // Specify the main entry point files for documentation generation
-  // These are the root files from which TypeDoc will begin parsing
-  "entryPoints": ["./src/frontend/index.ts", "./src/backend/server.ts"],
-
-  // Determines how TypeDoc processes entry points
-  // "expand" means it will include all referenced files from entry points
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": [
+    "src/types.ts",
+    "src/frontend",
+    "src/backend",
+    "src/shared"
+  ],
   "entryPointStrategy": "expand",
-
-  // Output directory for the generated documentation
-  "out": "docs",
-
-  // Patterns to exclude from documentation generation
-  // Here we exclude all node_modules to avoid documenting external dependencies
-  "exclude": ["**/node_modules/**"],
-
-  // Skip documentation for private class members and methods
+  "out": "docs/api",
+  "name": "FARM Stack API Documentation",
+  "includeVersion": true,
   "excludePrivate": true,
-
-  // Skip documentation for protected class members and methods
   "excludeProtected": true,
-
-  // Skip documentation for external modules (from node_modules)
   "excludeExternals": true,
-
-  // The visual theme to use for generated documentation
-  // "default" is TypeDoc's standard theme
+  "excludeInternal": true,
+  "exclude": [
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "**/*.stories.ts",
+    "**/__tests__/**",
+    "**/test/**",
+    "**/tests/**",
+    "**/*.test.tsx",
+    "**/*.spec.tsx",
+    "**/*.stories.tsx"
+  ],
+  "plugin": [],
   "theme": "default",
-
-  // The title that appears in the generated documentation
-  "name": "Web App Boilerplate Documentation"
-} 
+  "readme": "src/README.md",
+  "tsconfig": "tsconfig.json",
+  "sort": [
+    "source-order"
+  ],
+  "categorizeByGroup": true,
+  "searchInComments": true,
+  "validation": {
+    "invalidLink": true,
+    "notExported": true
+  },
+  "navigationLinks": {
+    "Project Documentation": "https://falkicon.github.io/farm",
+    "GitHub": "https://github.com/Falkicon/farm"
+  },
+  "visibilityFilters": {
+    "protected": false,
+    "private": false,
+    "inherited": true,
+    "external": false
+  },
+  "cleanOutputDir": true,
+  "preserveWatchOutput": true,
+  "pretty": true,
+  "titleLink": "https://falkicon.github.io/farm",
+  "htmlLang": "en",
+  "githubPages": true,
+  "disableSources": false,
+  "sourceLinkTemplate": "https://github.com/Falkicon/farm/blob/{gitRevision}/{path}#L{line}",
+  "gitRevision": "main",
+  "gaID": ""
+}

@@ -1,0 +1,99 @@
+site_name: FARM Stack Documentation
+site_description: Documentation for the FARM Stack Boilerplate
+site_author: Falkicon
+site_url: https://falkicon.github.io/farm
+
+theme:
+  name: dracula
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - search.highlight
+    - content.code.copy
+
+plugins:
+  - search
+  - minify:
+      minify_html: true
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed
+  - pymdownx.tasklist
+  - admonition
+  - toc:
+      permalink: true
+  - tables
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Overview: getting-started/index.md
+    - Installation: getting-started/installation.md
+    - Development: getting-started/development.md
+    - Project Structure: getting-started/project-structure.md
+  - Architecture:
+    - Overview: architecture/overview.md
+    - Backend:
+      - Overview: architecture/overview/backend.md
+      - Implementation: architecture/backend.md
+    - Frontend:
+      - Overview: architecture/overview/frontend.md
+      - Implementation: architecture/frontend.md
+    - Shared:
+      - Overview: architecture/overview/shared.md
+      - Implementation: architecture/shared.md
+  - Development:
+    - Overview: development/index.md
+    - Guidelines: development/guidelines.md
+    - Testing: development/testing.md
+  - Frontend:
+    - Components:
+      - Guidelines: frontend/components/guidelines.md
+    - State Management: frontend/state-management.md
+    - Routing: frontend/routing.md
+  - Backend:
+    - API:
+      - Overview: api/overview.md
+      - Guidelines: backend/api/guidelines.md
+      - Reference: api/modules.md
+    - Database: backend/database.md
+    - Security: backend/security.md
+  - Shared:
+    - Types: shared/types.md
+    - Utilities: shared/utilities.md
+    - Constants: shared/constants.md
+  - Specifications:
+    - Overview: specs/overview.md
+    - Tracking: specs/SPECIFICATION-TRACKING.md
+    - Core:
+      - Development Environment: specs/top-level/development-environment-spec.yaml
+      - Documentation System: specs/top-level/documentation-system-spec.yaml
+      - Module Structure: specs/top-level/module-structure-spec.yaml
+      - Processes: specs/top-level/processes-spec.yaml
+    - Components:
+      - Backend: specs/backend.md
+      - Frontend: specs/frontend.md
+      - Shared: specs/shared.md
+  - API Reference:
+    - Overview: api/index.md
+    - Modules: api/modules.md
+    - Interfaces: api/interfaces.md
+    - Classes: api/classes.md
+  - FAQ: faq.md
+  - Contributing: contributing.md
+  - License: license.md
+  - Changelog: changelog.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/Falkicon/farm
+    - icon: fontawesome/brands/discord
+      link: https://discord.gg/farm-stack
