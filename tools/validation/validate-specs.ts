@@ -98,6 +98,19 @@ function formatErrors(errors: ErrorObject[]): string[] {
 }
 
 /**
+ * Preprocesses YAML content to handle @ prefixed fields
+ */
+function preprocessYaml(content: string): string {
+  // Add --- at the start if not present
+  if (!content.startsWith('---\n')) {
+    content = '---\n' + content;
+  }
+
+  // Replace @ prefixed fields with quoted versions
+  return content.replace(/^@(\w+):/gm, '"@$1":');
+}
+
+/**
  * Validates a YAML specification file against the schema
  * @param filePath - Path to the YAML file to validate
  * @returns Validation result with any errors found
@@ -108,15 +121,13 @@ function validateSpec(filePath: string): ValidationResult {
     const content = readFileSync(filePath, 'utf-8');
 
     process.stdout.write('Parsing YAML...\n');
-    const spec = load(content);
-    process.stdout.write('Parsed spec: ' + JSON.stringify(spec, null, 2) + '\n');
+    const processedContent = preprocessYaml(content);
+    const spec = load(processedContent) as SpecificationDocument;
 
     process.stdout.write('Validating against schema...\n');
     const valid = validate(spec);
-    process.stdout.write('Validation result: ' + valid + '\n');
 
     if (!valid) {
-      process.stdout.write('Validation errors: ' + JSON.stringify(validate.errors, null, 2) + '\n');
       return {
         valid: false,
         errors: formatErrors(validate.errors || [])
@@ -125,7 +136,6 @@ function validateSpec(filePath: string): ValidationResult {
 
     return { valid: true };
   } catch (error) {
-    process.stdout.write('Error: ' + (error as Error).message + '\n');
     return {
       valid: false,
       errors: [(error as Error).message]
