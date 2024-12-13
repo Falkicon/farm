@@ -1,6 +1,6 @@
 @feature: health-check-api
-@module:
-@version: 1.0.0 backend
+@module: backend
+@version: 1.0.0
 @priority: High
 @status: implemented
 @dependencies: ["fastify", "os"]

@@ -1,5 +1,5 @@
-@module:
-@version: 1.0.0 shared
+@module: shared
+@version: 1.0.0
 @priority: High
 @dependencies: ["typescript", "zod", "vitest"]
 

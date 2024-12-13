@@ -1,6 +1,6 @@
 @feature: card-components
-@module:
-@version: 1.0.0 frontend
+@module: frontend
+@version: 1.0.0
 @priority: Medium
 @status: implemented
 @dependencies: ["lit", "lit/decorators"]

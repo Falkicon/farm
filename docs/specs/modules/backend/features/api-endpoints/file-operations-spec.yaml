@@ -1,6 +1,6 @@
 @feature: file-operations
-@module:
-@version: 1.0.0 backend
+@module: backend
+@version: 1.0.0
 @priority: High
 @status: partially-implemented
 @dependencies: ["fastify", "@fastify/multipart", "fs", "stream/promises"]
