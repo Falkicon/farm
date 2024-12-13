@@ -98,8 +98,7 @@ export const config = {
   /** Database configuration */
   database: {
     /** Active database URL (uses TEST_DATABASE_URL in test environment if available) */
-    url:
-      env.NODE_ENV === 'test' && env.TEST_DATABASE_URL ? env.TEST_DATABASE_URL : env.DATABASE_URL,
+    url: env.NODE_ENV === 'test' && env.TEST_DATABASE_URL ? env.TEST_DATABASE_URL : env.DATABASE_URL,
   },
 
   /** Security configuration */

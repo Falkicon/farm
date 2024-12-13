@@ -184,7 +184,7 @@ export async function registerFileRoutes(fastify: FastifyInstance): Promise<void
           message: 'File upload failed',
         } as ErrorResponse;
       }
-    }
+    },
   );
 
   /**
@@ -229,7 +229,7 @@ export async function registerFileRoutes(fastify: FastifyInstance): Promise<void
     async (): Promise<never> => {
       // TODO: Implement file metadata retrieval from database
       throw { statusCode: 501, message: 'Not implemented' } as ErrorResponse;
-    }
+    },
   );
 
   /**
@@ -279,6 +279,6 @@ export async function registerFileRoutes(fastify: FastifyInstance): Promise<void
     async (): Promise<never> => {
       // TODO: Implement file deletion
       throw { statusCode: 501, message: 'Not implemented' } as ErrorResponse;
-    }
+    },
   );
 }

@@ -150,7 +150,7 @@ export async function registerAuthRoutes(fastify: FastifyInstance): Promise<void
       }
 
       throw { statusCode: 401, message: 'Invalid credentials' } as ErrorResponse;
-    }
+    },
   );
 
   /**
@@ -195,7 +195,7 @@ export async function registerAuthRoutes(fastify: FastifyInstance): Promise<void
     async (): Promise<SuccessResponse> => {
       // TODO: Implement token invalidation
       return { success: true };
-    }
+    },
   );
 
   /**
@@ -269,6 +269,6 @@ export async function registerAuthRoutes(fastify: FastifyInstance): Promise<void
           message: error instanceof Error ? error.message : 'Invalid token',
         } as ErrorResponse;
       }
-    }
+    },
   );
 }

@@ -73,9 +73,7 @@ export class APICache {
   }
 
   getCacheKey(endpoint: string, params?: Record<string, unknown>): string {
-    const queryString = params
-      ? new URLSearchParams(params as Record<string, string>).toString()
-      : '';
+    const queryString = params ? new URLSearchParams(params as Record<string, string>).toString() : '';
     return `${endpoint}${queryString ? `?${queryString}` : ''}`;
   }
 }

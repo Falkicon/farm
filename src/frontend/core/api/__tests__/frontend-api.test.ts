@@ -36,7 +36,7 @@ describe('FrontendAPI', () => {
       expect(response.data).toEqual(mockResponse);
       expect(global.fetch).toHaveBeenCalledWith(
         expect.stringContaining('/test'),
-        expect.objectContaining({ method: 'GET' })
+        expect.objectContaining({ method: 'GET' }),
       );
     });
 
@@ -57,7 +57,7 @@ describe('FrontendAPI', () => {
         expect.objectContaining({
           method: 'POST',
           body: JSON.stringify(mockData),
-        })
+        }),
       );
     });
 
@@ -88,9 +88,7 @@ describe('FrontendAPI', () => {
       });
 
       const interceptor = {
-        onRequest: vi
-          .fn()
-          .mockImplementation((config) => ({ ...config, headers: { 'X-Test': 'test' } })),
+        onRequest: vi.fn().mockImplementation((config) => ({ ...config, headers: { 'X-Test': 'test' } })),
         onResponse: vi.fn().mockImplementation((response) => response),
       };
 
@@ -116,7 +114,7 @@ describe('FrontendAPI', () => {
         expect.any(String),
         expect.objectContaining({
           credentials: 'include',
-        })
+        }),
       );
     });
   });

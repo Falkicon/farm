@@ -5,9 +5,7 @@ import '../shared/components/app-card';
 const meta: Meta = {
   title: 'Components/AppCard',
   tags: ['autodocs'],
-  render: (args) => html`
-    <app-card .title=${args.title} .description=${args.description}></app-card>
-  `,
+  render: (args) => html` <app-card .title=${args.title} .description=${args.description}></app-card> `,
   argTypes: {
     title: { control: 'text' },
     description: { control: 'text' },

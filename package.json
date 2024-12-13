@@ -53,6 +53,7 @@
     "lint": "eslint \"src/**/*.{ts,tsx,js,jsx}\"",
     "lint:fix": "eslint \"src/**/*.{ts,tsx,js,jsx}\" --fix",
     "format": "prettier --write 'src/**/*.{ts,tsx,css,md}'",
+    "format:md": "prettier --write \"docs/**/*.md\"",
     "validate": "npm-run-all validate:*",
     "validate:specs": "tsx tools/validation/validate-specs.ts",
     "validate:openapi": "tsx tools/validation/validate-openapi.ts",

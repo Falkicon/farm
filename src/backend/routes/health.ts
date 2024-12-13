@@ -143,9 +143,7 @@ export async function healthRoutes(fastify: FastifyInstance) {
         memory: {
           used: process.memoryUsage().heapUsed / 1024 / 1024,
           total: process.memoryUsage().heapTotal / 1024 / 1024,
-          free:
-            process.memoryUsage().heapTotal / 1024 / 1024 -
-            process.memoryUsage().heapUsed / 1024 / 1024,
+          free: process.memoryUsage().heapTotal / 1024 / 1024 - process.memoryUsage().heapUsed / 1024 / 1024,
         },
         cpu: {
           usage: process.cpuUsage().user / 1000000,

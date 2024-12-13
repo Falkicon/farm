@@ -4,22 +4,11 @@ This directory contains all frontend-related code for our web application, built
 
 ## Directory Structure
 
-frontend/
-├── core/ # Core application functionality
-│ ├── error/ # Error handling and boundaries
-│ ├── feature-registry/ # Feature registration system
-│ ├── performance/ # Performance monitoring
-│ └── router/ # Routing implementation
-│
-├── features/ # Feature-based components
-│ └── home/ # Home feature example
-│
-├── shared/ # Shared utilities and components
-│ ├── base/ # Base component classes
-│ ├── components/ # Reusable UI components
-│ └── testing/ # Test utilities and helpers
-│
-└── styles/ # Global styles and Tailwind CSS
+frontend/ ├── core/ # Core application functionality │ ├── error/ # Error handling and boundaries │ ├──
+feature-registry/ # Feature registration system │ ├── performance/ # Performance monitoring │ └── router/ # Routing
+implementation │ ├── features/ # Feature-based components │ └── home/ # Home feature example │ ├── shared/ # Shared
+utilities and components │ ├── base/ # Base component classes │ ├── components/ # Reusable UI components │ └──
+testing/ # Test utilities and helpers │ └── styles/ # Global styles and Tailwind CSS
 
 ## Key Components
 

@@ -2,7 +2,9 @@
 
 ## Overview
 
-This module implements a standardized interface between UI components and backend services, promoting modularity, reusability, and flexibility. It decouples the frontend UI from backend details, allowing for easier updates, feature toggling, and experimentation with different user experiences.
+This module implements a standardized interface between UI components and backend services, promoting modularity,
+reusability, and flexibility. It decouples the frontend UI from backend details, allowing for easier updates, feature
+toggling, and experimentation with different user experiences.
 
 ## Implementation Status
 

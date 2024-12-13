@@ -12,7 +12,7 @@ interface Route {
   children?: Route[];
   action?: (
     context: RouteContext<unknown, RouterContext>,
-    params: RouteParams
+    params: RouteParams,
   ) => Promise<string | typeof HTMLElement> | string | typeof HTMLElement;
 }
 

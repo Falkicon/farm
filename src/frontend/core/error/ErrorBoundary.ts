@@ -32,7 +32,7 @@ export class ErrorBoundary extends LitElement {
         detail: { error },
         bubbles: true,
         composed: true,
-      })
+      }),
     );
   }
 
@@ -42,9 +42,7 @@ export class ErrorBoundary extends LitElement {
         <div class="error-boundary" role="alert">
           <h2 class="error-message">${this.fallbackMessage}</h2>
           ${this.showDetails ? html` <pre class="error-details">${this.error.stack}</pre> ` : ''}
-          <button class="retry-button" @click=${this.retry} aria-label="Retry operation">
-            Retry
-          </button>
+          <button class="retry-button" @click=${this.retry} aria-label="Retry operation">Retry</button>
         </div>
       `;
     }

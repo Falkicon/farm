@@ -150,16 +150,13 @@ export class DataTable extends LitElement {
                 <tr>
                   ${this.config.columns.map((column) => html`<td>${item[column.key]}</td>`)}
                 </tr>
-              `
+              `,
             )}
           </tbody>
         </table>
 
         <div class="pagination">
-          <button
-            ?disabled=${this.currentPage === 1}
-            @click=${() => this.handlePageChange(this.currentPage - 1)}
-          >
+          <button ?disabled=${this.currentPage === 1} @click=${() => this.handlePageChange(this.currentPage - 1)}>
             Previous
           </button>
           <span>Page ${this.currentPage} of ${this.totalPages}</span>

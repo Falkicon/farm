@@ -3,7 +3,7 @@ import { fixture as _fixture, html } from '@open-wc/testing';
 
 export async function createElementWithProps<T extends LitElement>(
   tag: string,
-  props: Record<string, unknown> = {}
+  props: Record<string, unknown> = {},
 ): Promise<T> {
   const propsString = Object.entries(props)
     .map(([key, value]) => `${key}="${value}"`)

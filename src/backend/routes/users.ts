@@ -112,7 +112,7 @@ export async function registerUserRoutes(fastify: FastifyInstance): Promise<void
     },
     async (): Promise<UserListResponse> => {
       return { users };
-    }
+    },
   );
 
   /**
@@ -180,7 +180,7 @@ export async function registerUserRoutes(fastify: FastifyInstance): Promise<void
       }
 
       return { user };
-    }
+    },
   );
 
   /**
@@ -259,7 +259,7 @@ export async function registerUserRoutes(fastify: FastifyInstance): Promise<void
 
       users.push(newUser);
       return { user: newUser };
-    }
+    },
   );
 
   /**
@@ -353,7 +353,7 @@ export async function registerUserRoutes(fastify: FastifyInstance): Promise<void
 
       users[userIndex] = { ...users[userIndex], ...updates };
       return { user: users[userIndex] };
-    }
+    },
   );
 
   /**
@@ -420,6 +420,6 @@ export async function registerUserRoutes(fastify: FastifyInstance): Promise<void
 
       users.splice(userIndex, 1);
       return { success: true };
-    }
+    },
   );
 }

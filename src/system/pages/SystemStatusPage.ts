@@ -442,7 +442,7 @@ export class SystemStatusPage extends LitElement {
         !isNaN(data.memory.usedPercent) &&
         data.cpu?.usage !== undefined &&
         typeof data.cpu?.usage === 'number' &&
-        !isNaN(data.cpu.usage)
+        !isNaN(data.cpu.usage),
     );
   }
 
@@ -576,9 +576,7 @@ export class SystemStatusPage extends LitElement {
         <div class="error">
           <h2>${this.error.error}</h2>
           <p>${this.error.message}</p>
-          ${this.error.details
-            ? html` <pre>${JSON.stringify(this.error.details, null, 2)}</pre> `
-            : ''}
+          ${this.error.details ? html` <pre>${JSON.stringify(this.error.details, null, 2)}</pre> ` : ''}
           ${this.retryCount < this.maxRetries
             ? html` <p>Retrying... (Attempt ${this.retryCount} of ${this.maxRetries})</p> `
             : html` <p>Max retries reached. Please refresh the page to try again.</p> `}
@@ -598,12 +596,12 @@ export class SystemStatusPage extends LitElement {
 
     const cpuTrend = this.calculateTrend(
       this.metrics.cpu?.usage ?? 0,
-      validHistory.map((m) => m.cpu?.usage ?? 0)
+      validHistory.map((m) => m.cpu?.usage ?? 0),
     );
 
     const memoryTrend = this.calculateTrend(
       this.metrics.memory?.usedPercent ?? 0,
-      validHistory.map((m) => m.memory?.usedPercent ?? 0)
+      validHistory.map((m) => m.memory?.usedPercent ?? 0),
     );
 
     const apiResponseTimeData = validHistory
@@ -664,20 +662,14 @@ export class SystemStatusPage extends LitElement {
             </div>
             <div class="status-row">
               <span class="status-label">Last Updated</span>
-              <span class="status-value"
-                >${new Date(this.metrics.timestamp).toLocaleTimeString()}</span
-              >
+              <span class="status-value">${new Date(this.metrics.timestamp).toLocaleTimeString()}</span>
             </div>
           </div>
 
           <div class="status-card">
             <div class="status-row">
               <span class="status-label">
-                <span
-                  class="threshold-indicator ${dbConnected
-                    ? 'threshold-normal'
-                    : 'threshold-critical'}"
-                ></span>
+                <span class="threshold-indicator ${dbConnected ? 'threshold-normal' : 'threshold-critical'}"></span>
                 Database Status
               </span>
               <span class="status-value ${dbConnected ? 'status-enabled' : 'status-disabled'}">
@@ -688,9 +680,7 @@ export class SystemStatusPage extends LitElement {
               <span class="status-label">Latency</span>
               <span class="status-value">
                 ${dbLatency ?? 'N/A'}ms
-                ${dbLatency && dbLatency > 100
-                  ? html` <span class="tooltip">High latency detected</span> `
-                  : ''}
+                ${dbLatency && dbLatency > 100 ? html` <span class="tooltip">High latency detected</span> ` : ''}
               </span>
             </div>
           </div>
@@ -699,12 +689,7 @@ export class SystemStatusPage extends LitElement {
         <section class="section" role="region" aria-label="API Features Status">
           <div class="section-header">
             <h2 class="section-title">API Features</h2>
-            <span
-              class="info-icon"
-              role="tooltip"
-              aria-label="Status of API features and middleware"
-              >ⓘ</span
-            >
+            <span class="info-icon" role="tooltip" aria-label="Status of API features and middleware">ⓘ</span>
           </div>
 
           <div class="feature-list" role="list">
@@ -717,20 +702,14 @@ export class SystemStatusPage extends LitElement {
         <section class="section" role="region" aria-label="Performance Metrics">
           <div class="section-header">
             <h2 class="section-title">Performance Metrics</h2>
-            <span class="info-icon" role="tooltip" aria-label="Real-time system performance metrics"
-              >ⓘ</span
-            >
+            <span class="info-icon" role="tooltip" aria-label="Real-time system performance metrics">ⓘ</span>
           </div>
 
           <div class="status-card">
             <div class="metric-value">
               ${responseTime.toFixed(2)}ms
               ${responseTime > 100
-                ? html`
-                    <span class="tooltip" role="tooltip"
-                      >Response time is higher than recommended</span
-                    >
-                  `
+                ? html` <span class="tooltip" role="tooltip">Response time is higher than recommended</span> `
                 : ''}
             </div>
             <div class="metric-label">API Response Time</div>
@@ -750,9 +729,7 @@ export class SystemStatusPage extends LitElement {
 
           <div class="status-card">
             <div class="metric-value">
-              <span
-                class="threshold-indicator ${this.getThresholdClass(memoryUsedPercent, 'memory')}"
-              ></span>
+              <span class="threshold-indicator ${this.getThresholdClass(memoryUsedPercent, 'memory')}"></span>
               ${Math.round(memoryUsedPercent)}% ${memoryTrend}
             </div>
             <div class="metric-label">Memory Usage</div>
@@ -795,9 +772,7 @@ export class SystemStatusPage extends LitElement {
               </div>
               <div class="status-row">
                 <span class="status-label">Temperature</span>
-                <span class="status-value ${cpuTemp > 80 ? 'status-warning' : ''}"
-                  >${cpuTemp}°C</span
-                >
+                <span class="status-value ${cpuTemp > 80 ? 'status-warning' : ''}">${cpuTemp}°C</span>
               </div>
             </div>
           </div>
@@ -813,14 +788,11 @@ export class SystemStatusPage extends LitElement {
         role="listitem"
         tabindex="0"
         @click="${() => this.handleFeatureClick(name, enabled)}"
-        @keydown="${(e: KeyboardEvent) =>
-          e.key === 'Enter' && this.handleFeatureClick(name, enabled)}"
+        @keydown="${(e: KeyboardEvent) => e.key === 'Enter' && this.handleFeatureClick(name, enabled)}"
         aria-label="${name} feature is ${enabled ? 'enabled' : 'disabled'}"
       >
         <div class="feature-name">
-          <span
-            class="threshold-indicator ${enabled ? 'threshold-normal' : 'threshold-critical'}"
-          ></span>
+          <span class="threshold-indicator ${enabled ? 'threshold-normal' : 'threshold-critical'}"></span>
           <span>${name}</span>
         </div>
         <span class="feature-status ${enabled ? 'status-enabled' : 'status-disabled'}">

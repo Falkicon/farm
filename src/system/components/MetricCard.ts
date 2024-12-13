@@ -221,11 +221,7 @@ export class MetricCard extends LitElement {
           <slot name="subtitle"></slot>
         </div>
         <div class="sparkline-container">
-          <system-sparkline
-            .data="${this.history}"
-            .unit="${this.unit}"
-            .trend="${trend}"
-          ></system-sparkline>
+          <system-sparkline .data="${this.history}" .unit="${this.unit}" .trend="${trend}"></system-sparkline>
         </div>
       </div>
     `;

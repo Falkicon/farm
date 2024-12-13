@@ -61,7 +61,7 @@ export class BaseComponent extends LitElement {
   protected handleKeyboardNavigation(e: KeyboardEvent): void {
     if (e.key === 'Tab') {
       const focusableElements = this.shadowRoot?.querySelectorAll(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
       );
 
       if (focusableElements) {
@@ -94,7 +94,7 @@ export class BaseComponent extends LitElement {
         detail,
         bubbles: true,
         composed: true,
-      })
+      }),
     );
   }
 

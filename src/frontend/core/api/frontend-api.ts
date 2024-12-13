@@ -39,7 +39,7 @@ export class FrontendAPI {
     method: HTTPMethod,
     endpoint: string,
     config?: RequestConfig,
-    data?: unknown
+    data?: unknown,
   ): Promise<APIResponse<T>> {
     const url = new URL(endpoint, this.baseURL);
     const cacheKey = `${method}:${url.toString()}`;
@@ -72,10 +72,7 @@ export class FrontendAPI {
     // Run request interceptors
     const interceptedConfig = await this.interceptors.runRequestInterceptors(finalConfig);
 
-    const timeoutId = setTimeout(
-      () => controller.abort(),
-      interceptedConfig.timeout ?? this.defaultConfig.timeout
-    );
+    const timeoutId = setTimeout(() => controller.abort(), interceptedConfig.timeout ?? this.defaultConfig.timeout);
 
     try {
       const response = await fetch(url.toString(), {
@@ -151,11 +148,7 @@ export class FrontendAPI {
     return this.request<T>('DELETE', endpoint, config);
   }
 
-  async patch<T>(
-    endpoint: string,
-    data?: unknown,
-    config?: RequestConfig
-  ): Promise<APIResponse<T>> {
+  async patch<T>(endpoint: string, data?: unknown, config?: RequestConfig): Promise<APIResponse<T>> {
     return this.request<T>('PATCH', endpoint, config, data);
   }
 }

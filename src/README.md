@@ -1,6 +1,7 @@
 # FARM Stack API Documentation
 
-Welcome to the FARM Stack API documentation. This documentation is automatically generated from the TypeScript source code using TypeDoc.
+Welcome to the FARM Stack API documentation. This documentation is automatically generated from the TypeScript source
+code using TypeDoc.
 
 ## Documentation Sections
 
@@ -11,18 +12,21 @@ Welcome to the FARM Stack API documentation. This documentation is automatically
 ## Core APIs
 
 ### Frontend
+
 - Components and Web Elements
 - State Management
 - Routing System
 - API Integration
 
 ### Backend
+
 - Server Configuration
 - API Endpoints
 - Database Integration
 - Security Features
 
 ### Shared
+
 - Common Types
 - Utility Functions
 - Constants
@@ -39,6 +43,7 @@ Welcome to the FARM Stack API documentation. This documentation is automatically
 To contribute to this documentation:
 
 1. Add TypeDoc comments to your code:
+
 ```typescript
 /**
  * @module MyModule
@@ -59,11 +64,13 @@ export interface MyInterface {
 ```
 
 2. Generate documentation:
+
 ```bash
 npm run docs:api
 ```
 
 3. Preview changes:
+
 ```bash
 npm run docs:api:serve
 ```
