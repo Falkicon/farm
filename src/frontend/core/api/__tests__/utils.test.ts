@@ -98,13 +98,9 @@ describe('API Utilities', () => {
 
       // Create a proper multipart form-data body
       const boundary = '----WebKitFormBoundary7MA4YWxkTrZu0gW';
-      const body = [
-        `--${boundary}`,
-        'Content-Disposition: form-data; name="test"',
-        '',
-        'data',
-        `--${boundary}--`,
-      ].join('\r\n');
+      const body = [`--${boundary}`, 'Content-Disposition: form-data; name="test"', '', 'data', `--${boundary}--`].join(
+        '\r\n',
+      );
 
       const response = new Response(body, {
         headers: {

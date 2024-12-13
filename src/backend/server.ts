@@ -75,7 +75,7 @@ server.addHook('onRequest', async (request) => {
       method: request.method,
       id: request.id,
     },
-    'Incoming request'
+    'Incoming request',
   );
 });
 
@@ -87,7 +87,7 @@ server.addHook('onResponse', async (request, reply) => {
       statusCode: reply.statusCode,
       elapsed: reply.elapsedTime,
     },
-    'Request completed'
+    'Request completed',
   );
 });
 
@@ -100,7 +100,7 @@ server.register(
     // Register health check route
     healthRoutes(fastify);
   },
-  { prefix: '' }
+  { prefix: '' },
 ); // Empty prefix for root-level routes
 
 // Register API routes
@@ -120,7 +120,7 @@ server.register(
       await registerFileRoutes(fastify);
     });
   },
-  { prefix: '/api' }
+  { prefix: '/api' },
 );
 
 export default server;

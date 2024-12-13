@@ -191,52 +191,42 @@ export class SystemMetricsService {
 
     try {
       // Collect all metrics in parallel with individual error handling
-      const [
-        cpuData,
-        memData,
-        networkStatsArray,
-        diskData,
-        networkInterfacesData,
-        osInfo,
-        cpuTemp,
-      ] = await Promise.all([
-        this.getCpuLoad().catch((err) => {
-          console.error('[SystemMetricsService] CPU load error:', err);
-          return null;
-        }),
-        si.mem().catch((err) => {
-          console.error('[SystemMetricsService] Memory error:', err);
-          return null;
-        }),
-        si.networkStats().catch((err) => {
-          console.error('[SystemMetricsService] Network stats error:', err);
-          return null;
-        }),
-        si.fsSize().catch((err) => {
-          console.error('[SystemMetricsService] Disk error:', err);
-          return null;
-        }),
-        si.networkInterfaces().catch((err) => {
-          console.error('[SystemMetricsService] Network interfaces error:', err);
-          return null;
-        }),
-        si.osInfo().catch((err) => {
-          console.error('[SystemMetricsService] OS info error:', err);
-          return null;
-        }),
-        si.cpuTemperature().catch((err) => {
-          console.error('[SystemMetricsService] CPU temperature error:', err);
-          return null;
-        }),
-      ]);
+      const [cpuData, memData, networkStatsArray, diskData, networkInterfacesData, osInfo, cpuTemp] = await Promise.all(
+        [
+          this.getCpuLoad().catch((err) => {
+            console.error('[SystemMetricsService] CPU load error:', err);
+            return null;
+          }),
+          si.mem().catch((err) => {
+            console.error('[SystemMetricsService] Memory error:', err);
+            return null;
+          }),
+          si.networkStats().catch((err) => {
+            console.error('[SystemMetricsService] Network stats error:', err);
+            return null;
+          }),
+          si.fsSize().catch((err) => {
+            console.error('[SystemMetricsService] Disk error:', err);
+            return null;
+          }),
+          si.networkInterfaces().catch((err) => {
+            console.error('[SystemMetricsService] Network interfaces error:', err);
+            return null;
+          }),
+          si.osInfo().catch((err) => {
+            console.error('[SystemMetricsService] OS info error:', err);
+            return null;
+          }),
+          si.cpuTemperature().catch((err) => {
+            console.error('[SystemMetricsService] CPU temperature error:', err);
+            return null;
+          }),
+        ],
+      );
 
       // Ensure we have array data and handle null values
-      const networkStats = Array.isArray(networkStatsArray)
-        ? networkStatsArray
-        : [networkStatsArray];
-      const networkInterfaces = Array.isArray(networkInterfacesData)
-        ? networkInterfacesData
-        : [networkInterfacesData];
+      const networkStats = Array.isArray(networkStatsArray) ? networkStatsArray : [networkStatsArray];
+      const networkInterfaces = Array.isArray(networkInterfacesData) ? networkInterfacesData : [networkInterfacesData];
       const firstNetworkStat = (networkStats[0] as ExtendedNetworkStats) || null;
 
       // Calculate network speed with null checks
@@ -258,10 +248,7 @@ export class SystemMetricsService {
         };
       }
 
-      const [dbStatus, apiResponseTime] = await Promise.all([
-        this.getDatabaseStatus(),
-        this.measureApiResponseTime(),
-      ]);
+      const [dbStatus, apiResponseTime] = await Promise.all([this.getDatabaseStatus(), this.measureApiResponseTime()]);
 
       // Create metrics object with safe fallbacks
       const metrics: SystemMetrics = {
@@ -295,7 +282,7 @@ export class SystemMetricsService {
                     name: 'unknown',
                     speed: 0,
                     type: 'unknown',
-                  }
+                  },
             ) || [],
           stats: {
             rx_bytes: firstNetworkStat?.rx_bytes || 0,

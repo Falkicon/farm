@@ -202,12 +202,7 @@ export class ApiForm extends LitElement {
     this.success = false;
 
     try {
-      const method = this.config.method.toLowerCase() as
-        | 'get'
-        | 'post'
-        | 'put'
-        | 'delete'
-        | 'patch';
+      const method = this.config.method.toLowerCase() as 'get' | 'post' | 'put' | 'delete' | 'patch';
       await this.api[method](this.config.endpoint, this.formData);
 
       this.success = true;
@@ -217,7 +212,7 @@ export class ApiForm extends LitElement {
       this.dispatchEvent(
         new CustomEvent('submit-success', {
           detail: { data: this.formData },
-        })
+        }),
       );
     } catch (error) {
       this.error = error instanceof Error ? error.message : 'Submission failed';
@@ -226,7 +221,7 @@ export class ApiForm extends LitElement {
       this.dispatchEvent(
         new CustomEvent('submit-error', {
           detail: { error },
-        })
+        }),
       );
     } finally {
       this.loading = false;
@@ -236,15 +231,9 @@ export class ApiForm extends LitElement {
   protected override render() {
     return html`
       <form @submit=${this.handleSubmit} class=${this.loading ? 'loading' : ''}>
-        ${this.error
-          ? html` <div class="error">${this.config.errorMessage || this.error}</div> `
-          : ''}
+        ${this.error ? html` <div class="error">${this.config.errorMessage || this.error}</div> ` : ''}
         ${this.success
-          ? html`
-              <div class="success">
-                ${this.config.successMessage || 'Form submitted successfully'}
-              </div>
-            `
+          ? html` <div class="success">${this.config.successMessage || 'Form submitted successfully'}</div> `
           : ''}
         ${this.config.fields.map(
           (field) => html`
@@ -261,9 +250,7 @@ export class ApiForm extends LitElement {
                       .value=${this.formData[field.name] || ''}
                     >
                       <option value="">Select ${field.label}</option>
-                      ${field.options?.map(
-                        (option) => html` <option value=${option.value}>${option.label}</option> `
-                      )}
+                      ${field.options?.map((option) => html` <option value=${option.value}>${option.label}</option> `)}
                     </select>
                   `
                 : field.type === 'textarea'
@@ -291,11 +278,9 @@ export class ApiForm extends LitElement {
                         max=${field.validation?.max || ''}
                       />
                     `}
-              ${this.errors[field.name]
-                ? html` <span class="error">${this.errors[field.name]}</span> `
-                : ''}
+              ${this.errors[field.name] ? html` <span class="error">${this.errors[field.name]}</span> ` : ''}
             </div>
-          `
+          `,
         )}
 
         <button type="submit" ?disabled=${this.loading}>

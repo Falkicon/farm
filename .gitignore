@@ -54,8 +54,10 @@ Thumbs.db
 **/.vite
 **/.rollup.cache
 
-# Documentation
-**/docs
+# Documentation (but keep specs)
+**/docs/*
+!**/docs/specs/
+!**/docs/specs/**/*
 
 # Docker
 **/docker-compose*.yml

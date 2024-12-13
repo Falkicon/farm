@@ -89,7 +89,7 @@ describe('API Integration', () => {
           headers: expect.objectContaining({
             Authorization: 'Bearer test-token',
           }),
-        })
+        }),
       );
     });
   });
@@ -190,10 +190,7 @@ describe('API Integration', () => {
       });
 
       await api.get('/test', { query: { param: 'value' } });
-      expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining('param=value'),
-        expect.any(Object)
-      );
+      expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('param=value'), expect.any(Object));
     });
   });
 

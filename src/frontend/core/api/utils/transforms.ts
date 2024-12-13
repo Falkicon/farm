@@ -4,12 +4,7 @@ export function isAPIError(error: unknown): error is APIError {
   return error instanceof Error && 'status' in error;
 }
 
-export function createAPIError(
-  message: string,
-  status?: number,
-  code?: string,
-  retry?: boolean
-): APIError {
+export function createAPIError(message: string, status?: number, code?: string, retry?: boolean): APIError {
   const error = new Error(message) as APIError;
   error.status = status;
   error.code = code;

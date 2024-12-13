@@ -60,7 +60,7 @@ export class RetryInterceptor implements RequestInterceptor, ResponseInterceptor
   private async delay(attempt: number): Promise<void> {
     const backoffDelay = Math.min(
       this.config.initialDelay * Math.pow(this.config.backoffFactor, attempt),
-      this.config.maxDelay
+      this.config.maxDelay,
     );
 
     // Add jitter to prevent thundering herd

@@ -1,6 +1,7 @@
 # Shared Code
 
-This folder contains code that is shared between frontend and backend parts of the application. This helps maintain consistency and avoid code duplication.
+This folder contains code that is shared between frontend and backend parts of the application. This helps maintain
+consistency and avoid code duplication.
 
 ## Directory Structure
 

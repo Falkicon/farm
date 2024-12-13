@@ -180,7 +180,7 @@ export class FileUpload extends LitElement {
         }
         fileWithPreview.progress = 0;
         return fileWithPreview;
-      })
+      }),
     );
 
     this.files = this.config.multiple
@@ -200,7 +200,7 @@ export class FileUpload extends LitElement {
             detail: {
               error: `File ${file.name} exceeds maximum size of ${this.formatSize(this.config.maxSize)}`,
             },
-          })
+          }),
         );
         return false;
       }
@@ -209,7 +209,7 @@ export class FileUpload extends LitElement {
         this.dispatchEvent(
           new CustomEvent('upload-error', {
             detail: { error: `File type ${file.type} is not allowed` },
-          })
+          }),
         );
         return false;
       }
@@ -277,7 +277,7 @@ export class FileUpload extends LitElement {
       this.dispatchEvent(
         new CustomEvent('upload-success', {
           detail: { response },
-        })
+        }),
       );
 
       if (!this.config.multiple) {
@@ -292,7 +292,7 @@ export class FileUpload extends LitElement {
       this.dispatchEvent(
         new CustomEvent('upload-error', {
           detail: { error },
-        })
+        }),
       );
     } finally {
       this.uploading = false;
@@ -326,9 +326,7 @@ export class FileUpload extends LitElement {
           ${this.config.allowedTypes
             ? html`<br /><small>(Allowed: ${this.config.allowedTypes.join(', ')})</small>`
             : ''}
-          ${this.config.maxSize
-            ? html`<br /><small>(Max size: ${this.formatSize(this.config.maxSize)})</small>`
-            : ''}
+          ${this.config.maxSize ? html`<br /><small>(Max size: ${this.formatSize(this.config.maxSize)})</small>` : ''}
         </p>
       </div>
 
@@ -341,13 +339,7 @@ export class FileUpload extends LitElement {
                     ${file.preview
                       ? html` <img src=${file.preview} alt=${file.name} /> `
                       : html` <div class="file-icon">📄</div> `}
-                    <button
-                      class="remove"
-                      @click=${() => this.removeFile(index)}
-                      ?disabled=${this.uploading}
-                    >
-                      ×
-                    </button>
+                    <button class="remove" @click=${() => this.removeFile(index)} ?disabled=${this.uploading}>×</button>
                     <div class="file-info">
                       <div class="file-name">${file.name}</div>
                       <div class="file-size">${this.formatSize(file.size)}</div>
@@ -361,7 +353,7 @@ export class FileUpload extends LitElement {
                       : ''}
                     ${file.error ? html` <div class="error">${file.error}</div> ` : ''}
                   </div>
-                `
+                `,
               )}
             </div>
 

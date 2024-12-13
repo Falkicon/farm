@@ -1,0 +1,48 @@
+name: Validate Specifications
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/specs/**'
+      - 'tools/validation/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'docs/specs/**'
+      - 'tools/validation/**'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate specifications
+        run: npm run validate:specs
+
+      - name: Validate OpenAPI
+        run: npm run validate:openapi
+
+      - name: Validate Markdown
+        run: |
+          npm install -g markdownlint-cli
+          markdownlint 'docs/specs/**/*.md' --config .markdownlint.json
+
+      - name: Check for validation status
+        run: |
+          if [ $? -eq 0 ]; then
+            echo "All validations passed!"
+          else
+            echo "Validation failed!"
+            exit 1
+          fi

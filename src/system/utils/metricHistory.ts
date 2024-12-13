@@ -19,7 +19,7 @@ export class MetricHistoryManager {
       updateInterval?: number;
       volatility?: number;
       onUpdate: (history: MetricHistory[]) => void;
-    }
+    },
   ) {
     this.baseValue = baseValue;
     this.maxPoints = options.maxPoints || 50;

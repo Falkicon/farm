@@ -79,7 +79,7 @@ interface CustomError extends FastifyError {
 export const errorHandler = async (
   error: FastifyError,
   request: FastifyRequest,
-  reply: FastifyReply
+  reply: FastifyReply,
 ): Promise<void> => {
   // Log all errors
   request.log.error(error);

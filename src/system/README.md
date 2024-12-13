@@ -1,6 +1,7 @@
 # System Module
 
-The system module provides a collection of utility components, styles, and functionality for system-level features like monitoring, status pages, and administrative interfaces.
+The system module provides a collection of utility components, styles, and functionality for system-level features like
+monitoring, status pages, and administrative interfaces.
 
 ## Architecture
 

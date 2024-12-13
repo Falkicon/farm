@@ -1,15 +1,13 @@
 # Testing Guidelines
 
-This folder contains all test-related files for our web application. We use Vitest for unit/integration testing and Playwright for E2E testing.
+This folder contains all test-related files for our web application. We use Vitest for unit/integration testing and
+Playwright for E2E testing.
 
 ## Directory Structure
 
-@tests/
-├── unit/ # Unit tests for components and utilities
-├── integration/ # Integration tests for API endpoints
-├── e2e/ # End-to-end tests with Playwright
-├── mocks/ # Mock data and services
-└── setup/ # Test setup and utility functions
+@tests/ ├── unit/ # Unit tests for components and utilities ├── integration/ # Integration tests for API endpoints ├──
+e2e/ # End-to-end tests with Playwright ├── mocks/ # Mock data and services └── setup/ # Test setup and utility
+functions
 
 ## Running Tests
 
@@ -46,29 +44,19 @@ npm run test:watch
 
 import { expect, describe, it } from 'vitest';
 
-describe('ComponentName', () => {
-it('should do something specific', () => {
-// Your test here
-});
-});
+describe('ComponentName', () => { it('should do something specific', () => { // Your test here }); });
 
 ### Integration Tests Example
 
 import { expect, describe, it } from 'vitest';
 
-describe('API: /endpoint', () => {
-it('should handle the request correctly', async () => {
-// Your test here
-});
-});
+describe('API: /endpoint', () => { it('should handle the request correctly', async () => { // Your test here }); });
 
 ### E2E Tests Example
 
 import { test, expect } from '@playwright/test';
 
-test('user flow description', async ({ page }) => {
-// Your test here
-});
+test('user flow description', async ({ page }) => { // Your test here });
 
 ## Best Practices
 

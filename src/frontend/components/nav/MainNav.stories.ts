@@ -9,8 +9,7 @@ const meta: Meta = {
   parameters: {
     docs: {
       description: {
-        component:
-          'Main navigation component that provides the primary navigation menu with links to major sections.',
+        component: 'Main navigation component that provides the primary navigation menu with links to major sections.',
       },
     },
   },

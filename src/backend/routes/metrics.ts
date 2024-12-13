@@ -14,7 +14,7 @@ export async function metricsRoutes(fastify: FastifyInstance) {
         params: request.params,
         query: request.query,
       },
-      'Metrics request received'
+      'Metrics request received',
     );
 
     try {

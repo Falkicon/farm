@@ -190,16 +190,12 @@ export class HomePage extends LitElement {
         <div class="features">
           <div class="feature-card">
             <h3 class="feature-title">Fast & Efficient</h3>
-            <p class="feature-description">
-              Built with modern web technologies for optimal performance and speed
-            </p>
+            <p class="feature-description">Built with modern web technologies for optimal performance and speed</p>
           </div>
 
           <div class="feature-card">
             <h3 class="feature-title">Type-Safe</h3>
-            <p class="feature-description">
-              Fully typed with TypeScript for better development experience
-            </p>
+            <p class="feature-description">Fully typed with TypeScript for better development experience</p>
           </div>
 
           <div class="feature-card">

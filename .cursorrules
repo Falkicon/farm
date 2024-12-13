@@ -1,8 +1,64 @@
 # Cursor Rules Configuration
 
-# Terminal Settings (Cross-Platform)
-terminal.preferredShell: "default"  # Use system default shell
-terminal.commandPrefix: ""  # No prefix needed
+# Cross-Platform Script Handling
+scripts.crossPlatform: {
+  "shell": {
+    "windows": "powershell",
+    "linux": "bash",
+    "darwin": "bash"
+  },
+  "commands": {
+    "docs": {
+      "serve": {
+        "windows": "python -m mkdocs serve",
+        "unix": "python3 -m mkdocs serve"
+      },
+      "build": {
+        "windows": "python -m mkdocs build",
+        "unix": "python3 -m mkdocs build"
+      },
+      "deploy": {
+        "windows": "python -m mkdocs gh-deploy",
+        "unix": "python3 -m mkdocs gh-deploy"
+      },
+      "clean": {
+        "windows": "if (Test-Path site) { Remove-Item -Recurse -Force site }",
+        "unix": "rm -rf site"
+      }
+    }
+  }
+}
+
+# Terminal Settings (Platform-specific)
+terminal.settings: {
+  "windows": {
+    "shell": "powershell",
+    "commandPrefix": "",
+    "pathSeparator": "\\",
+    "lineEnding": "\r\n"
+  },
+  "unix": {
+    "shell": "bash",
+    "commandPrefix": "",
+    "pathSeparator": "/",
+    "lineEnding": "\n"
+  }
+}
+
+# Package Scripts (Cross-platform using npm packages)
+package.scripts.crossPlatform: {
+  "dev": "cross-env NODE_ENV=development vite",
+  "build": "cross-env NODE_ENV=production vite build",
+  "test": "vitest",
+  "clean": "rimraf dist",
+  "docs": "node scripts/docs.js",
+  "docs:build": "node scripts/docs.js build",
+  "docs:deploy": "node scripts/docs.js deploy",
+  "lint": "eslint . --ext .ts,.tsx",
+  "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
+  "typecheck": "tsc --noEmit",
+  "validate": "npm run lint && npm run typecheck && npm run test"
+}
 
 # Project Structure
 project.type: "web-app"
@@ -10,65 +66,46 @@ project.framework: "lit"
 project.backend: "fastify"
 project.language: "typescript"
 project.styling: "tailwindcss"
-project.architecture: "monorepo"  # Frontend and backend in same repo
+project.architecture: "monorepo"
 
 # Package Manager
 package.manager: "npm"
 package.nodeVersion: ">=18.0.0"
+package.lockfile: "package-lock.json"
 
-# Development Scripts (Cross-Platform)
-scripts.dev: "npm run dev"
-scripts.build: "npm run build"
-scripts.test: "npm run test"
-scripts.clean: "npm run clean"
-scripts.docs: "npm run docs"
-
-# File Patterns
+# File Patterns (Cross-platform)
 files.source: "src/**/*.{ts,tsx}"
 files.styles: "src/**/*.css"
 files.tests: "**/*.test.ts"
 files.docs: "**/*.md"
 files.config: ["*.config.{js,ts}", "tsconfig*.json", ".env*"]
-files.ignore: ["node_modules", "dist", "coverage", ".turbo", ".next"]
+files.ignore: [
+  "node_modules",
+  "dist",
+  "coverage",
+  ".turbo",
+  ".next",
+  ".git",
+  "*.log"
+]
 
-# Project Structure Paths (Using forward slashes for cross-platform)
-paths.frontend: "src/frontend"
-paths.backend: "src/backend"
-paths.components: "src/frontend/components"
-paths.styles: "src/frontend/styles"
-paths.server: "src/backend/server.ts"
-paths.public: "public"
-paths.build: "dist"
-paths.docs: "docs"
-
-# Dependencies to Track
-dependencies.frontend: [
-  "lit",
-  "lit-element",
-  "lit-html",
-  "universal-router"
-]
-dependencies.backend: [
-  "fastify",
-  "@fastify/cors",
-  "@fastify/helmet"
-]
-dependencies.database: [
-  "@prisma/client"
-]
-dependencies.dev: [
-  "typescript",
-  "vite",
-  "eslint",
-  "prettier",
-  "tailwindcss"
-]
+# Project Structure Paths (Cross-platform format)
+paths.source: {
+  "frontend": "src/frontend",
+  "backend": "src/backend",
+  "components": "src/frontend/components",
+  "styles": "src/frontend/styles",
+  "server": "src/backend/server.ts",
+  "public": "public",
+  "build": "dist",
+  "docs": "docs"
+}
 
 # Development Tools
 tools.bundler: "vite"
 tools.testing: ["vitest", "playwright"]
 tools.linting: ["eslint", "prettier"]
-tools.documentation: "typedoc"
+tools.documentation: ["mkdocs", "typedoc"]
 tools.database: "prisma"
 
 # TypeScript Configuration
@@ -79,18 +116,13 @@ typescript.experimentalDecorators: true
 typescript.useDefineForClassFields: false
 typescript.emitDecoratorMetadata: true
 
-# Server Configuration
-server.frontend.port: 3000
-server.backend.port: 8000
-server.docs.port: 8080
-
-# Environment Variables
-env.required: [
-  "DATABASE_URL",
-  "NODE_ENV"
-]
-
-# Editor Settings (Cross-Platform)
-editor.formatOnSave: true
-editor.defaultFormatter: "esbenp.prettier-vscode"
-editor.lineEndings: "lf"  # Use LF for all files
+# Documentation Configuration
+documentation.settings: {
+  "engine": "mkdocs",
+  "theme": "dracula",
+  "output": "site",
+  "serve": {
+    "port": 8000,
+    "host": "localhost"
+  }
+}

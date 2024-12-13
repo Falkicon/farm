@@ -102,12 +102,7 @@ export class Sparkline extends LitElement {
 
     // Filter out any invalid data points
     const validData = this.data.filter(
-      (d) =>
-        d &&
-        typeof d.value === 'number' &&
-        !isNaN(d.value) &&
-        isFinite(d.value) &&
-        d.timestamp instanceof Date
+      (d) => d && typeof d.value === 'number' && !isNaN(d.value) && isFinite(d.value) && d.timestamp instanceof Date,
     );
 
     if (validData.length < 2) {

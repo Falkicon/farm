@@ -24,9 +24,7 @@ describe('AppButton', () => {
   });
 
   it('renders with secondary variant', async () => {
-    const el = await fixture<AppButton>(
-      html`<app-button variant="secondary">Click me</app-button>`
-    );
+    const el = await fixture<AppButton>(html`<app-button variant="secondary">Click me</app-button>`);
     const button = el.shadowRoot?.querySelector('button');
 
     expect(button?.className).to.include('secondary');
@@ -45,9 +43,7 @@ describe('AppButton', () => {
 
   it('handles click events', async () => {
     let clicked = false;
-    const el = await fixture<AppButton>(
-      html`<app-button @click=${() => (clicked = true)}>Click me</app-button>`
-    );
+    const el = await fixture<AppButton>(html`<app-button @click=${() => (clicked = true)}>Click me</app-button>`);
 
     el.click();
     await elementUpdated(el);
