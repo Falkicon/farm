@@ -1,75 +1,36 @@
-import { LitElement } from 'lit';
+import type { BaseComponent } from '../../shared/base/BaseComponent';
 
 /**
- * Metrics collected for component performance monitoring
- */
-export interface ComponentMetrics {
-  renderTime: number;
-  firstPaint: number;
-  memoryUsage?: number;
-  elementCount?: number;
-}
-
-/**
- * Return type for the monitoring instance
+ * Interface for monitoring component performance
  */
 export interface MonitorInstance {
-  end: () => ComponentMetrics;
+  /**
+   * Ends the monitoring session and records performance metrics
+   */
+  end(): void;
 }
 
 /**
- * Monitors component performance and collects metrics
- * @category Performance
+ * Utility class for monitoring component performance
  */
 export class ComponentMonitor {
-  private static metrics = new Map<string, ComponentMetrics[]>();
-
   /**
    * Starts monitoring a component's performance
    * @param component - The component to monitor
-   * @returns A monitoring instance with an end method
+   * @returns A monitor instance
    */
-  static startMonitoring(component: LitElement): MonitorInstance {
-    const start = performance.now();
-    const name = component.constructor.name;
+  static startMonitoring(component: BaseComponent): MonitorInstance {
+    const startTime = performance.now();
+    const componentName = component.constructor.name;
 
     return {
-      end: () => {
-        const metrics: ComponentMetrics = {
-          renderTime: performance.now() - start,
-          firstPaint: performance.getEntriesByType('paint')[0]?.startTime || 0,
-          elementCount: component.shadowRoot?.childElementCount,
-        };
+      end() {
+        const endTime = performance.now();
+        const duration = endTime - startTime;
 
-        if (!this.metrics.has(name)) {
-          this.metrics.set(name, []);
-        }
-        this.metrics.get(name)?.push(metrics);
-
-        // Report to analytics if threshold exceeded
-        if (metrics.renderTime > 16.67) {
-          // 60fps threshold
-          console.warn(`Slow render detected in ${name}: ${metrics.renderTime}ms`);
-        }
-
-        return metrics;
+        // Log performance metrics
+        console.debug(`Component ${componentName} rendered in ${duration.toFixed(2)}ms`);
       },
     };
-  }
-
-  /**
-   * Gets metrics for a specific component
-   * @param componentName - Name of the component
-   * @returns Array of collected metrics
-   */
-  static getMetrics(componentName: string): ComponentMetrics[] {
-    return this.metrics.get(componentName) || [];
-  }
-
-  /**
-   * Clears all collected metrics
-   */
-  static clearMetrics(): void {
-    this.metrics.clear();
   }
 }

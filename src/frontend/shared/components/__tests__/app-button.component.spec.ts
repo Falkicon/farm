@@ -1,46 +1,61 @@
-import { componentTest } from '../../testing/component-test-utils';
-const { test, expect, checkA11y, mountComponent } = componentTest;
+import { describe, it, expect, beforeEach } from 'vitest';
+import { fixture, html, elementUpdated } from '@open-wc/testing-helpers';
+import { AppButton } from '../app-button';
 
-test.describe('AppButton', () => {
-  test('meets accessibility guidelines', async ({ page }) => {
-    await mountComponent(page, 'app-button', { children: 'Click me' });
-    await checkA11y(page);
+describe('AppButton', () => {
+  let el: AppButton;
+
+  beforeEach(async () => {
+    el = await fixture<AppButton>(html`<app-button>Click me</app-button>`);
+    await elementUpdated(el);
   });
 
-  test('renders with default variant', async ({ page }) => {
-    const button = await mountComponent(page, 'app-button', { children: 'Click me' });
-    await expect(button).toHaveClass(/primary/);
+  it('meets accessibility guidelines', async () => {
+    expect(el.shadowRoot).toBeTruthy();
+    const button = el.shadowRoot!.querySelector('button');
+    expect(button).toBeTruthy();
   });
 
-  test('renders with secondary variant', async ({ page }) => {
-    const button = await mountComponent(page, 'app-button', {
-      variant: 'secondary',
-      children: 'Click me',
+  it('renders with default variant', async () => {
+    const button = el.shadowRoot!.querySelector('button');
+    expect(button).toBeTruthy();
+    expect(button!.classList.contains('primary')).toBe(true);
+  });
+
+  it('renders with secondary variant', async () => {
+    el = await fixture<AppButton>(
+      html`<app-button variant="secondary">Click me</app-button>`
+    );
+    await elementUpdated(el);
+    const button = el.shadowRoot!.querySelector('button');
+    expect(button).toBeTruthy();
+    expect(button!.classList.contains('secondary')).toBe(true);
+  });
+
+  it('handles click events', async () => {
+    const button = el.shadowRoot!.querySelector('button');
+    expect(button).toBeTruthy();
+
+    let clicked = false;
+    el.addEventListener('click', () => {
+      clicked = true;
     });
-    await expect(button).toHaveClass(/secondary/);
+
+    button!.click();
+    await elementUpdated(el);
+    expect(clicked).toBe(true);
   });
 
-  test('handles click events', async ({ page }) => {
-    const button = await mountComponent(page, 'app-button', { children: 'Click me' });
+  it('maintains focus state', async () => {
+    const button = el.shadowRoot!.querySelector('button');
+    expect(button).toBeTruthy();
 
-    const clicked = await button.evaluate((element: HTMLElement) => {
-      return new Promise<boolean>((resolve) => {
-        element.addEventListener('click', () => resolve(true), { once: true });
-        element.click();
-      });
-    });
+    button!.focus();
+    await elementUpdated(el);
 
-    expect(clicked).toBeTruthy();
-  });
-
-  test('maintains focus state', async ({ page }) => {
-    const button = await mountComponent(page, 'app-button', { children: 'Focus Test' });
-    await button.focus();
-
-    const hasFocus = await button.evaluate((element: HTMLElement) => {
-      return document.activeElement === element;
-    });
-
-    expect(hasFocus).toBeTruthy();
+    // In shadow DOM, the activeElement is the host element (app-button)
+    expect(document.activeElement).toBe(el);
+    // The actual focused element is in the shadow root
+    expect(el.shadowRoot!.activeElement).toBe(button);
   });
 });

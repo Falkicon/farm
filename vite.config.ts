@@ -1,82 +1,20 @@
-import { defineConfig } from 'vite';
+/// <reference types="vitest" />
+import { defineConfig } from 'vitest/config';
 import { resolve } from 'path';
 
-export default defineConfig(({ mode }) => ({
+export default defineConfig({
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src'),
-      '@frontend': resolve(__dirname, 'src/frontend'),
-      '@backend': resolve(__dirname, 'src/backend')
-    }
-  },
-  css: {
-    devSourcemap: true,
-    modules: {
-      localsConvention: 'camelCase'
+      '/src': resolve(__dirname, 'src')
     }
   },
   build: {
-    target: 'es2020',
-    minify: 'terser',
-    sourcemap: true,
-    outDir: 'dist',
-    rollupOptions: {
-      input: {
-        main: resolve(__dirname, 'index.html')
-      },
-      output: {
-        entryFileNames: '[name].js',
-        chunkFileNames: '[name]-[hash].js',
-        assetFileNames: '[name]-[hash][extname]',
-        manualChunks: {
-          lit: ['lit', 'lit/decorators.js'],
-        }
-      },
-      external: ['@backend/*']
-    }
+    sourcemap: true
   },
-  server: {
-    port: 3000,
-    proxy: {
-      '/api': {
-        target: 'http://localhost:8000',
-        changeOrigin: true,
-        secure: false,
-        rewrite: (path) => path
-      }
-    }
-  },
-  optimizeDeps: {
-    exclude: ['@backend/*'],
-    esbuildOptions: {
-      target: 'es2020'
-    }
-  },
-  ssr: {
-    noExternal: true
-  },
-  esbuild: {
-    lineLimit: 80,
-    format: 'esm',
-    target: 'esnext',
-    charset: 'utf8',
-    legalComments: 'none',
-    minifyIdentifiers: false,
-    minifySyntax: false,
-    minifyWhitespace: false
-  },
-  define: {
-    'process.env.NODE_ENV': JSON.stringify(mode),
-    // Only enable Lit dev mode in development
-    ...(mode === 'development'
-      ? {
-          'globalThis.litIssuedWarnings': 'new Set()',
-          'window.litIssuedWarnings': 'new Set()'
-        }
-      : {
-          'globalThis.litIssuedWarnings': 'undefined',
-          'window.litIssuedWarnings': 'undefined'
-        }
-    )
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['./src/frontend/shared/testing/setup.ts'],
+    include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}']
   }
-}));
+});

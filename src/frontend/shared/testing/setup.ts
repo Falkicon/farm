@@ -1,63 +1,52 @@
-import { expect, test } from '@playwright/test';
-import { beforeAll, afterAll } from 'vitest';
-import crossSpawn from 'cross-spawn';
-import { waitForPort } from './utils.js';
+import '@testing-library/jest-dom';
+import { configure } from '@testing-library/dom';
+import { LitElement } from 'lit';
+import { AppButton } from '../components/app-button';
 
-let backendProcess: ReturnType<typeof crossSpawn>;
-
-beforeAll(async () => {
-  // Start backend server for tests
-  const npmPath = process.platform === 'win32' ? 'npm.cmd' : 'npm';
-
-  backendProcess = crossSpawn(npmPath, ['run', 'dev:backend'], {
-    stdio: 'pipe',
-    env: {
-      ...process.env,
-      NODE_ENV: 'test',
-      PORT: '8000', // Explicitly set port for tests
-    },
-    cwd: process.cwd(),
-  });
-
-  // Log backend output for debugging
-  backendProcess.stdout?.on('data', (data) => {
-    console.log(`Backend: ${data}`);
-  });
-
-  backendProcess.stderr?.on('data', (data) => {
-    console.error(`Backend Error: ${data}`);
-  });
-
-  // Wait for backend to be ready
-  try {
-    await waitForPort(8000, 30000); // Wait up to 30 seconds
-    console.log('Backend server started successfully');
-  } catch (error) {
-    console.error('Failed to start backend server:', error);
-    throw error;
+declare global {
+  interface Window {
+    process: {
+      env: {
+        NODE_ENV: string;
+        [key: string]: string | undefined;
+      };
+    };
+    BaseComponent: typeof BaseComponent;
   }
-}, 35000);
+}
 
-afterAll(() => {
-  // Cleanup backend process
-  if (backendProcess) {
-    backendProcess.kill();
-    console.log('Backend server stopped');
-  }
+// Configure testing-library
+configure({
+  testIdAttribute: 'data-testid',
 });
 
-// Add custom matchers if needed
-expect.extend({
-  // Add custom matchers here
-});
+// Mock BaseComponent for testing
+class BaseComponent extends LitElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
 
-// Export test hooks for global usage
-export const hooks = {
-  beforeAll: test.beforeAll,
-  afterAll: test.afterAll,
-  beforeEach: test.beforeEach,
-  afterEach: test.afterEach,
-};
+  protected dispatchCustomEvent(name: string, detail: unknown) {
+    this.dispatchEvent(
+      new CustomEvent(name, {
+        detail,
+        bubbles: true,
+        composed: true,
+      })
+    );
+  }
+}
 
-// Make hooks available globally
-Object.assign(global, hooks);
+// Make BaseComponent available globally
+window.BaseComponent = BaseComponent as typeof window.BaseComponent;
+
+// Configure Lit for testing
+window.process = window.process || {};
+window.process.env = window.process.env || {};
+window.process.env.NODE_ENV = 'test';
+
+// Define custom elements if they haven't been defined yet
+if (!(window.customElements && window.customElements.get('app-button'))) {
+  window.customElements.define('app-button', AppButton);
+}
