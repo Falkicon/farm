@@ -1,5 +1,6 @@
 @feature: type-definitions
-@module: shared
+@module:
+@version: 1.0.0 shared
 @priority: High
 @status: planned
 @dependencies: ["typescript", "@types/node"]

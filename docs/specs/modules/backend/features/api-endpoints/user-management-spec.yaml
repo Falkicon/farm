@@ -1,5 +1,6 @@
 @feature: user-management
-@module: backend
+@module:
+@version: 1.0.0 backend
 @priority: High
 @status: implemented
 @dependencies: ["fastify", "prisma", "zod"]

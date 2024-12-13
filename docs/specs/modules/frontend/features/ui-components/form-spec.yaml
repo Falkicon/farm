@@ -1,5 +1,6 @@
 @feature: form-components
-@module: frontend
+@module:
+@version: 1.0.0 frontend
 @priority: High
 @status: planned
 @dependencies: ["lit", "lit/decorators", "@lit-labs/form"]

@@ -1,5 +1,6 @@
 @feature: constants
-@module: shared
+@module:
+@version: 1.0.0 shared
 @priority: Medium
 @status: planned
 @dependencies: ["typescript", "dotenv"]

@@ -1,4 +1,5 @@
 @module: backend
+@version: 1.0.0
 @priority: High
 @dependencies: ["fastify", "prisma", "typescript"]
 

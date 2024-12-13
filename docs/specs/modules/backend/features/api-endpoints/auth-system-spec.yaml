@@ -1,5 +1,6 @@
 @feature: authentication-system
 @module: backend
+@version: 1.0.0
 @priority: High
 @status: implemented
 @dependencies: ["fastify", "jsonwebtoken", "zod"]

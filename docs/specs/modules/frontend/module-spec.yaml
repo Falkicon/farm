@@ -1,4 +1,5 @@
-@module: frontend
+@module:
+@version: 1.0.0 frontend
 @priority: High
 @dependencies: ["lit", "typescript", "tailwindcss", "vite"]
 

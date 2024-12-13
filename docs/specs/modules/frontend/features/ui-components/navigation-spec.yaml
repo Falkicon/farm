@@ -1,5 +1,6 @@
 @feature: navigation-components
-@module: frontend
+@module:
+@version: 1.0.0 frontend
 @priority: High
 @status: implemented
 @dependencies: ["lit", "lit/decorators"]
