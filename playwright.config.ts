@@ -1,43 +1,38 @@
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
-    // Test files location and pattern
     testDir: './src',
     testMatch: '**/*.spec.ts',
+    fullyParallel: true,
+    forbidOnly: !!process.env.CI,
+    workers: process.env.CI ? 1 : undefined,
+    reporter: 'html',
 
-    // Parallel execution settings
-    fullyParallel: true, // Run tests in parallel
-    forbidOnly: !!process.env.CI, // Fail if test.only is left in code in CI
-    workers: process.env.CI ? 1 : undefined, // Use single worker in CI
-
-    // Test reporting
-    reporter: 'html', // Generate HTML test reports
-
-    // Global test configuration
     use: {
-        baseURL: 'http://localhost:3000', // Base URL for all tests
-        trace: 'on-first-retry', // Capture trace on first retry of failed test
+        baseURL: 'http://localhost:3000',
+        trace: 'on-first-retry',
     },
 
-    // Test projects configuration
+    webServer: {
+        command: 'vite --config vite.config.test.ts',
+        port: 3000,
+        reuseExistingServer: !process.env.CI,
+        timeout: 120 * 1000,
+    },
+
     projects: [
         {
-            name: 'chromium', // Chrome browser tests
-            use: { ...devices['Desktop Chrome'] },
+            name: 'chromium',
+            use: {
+                ...devices['Desktop Chrome'],
+            },
         },
         {
-            name: 'components', // Component-specific tests
+            name: 'components',
             testMatch: '**/*.component.spec.ts',
             use: {
-                viewport: { width: 500, height: 500 }, // Fixed viewport for component tests
+                viewport: { width: 500, height: 500 },
             },
         },
     ],
-
-    // Development server configuration
-    webServer: {
-        command: 'npm run dev', // Command to start dev server
-        port: 3000, // Port to wait for
-        reuseExistingServer: !process.env.CI, // Reuse server in dev, not in CI
-    },
-}); 
+});

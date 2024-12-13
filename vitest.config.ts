@@ -18,7 +18,7 @@ export default defineConfig({
 
         // Pattern for test files to include
         // Will run all .test.ts files under the src directory
-        include: ['src/**/*.test.ts'],
+        include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
 
         // Pattern for test files to exclude
         // Will exclude all files under node_modules, dist, and e2e directories
@@ -37,15 +37,20 @@ export default defineConfig({
 
         // Dependencies configuration
         deps: {
-            inline: [/@open-wc\/testing/, /lit/]
+            inline: [/lit/, /@lit/, /@open-wc/]
         },
 
         // Test timeout configuration
-        testTimeout: 60000
+        testTimeout: 10000,
+        hookTimeout: 10000
     },
     resolve: {
         alias: {
-            '@': resolve(__dirname, './src')
+            '/src': resolve(__dirname, 'src')
         }
+    },
+    define: {
+        'process.env.NODE_ENV': '"test"',
+        'process.env.TEST': 'true'
     }
 });
