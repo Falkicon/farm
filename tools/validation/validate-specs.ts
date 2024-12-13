@@ -3,7 +3,7 @@
  * Validates YAML specification files against a predefined schema using Ajv.
  */
 
-import { readFileSync } from 'fs';
+import { readFileSync, readdirSync, statSync } from 'fs';
 import { join } from 'path';
 import { load } from 'js-yaml';
 import { fileURLToPath } from 'url';
@@ -134,36 +134,74 @@ function validateSpec(filePath: string): ValidationResult {
 }
 
 /**
+ * Gets all YAML files in a directory recursively
+ */
+function getYamlFiles(dir: string): string[] {
+  const files: string[] = [];
+
+  function scan(directory: string) {
+    const entries = readdirSync(directory);
+    for (const entry of entries) {
+      const fullPath = join(directory, entry);
+      const stat = statSync(fullPath);
+
+      if (stat.isDirectory()) {
+        scan(fullPath);
+      } else if (stat.isFile() && /\.ya?ml$/i.test(entry)) {
+        files.push(fullPath);
+      }
+    }
+  }
+
+  scan(dir);
+  return files;
+}
+
+/**
  * Main entry point for the validation script
  */
 function main(): void {
-  const specPath = process.argv[2] || join(process.cwd(), 'docs/specs/test-spec.yaml');
-  process.stdout.write('Validating file: ' + specPath + '\n');
+  let files: string[];
+  const specsDir = join(process.cwd(), 'docs/specs');
 
-  const result = validateSpec(specPath);
+  // If a specific file is provided, validate only that file
+  if (process.argv[2]) {
+    files = [process.argv[2]];
+  } else {
+    // Otherwise, validate all YAML files in the specs directory
+    files = getYamlFiles(specsDir);
+  }
 
-  const output = [
-    '\n=== Validation Results ===\n',
-    'File: ' + specPath + '\n',
-    result.valid ? '✓ Validation passed\n' : '✗ Validation failed\n'
-  ];
+  if (files.length === 0) {
+    process.stdout.write('No YAML files found to validate.\n');
+    process.exit(1);
+  }
 
-  if (!result.valid && result.errors) {
-    output.push('Errors found:');
-    result.errors.forEach((error, index) => {
-      output.push(`${index + 1}. ${error}`);
-    });
-    output.push('');
+  let hasErrors = false;
+  const results: string[] = ['\n=== Validation Results ===\n'];
+
+  for (const file of files) {
+    process.stdout.write(`\nValidating file: ${file}\n`);
+    const result = validateSpec(file);
+
+    results.push(`\nFile: ${file}`);
+    results.push(result.valid ? '✓ Validation passed' : '✗ Validation failed');
+
+    if (!result.valid && result.errors) {
+      results.push('Errors found:');
+      result.errors.forEach((error, index) => {
+        results.push(`${index + 1}. ${error}`);
+      });
+      hasErrors = true;
+    }
   }
 
   // Write results to stdout
-  output.forEach(line => process.stdout.write(line + '\n'));
-
-  // Write exit code in a specific format
-  const exitCode = result.valid ? 0 : 1;
-  process.stdout.write(`\n${exitCode} (${exitCode === 0 ? 'PASS' : 'FAIL'})\n`);
+  results.forEach(line => process.stdout.write(line + '\n'));
 
   // Exit with appropriate code
+  const exitCode = hasErrors ? 1 : 0;
+  process.stdout.write(`\n${exitCode} (${exitCode === 0 ? 'PASS' : 'FAIL'})\n`);
   process.exit(exitCode);
 }
 
