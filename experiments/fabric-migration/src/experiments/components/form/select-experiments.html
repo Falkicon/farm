@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Component Experiments</title>
+    <script type="module" src="./select-experiments.ts"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+            background-color: #f5f5f5;
+        }
+        .experiment-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .experiment-section {
+            margin-bottom: 40px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 20px 0;
+        }
+        .form-row {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        h1 {
+            margin-top: 0;
+            margin-bottom: 32px;
+            color: #323130;
+            font-size: 32px;
+            font-weight: 600;
+        }
+        h2 {
+            color: #323130;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #edebe9;
+        }
+        h3 {
+            color: #605e5c;
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="experiment-container">
+        <h1>Select Component Experiments</h1>
+
+        <!-- Standard Select -->
+        <section class="experiment-section">
+            <h2>Standard Select</h2>
+
+            <!-- Fluent UI -->
+            <div class="form-group">
+                <h3>Fluent UI:</h3>
+                <div class="form-row">
+                    <fluent-select appearance="outline">
+                        <fluent-option value="1">Option 1</fluent-option>
+                        <fluent-option value="2">Option 2</fluent-option>
+                        <fluent-option value="3">Option 3</fluent-option>
+                    </fluent-select>
+                </div>
+            </div>
+
+            <!-- Fabric -->
+            <div class="form-group">
+                <h3>Fabric:</h3>
+                <div class="form-row">
+                    <fabric-select variant="outline">
+                        <fabric-option value="1">Option 1</fabric-option>
+                        <fabric-option value="2">Option 2</fabric-option>
+                        <fabric-option value="3">Option 3</fabric-option>
+                    </fabric-select>
+                </div>
+            </div>
+        </section>
+
+        <!-- Required Select -->
+        <section class="experiment-section">
+            <h2>Required Select</h2>
+
+            <!-- Fluent UI -->
+            <div class="form-group">
+                <h3>Fluent UI:</h3>
+                <div class="form-row">
+                    <fluent-select appearance="outline" required>
+                        <fluent-option value="">Select an option</fluent-option>
+                        <fluent-option value="1">Option 1</fluent-option>
+                        <fluent-option value="2">Option 2</fluent-option>
+                    </fluent-select>
+                </div>
+            </div>
+
+            <!-- Fabric -->
+            <div class="form-group">
+                <h3>Fabric:</h3>
+                <div class="form-row">
+                    <fabric-select variant="outline" required>
+                        <fabric-option value="">Select an option</fabric-option>
+                        <fabric-option value="1">Option 1</fabric-option>
+                        <fabric-option value="2">Option 2</fabric-option>
+                    </fabric-select>
+                </div>
+            </div>
+        </section>
+
+        <!-- Multiple Select -->
+        <section class="experiment-section">
+            <h2>Multiple Select</h2>
+
+            <!-- Fluent UI -->
+            <div class="form-group">
+                <h3>Fluent UI:</h3>
+                <div class="form-row">
+                    <fluent-select appearance="outline" multiple>
+                        <fluent-option value="1">Option 1</fluent-option>
+                        <fluent-option value="2">Option 2</fluent-option>
+                        <fluent-option value="3">Option 3</fluent-option>
+                    </fluent-select>
+                </div>
+            </div>
+
+            <!-- Fabric -->
+            <div class="form-group">
+                <h3>Fabric:</h3>
+                <div class="form-row">
+                    <fabric-select variant="outline" multiple>
+                        <fabric-option value="1">Option 1</fabric-option>
+                        <fabric-option value="2">Option 2</fabric-option>
+                        <fabric-option value="3">Option 3</fabric-option>
+                    </fabric-select>
+                </div>
+            </div>
+        </section>
+
+        <!-- Disabled Select -->
+        <section class="experiment-section">
+            <h2>Disabled Select</h2>
+
+            <!-- Fluent UI -->
+            <div class="form-group">
+                <h3>Fluent UI:</h3>
+                <div class="form-row">
+                    <fluent-select appearance="outline" disabled>
+                        <fluent-option value="1">Option 1</fluent-option>
+                        <fluent-option value="2">Option 2</fluent-option>
+                    </fluent-select>
+                </div>
+            </div>
+
+            <!-- Fabric -->
+            <div class="form-group">
+                <h3>Fabric:</h3>
+                <div class="form-row">
+                    <fabric-select variant="outline" disabled>
+                        <fabric-option value="1">Option 1</fabric-option>
+                        <fabric-option value="2">Option 2</fabric-option>
+                    </fabric-select>
+                </div>
+            </div>
+        </section>
+
+        <!-- Validation Select -->
+        <section class="experiment-section">
+            <h2>Validation Select</h2>
+
+            <!-- Fluent UI -->
+            <div class="form-group">
+                <h3>Fluent UI:</h3>
+                <div class="form-row">
+                    <fluent-select id="fluent-validation" appearance="outline" required>
+                        <fluent-option value="">Select an option</fluent-option>
+                        <fluent-option value="1">Option 1</fluent-option>
+                        <fluent-option value="2">Option 2</fluent-option>
+                    </fluent-select>
+                </div>
+            </div>
+
+            <!-- Fabric -->
+            <div class="form-group">
+                <h3>Fabric:</h3>
+                <div class="form-row">
+                    <fabric-select id="fabric-validation" variant="outline" required>
+                        <fabric-option value="">Select an option</fabric-option>
+                        <fabric-option value="1">Option 1</fabric-option>
+                        <fabric-option value="2">Option 2</fabric-option>
+                    </fabric-select>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

@@ -1,128 +1,139 @@
-# Cursor Rules Configuration
+# Project Overview
+You are an expert in TypeScript, Lit Web Components, Fastify, and Tailwind CSS. This project is a full-stack, API-first, reactive, and modern web platform designed as a boilerplate for scalable web applications.
 
-# Cross-Platform Script Handling
-scripts.crossPlatform: {
-  "shell": {
-    "windows": "powershell",
-    "linux": "bash",
-    "darwin": "bash"
-  },
-  "commands": {
-    "docs": {
-      "serve": {
-        "windows": "python -m mkdocs serve",
-        "unix": "python3 -m mkdocs serve"
-      },
-      "build": {
-        "windows": "python -m mkdocs build",
-        "unix": "python3 -m mkdocs build"
-      },
-      "deploy": {
-        "windows": "python -m mkdocs gh-deploy",
-        "unix": "python3 -m mkdocs gh-deploy"
-      },
-      "clean": {
-        "windows": "if (Test-Path site) { Remove-Item -Recurse -Force site }",
-        "unix": "rm -rf site"
-      }
-    }
-  }
-}
+# Project Status
+- Alpha Status: APIs and architecture may change significantly between versions
+- Version: 1.0.0
+- Homepage: https://falkicon.github.io/farm
+- Repository: https://github.com/falkicon/farm.git
 
-# Terminal Settings (Platform-specific)
-terminal.settings: {
-  "windows": {
-    "shell": "powershell",
-    "commandPrefix": "",
-    "pathSeparator": "\\",
-    "lineEnding": "\r\n"
-  },
-  "unix": {
-    "shell": "bash",
-    "commandPrefix": "",
-    "pathSeparator": "/",
-    "lineEnding": "\n"
-  }
-}
+# Server Configuration
+- Default port: 8000 (backend), 3000 (frontend), 6006 (Storybook)
+- Logging: Uses pino-pretty with colorization
+- CORS: Enabled with credentials support
+- Security: Helmet integration with CSP disabled
+- File Upload Limits:
+  - Max file size: 1MB
+  - Max fields: 10
+  - Field name size: 100
+  - Files per request: 1
 
-# Package Scripts (Cross-platform using npm packages)
-package.scripts.crossPlatform: {
-  "dev": "cross-env NODE_ENV=development vite",
-  "build": "cross-env NODE_ENV=production vite build",
-  "test": "vitest",
-  "clean": "rimraf dist",
-  "docs": "node scripts/docs.js",
-  "docs:build": "node scripts/docs.js build",
-  "docs:deploy": "node scripts/docs.js deploy",
-  "lint": "eslint . --ext .ts,.tsx",
-  "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
-  "typecheck": "tsc --noEmit",
-  "validate": "npm run lint && npm run typecheck && npm run test"
-}
+# API Structure
+- Base path: /api
+- Public routes: health checks at root level
+- Protected routes: require authentication
+- Route categories:
+  - /api/auth
+  - /api/users
+  - /api/files
+  - /api/metrics
+
+# Middleware Stack
+- Rate limiting
+- Request validation
+- Authentication
+- Error handling
+- Request/Response logging
+
+# Coding Standards
+- Write concise, modular, and maintainable TypeScript code.
+- Use functional and declarative programming patterns; avoid classes.
+- Adhere to the Airbnb style guide for code formatting.
+- Use camelCase for variable and function names.
+- Prefer iteration and modularization to adhere to DRY principles and avoid code duplication.
+- Use descriptive variable names with auxiliary verbs (e.g., isLoading, hasError).
+- Write package.json scripts that are cross-platform compatible.
+
+# Frontend Development
+- Develop UI components using Lit Web Components.
+- Style components with Tailwind CSS.
+- Implement reactive state management.
+- Utilize Hot Module Replacement for rapid development.
+- Develop and document components using Storybook.
+
+# Backend Development
+- Build the server using Fastify.
+- Follow an API-first development approach.
+- Integrate the Prisma ORM for type-safe database interactions.
+- Implement built-in system metrics and monitoring.
+
+# Testing
+- Write unit tests using Vitest for all new components and utilities.
+- Aim for at least 80% test coverage.
+- Conduct end-to-end tests using Playwright.
+- Ensure accessibility compliance in tests.
+
+# Documentation
+- Use JSDoc comments for all functions and components.
+- Maintain up-to-date documentation using MkDocs and TypeDoc.
+- Ensure the README.md includes current project setup and contribution guidelines.
+
+# Security
+- Sanitize all user inputs to prevent XSS attacks.
+- Use parameterized queries to prevent SQL injection.
+- Implement security best practices as recommended by Fastify and Prisma.
 
 # Project Structure
-project.type: "web-app"
-project.framework: "lit"
-project.backend: "fastify"
-project.language: "typescript"
-project.styling: "tailwindcss"
-project.architecture: "monorepo"
+- Organize frontend components in the 'src/frontend/components' directory.
+- Place utility functions in 'src/utils'.
+- Store styles in 'src/frontend/styles'.
+- Maintain a clear separation between frontend and backend codebases.
 
-# Package Manager
-package.manager: "npm"
-package.nodeVersion: ">=18.0.0"
-package.lockfile: "package-lock.json"
+# Package Management
+- Use npm as the package manager.
+- Always ask permission before adding a new package and explain why it is needed and the version you plan to use.
+- Before adding a new package, check if it is already listed in the package.json file or if there is a similar package that can be used instead.
 
-# File Patterns (Cross-platform)
-files.source: "src/**/*.{ts,tsx}"
-files.styles: "src/**/*.css"
-files.tests: "**/*.test.ts"
-files.docs: "**/*.md"
-files.config: ["*.config.{js,ts}", "tsconfig*.json", ".env*"]
-files.ignore: [
-  "node_modules",
-  "dist",
-  "coverage",
-  ".turbo",
-  ".next",
-  ".git",
-  "*.log"
-]
+# Collaboration
+- Follow the Git branching strategy: 'main' for production, 'develop' for development, and feature branches for new features.
+- Write clear and concise commit messages following the Conventional Commits standard.
+- Use GitHub Actions for CI/CD workflows, including testing, building, and deploying.
 
-# Project Structure Paths (Cross-platform format)
-paths.source: {
-  "frontend": "src/frontend",
-  "backend": "src/backend",
-  "components": "src/frontend/components",
-  "styles": "src/frontend/styles",
-  "server": "src/backend/server.ts",
-  "public": "public",
-  "build": "dist",
-  "docs": "docs"
-}
+# Cross-Platform Development
+- Use the following shell environments:
+  - Windows: PowerShell
+  - Linux: Bash
+  - macOS: Bash
+- Implement cross-platform scripts using the 'cross-env' package.
+- Define platform-specific commands in the 'scripts' section of package.json.
 
-# Development Tools
-tools.bundler: "vite"
-tools.testing: ["vitest", "playwright"]
-tools.linting: ["eslint", "prettier"]
-tools.documentation: ["mkdocs", "typedoc"]
-tools.database: "prisma"
+# Terminal Settings
+- When running the run_terminal_command prefer syntax that supports powershell and the os provided in the system prompt.
+- PowerShell Command Syntax:
+  - Use semicolon (;) instead of && for command chaining
+  - Verify current directory before using cd commands
+  - Use Set-Location instead of cd for better error handling
+  - Use absolute paths when necessary
+  - Example: `Set-Location -Path "path/to/dir"; npm install`
 
-# TypeScript Configuration
-typescript.target: "ES2020"
-typescript.module: "ESNext"
-typescript.configs: ["tsconfig.json", "tsconfig.backend.json"]
-typescript.experimentalDecorators: true
-typescript.useDefineForClassFields: false
-typescript.emitDecoratorMetadata: true
+# Package Management
+- Use npm as the package manager.
+- Ensure compatibility with Node.js version 18.0.0 or higher.
+- Maintain the 'package-lock.json' file for consistent dependencies.
 
-# Documentation Configuration
-documentation.settings: {
-  "engine": "mkdocs",
-  "theme": "dracula",
-  "output": "site",
-  "serve": {
-    "port": 8000,
-    "host": "localhost"
-  }
-}
+# Additional Guidelines
+- Ensure compatibility with Node.js version 22.0 or higher.
+- Use npm version 10.0 or higher for package management.
+- Adhere to the project's code of conduct and contribution guidelines.
+
+# Cursor Protection
+- Do not modify documents with a comment that includes @cursor-nocursor at the start or end of the document.
+- Do not modify a document section that is wrapped with comments that include @cursor-nocursor-start and @cursor-nocursor-end.
+- Comment styles can include:
+      markdown: <!--  -->
+      javascript: /*  */
+      typescript: /*  */
+      python: #
+      bash: #
+      yaml: #
+      json: //
+      default: //
+
+# Development Environment
+- Frontend port: 3000
+- Backend port: 8000
+- Storybook port: 6006
+- Documentation ports: 8000 (MkDocs), 8001 (TypeDoc)
+- Hot Module Replacement enabled
+- Vite as bundler
+- Cross-env for cross-platform compatibility

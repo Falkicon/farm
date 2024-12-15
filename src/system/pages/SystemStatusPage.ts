@@ -15,6 +15,8 @@ interface MetricsError {
   details?: unknown;
 }
 
+type TimeRange = '5m' | '15m' | '1h' | '24h';
+
 /**
  * System status dashboard component
  *
@@ -48,324 +50,431 @@ interface MetricsError {
 @customElement('system-status-page')
 export class SystemStatusPage extends LitElement {
   static override styles = css`
-    /* CSS Custom Properties for consistent theming */
     :host {
-      --font-size-base: 14px;
-      --font-size-sm: 12px;
-      --font-size-lg: 16px;
-      --font-size-xl: 20px;
+      /* Fluent Design System Variables */
+      --fluent-font-family: "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
 
-      --font-weight-normal: 400;
-      --font-weight-medium: 500;
-      --font-weight-bold: 600;
+      /* Spacing & Layout */
+      --spacing-xs: 4px;
+      --spacing-sm: 8px;
+      --spacing-md: 12px;
+      --spacing-lg: 16px;
+      --spacing-xl: 24px;
 
-      --color-bg-base: var(--color-bg-primary);
-      --color-bg-card: rgba(30, 41, 59, 0.6);
-      --color-bg-card-hover: rgba(30, 41, 59, 0.7);
-      --color-bg-header: rgba(255, 255, 255, 0.03);
+      /* Border Radius */
+      --radius-sm: 3px;
+      --radius-md: 4px;
+      --radius-lg: 6px;
+      --radius-pill: 999px;
 
-      --spacing-base: var(--system-spacing-4);
-      --border-radius: var(--system-radius-lg);
+      /* Elevation & Shadows */
+      --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.13), 0 1px 1px rgba(0, 0, 0, 0.11);
+      --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.13), 0 2px 2px rgba(0, 0, 0, 0.11);
+      --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.13), 0 4px 4px rgba(0, 0, 0, 0.11);
+
+      /* Colors */
+      --layer1-bg: rgb(28, 28, 28);
+      --layer2-bg: rgb(32, 32, 32);
+      --layer3-bg: rgb(36, 36, 36);
+      --card-stroke: rgba(255, 255, 255, 0.08);
+      --text-primary: rgba(255, 255, 255, 0.95);
+      --text-secondary: rgba(255, 255, 255, 0.78);
+      --text-tertiary: rgba(255, 255, 255, 0.54);
+
+      /* Status Colors */
+      --status-success: rgb(108, 203, 95);
+      --status-warning: rgb(252, 225, 0);
+      --status-error: rgb(255, 99, 97);
+      --status-success-bg: rgba(108, 203, 95, 0.1);
+      --status-warning-bg: rgba(252, 225, 0, 0.1);
+      --status-error-bg: rgba(255, 99, 97, 0.1);
+
+      /* Accent Colors */
+      --accent-primary: rgb(96, 205, 255);
+      --accent-secondary: rgb(0, 120, 212);
+
+      /* Motion */
+      --motion-duration-fast: 100ms;
+      --motion-duration-normal: 200ms;
+      --motion-duration-slow: 300ms;
+      --motion-ease-standard: cubic-bezier(0.33, 0, 0.67, 1);
 
       display: block;
-      padding: var(--spacing-base);
-      color: var(--color-text-primary);
-      background: var(--color-bg-base);
+      padding: var(--spacing-xl);
+      color: var(--text-primary);
+      background: var(--layer1-bg);
       min-height: 100vh;
-      font-size: var(--font-size-base);
+      font-family: var(--fluent-font-family);
     }
 
     .dashboard {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: calc(var(--spacing-base) * 2);
+      gap: var(--spacing-lg);
       max-width: 1400px;
       margin: 0 auto;
-      position: relative;
     }
 
-    .section {
-      display: flex;
-      flex-direction: column;
-      gap: calc(var(--spacing-base) * 1.25);
-    }
-
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: calc(var(--spacing-base) * 0.5);
-      margin-bottom: var(--spacing-base);
-      padding: calc(var(--spacing-base) * 0.75);
-      background: var(--color-bg-header);
-      border-radius: var(--border-radius);
-      position: relative;
-    }
-
-    .section-title {
-      font-size: var(--font-size-lg);
-      font-weight: var(--font-weight-medium);
-      color: var(--color-text-primary);
-      margin: 0;
-      opacity: 0.9;
-    }
-
-    .info-icon {
-      color: var(--color-text-secondary);
-      cursor: help;
-      transition: color 0.2s;
-      opacity: 0.6;
-    }
-
-    .info-icon:hover {
-      color: var(--color-accent);
-      opacity: 1;
-    }
-
-    .status-card {
-      background: var(--color-bg-card);
-      border-radius: var(--border-radius);
-      padding: var(--spacing-base);
-      border: 1px solid rgba(255, 255, 255, 0.03);
-      transition: background-color 0.2s;
-    }
-
-    .status-card:hover {
-      background: var(--color-bg-card-hover);
-    }
-
-    .status-row {
+    .dashboard-header {
+      grid-column: 1 / -1;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: calc(var(--spacing-base) * 0.5) 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      margin-bottom: var(--spacing-xl);
     }
 
-    .status-row:last-child {
-      border-bottom: none;
+    .dashboard-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin: 0;
+      color: var(--text-primary);
     }
 
-    .status-label {
-      color: var(--color-text-secondary);
-      font-size: var(--font-size-sm);
-      display: flex;
-      align-items: center;
-      gap: calc(var(--spacing-base) * 0.5);
-      opacity: 0.8;
+    .section {
+      grid-column: auto / span 1;
     }
 
-    .status-value {
-      font-family: var(--system-font-mono);
-      color: var(--color-text-primary);
-      font-size: var(--font-size-base);
-      transition: color 0.2s;
+    .section-header {
+      margin-bottom: var(--spacing-md);
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 0;
+      color: var(--text-secondary);
+    }
+
+    .time-range-selector {
+      display: inline-flex;
+      background: var(--layer2-bg);
+      border-radius: var(--radius-md);
+      padding: 2px;
+      border: 1px solid var(--card-stroke);
+      box-shadow: var(--shadow-sm);
+      gap: 2px;
+    }
+
+    .time-range-button {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      padding: 6px var(--spacing-md);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all var(--motion-duration-fast) var(--motion-ease-standard);
+      min-width: 44px;
+      font-family: inherit;
+      line-height: 20px;
+      height: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .time-range-button:hover {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .time-range-button.active {
+      background: var(--accent-secondary);
+      color: var(--text-primary);
+      font-weight: 500;
     }
 
     .feature-list {
       display: flex;
       flex-direction: column;
-      gap: calc(var(--spacing-base) * 0.5);
+      gap: var(--spacing-xs);
     }
 
     .feature-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: calc(var(--spacing-base) * 0.75);
-      background: var(--color-bg-card);
-      border-radius: calc(var(--border-radius) * 0.75);
-      transition: background-color 0.2s;
+      padding: var(--spacing-sm) var(--spacing-lg);
+      background: var(--layer2-bg);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--card-stroke);
       cursor: pointer;
-      outline: none;
+      transition: all var(--motion-duration-normal) var(--motion-ease-standard);
+      min-height: 40px;
+      gap: var(--spacing-md);
     }
 
-    .feature-item:focus-visible {
-      box-shadow: 0 0 0 2px var(--color-accent);
+    .feature-item:hover {
+      border-color: var(--accent-primary);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-1px);
+      background: var(--layer3-bg);
     }
 
     .feature-name {
       display: flex;
       align-items: center;
-      gap: calc(var(--spacing-base) * 0.5);
-      font-size: var(--font-size-base);
+      gap: var(--spacing-sm);
+      font-size: 13px;
+      color: var(--text-primary);
     }
 
     .feature-status {
-      font-size: var(--font-size-sm);
-      padding: calc(var(--spacing-base) * 0.25) calc(var(--spacing-base) * 0.5);
-      border-radius: var(--system-radius-full);
-      transition: all 0.2s;
-      font-weight: var(--font-weight-medium);
+      font-size: 11px;
+      padding: 3px var(--spacing-md);
+      border-radius: var(--radius-sm);
+      background: var(--layer3-bg);
+      font-weight: 500;
+      letter-spacing: 0.8px;
     }
 
     .status-enabled {
-      color: var(--color-success);
-      background: var(--color-success-light);
-    }
-
-    .status-warning {
-      color: var(--color-warning);
-      background: var(--color-warning-light);
+      color: var(--status-success);
     }
 
     .status-disabled {
-      color: var(--color-error);
-      background: var(--color-error-light);
+      color: var(--status-error);
+    }
+
+    .status-card {
+      background: var(--layer2-bg);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-lg);
+      border: 1px solid var(--card-stroke);
+      box-shadow: var(--shadow-sm);
+      transition: all var(--motion-duration-normal) var(--motion-ease-standard);
+      margin-bottom: var(--spacing-md);
+    }
+
+    .status-card:last-child {
+      margin-bottom: 0;
+    }
+
+    .status-card:hover {
+      border-color: var(--accent-primary);
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-1px);
     }
 
     .metric-value {
-      font-size: var(--font-size-xl);
-      font-weight: var(--font-weight-bold);
-      color: var(--color-accent);
-      margin-bottom: calc(var(--spacing-base) * 0.5);
+      font-size: 28px;
+      line-height: 36px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: var(--spacing-xs);
       display: flex;
-      align-items: baseline;
-      gap: calc(var(--spacing-base) * 0.5);
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+
+    /* Special case for connection status */
+    .status-card .metric-value:first-child {
+      font-size: 16px;
+      line-height: 24px;
+      letter-spacing: 0.5px;
     }
 
     .metric-trend {
-      font-size: var(--font-size-sm);
-      font-weight: var(--font-weight-normal);
-      opacity: 0.6;
-      margin-left: calc(var(--spacing-base) * 0.5);
+      font-size: 12px;
+      padding: 2px var(--spacing-sm);
+      border-radius: var(--radius-sm);
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      height: 20px;
+      margin-left: var(--spacing-xs);
+      letter-spacing: 0.5px;
     }
 
     .metric-trend-up {
-      color: var(--color-error);
+      color: var(--status-error);
+      background: var(--status-error-bg);
     }
 
     .metric-trend-down {
-      color: var(--color-success);
+      color: var(--status-success);
+      background: var(--status-success-bg);
     }
 
-    .metric-label {
-      font-size: var(--font-size-sm);
-      color: var(--color-text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      display: flex;
-      align-items: center;
-      gap: calc(var(--spacing-base) * 0.5);
-      opacity: 0.8;
+    .status-label {
+      color: var(--text-secondary);
+      font-size: 13px;
+      margin-bottom: var(--spacing-sm);
+    }
+
+    @media (max-width: 1200px) {
+      .dashboard {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-md);
+      }
+
+      .section {
+        grid-column: auto / span 1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .dashboard {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+      }
+
+      .section {
+        grid-column: 1 / -1;
+      }
+
+      .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-md);
+      }
+
+      :host {
+        padding: var(--spacing-lg);
+      }
+
+      .time-range-selector {
+        width: 100%;
+      }
+
+      .time-range-button {
+        flex: 1;
+        text-align: center;
+      }
     }
 
     .sparkline-container {
-      height: 45px;
-      margin: calc(var(--spacing-base) * 1.25) 0;
+      height: 60px;
+      margin: var(--spacing-lg) 0;
+      padding: var(--spacing-lg) var(--spacing-md) var(--spacing-md);
+      background: var(--layer1-bg);
+      border-radius: var(--radius-md);
       position: relative;
+      border: 1px solid var(--card-stroke);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .sparkline-tooltip {
+      position: absolute;
+      top: var(--spacing-sm);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--layer3-bg);
+      padding: 4px var(--spacing-sm);
+      border-radius: var(--radius-sm);
+      font-size: 11px;
+      color: var(--text-primary);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+      z-index: 1;
+      border: 1px solid var(--card-stroke);
+      white-space: nowrap;
     }
 
     system-sparkline {
-      --sparkline-line-width: 1.5px;
-      --sparkline-dot-size: 0px;
-      --sparkline-line-color: var(--color-accent);
+      flex: 1;
+      --sparkline-line-color: var(--accent-primary);
       --sparkline-fill-opacity: 0.1;
+      --sparkline-dot-size: 4px;
     }
 
     .sparkline-overlay {
       position: absolute;
-      top: 0;
+      bottom: var(--spacing-xs);
       left: 0;
       right: 0;
-      bottom: 0;
       display: flex;
       justify-content: space-between;
-      align-items: flex-end;
-      padding: 0 calc(var(--spacing-base) * 0.5);
+      padding: 0 var(--spacing-md);
+      font-size: 11px;
+      color: var(--text-tertiary);
+      font-weight: 500;
+      letter-spacing: 0.3px;
       pointer-events: none;
-      font-size: var(--font-size-sm);
-      color: var(--color-text-secondary);
-      opacity: 0.6;
     }
 
     .metric-details {
-      margin-top: var(--spacing-base);
-      padding-top: var(--spacing-base);
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      margin-top: var(--spacing-lg);
+      padding-top: var(--spacing-lg);
+      border-top: 1px solid var(--card-stroke);
+    }
+
+    .status-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--spacing-xs) 0;
+      min-height: 28px;
+      gap: var(--spacing-lg);
+    }
+
+    .status-row:last-child {
+      padding-bottom: 0;
+    }
+
+    .status-row:first-child {
+      padding-top: 0;
+    }
+
+    .status-label {
+      color: var(--text-secondary);
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+
+    .status-value {
+      font-family: "Cascadia Code", Consolas, monospace;
+      color: var(--text-primary);
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+      font-feature-settings: "tnum" 1;
     }
 
     .threshold-indicator {
       width: 6px;
       height: 6px;
-      border-radius: 50%;
-      margin-right: calc(var(--spacing-base) * 0.5);
+      border-radius: var(--radius-pill);
+      flex-shrink: 0;
+      position: relative;
     }
 
-    .threshold-normal {
-      background-color: var(--color-success);
-    }
-
-    .threshold-warning {
-      background-color: var(--color-warning);
-    }
-
-    .threshold-critical {
-      background-color: var(--color-error);
-    }
-
-    .tooltip {
+    .threshold-indicator::after {
+      content: '';
       position: absolute;
-      background: rgba(0, 0, 0, 0.85);
-      color: white;
-      padding: calc(var(--spacing-base) * 0.5) var(--spacing-base);
-      border-radius: calc(var(--border-radius) * 0.75);
-      font-size: var(--font-size-sm);
-      z-index: 1000;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.2s;
+      inset: -2px;
+      border-radius: inherit;
+      opacity: 0.5;
+      transition: opacity var(--motion-duration-normal) var(--motion-ease-standard);
     }
 
-    .status-card:hover .tooltip {
-      opacity: 1;
+    .threshold-indicator.normal {
+      background: var(--status-success);
     }
 
-    .error {
-      background: var(--color-error-light);
-      color: var(--color-error);
-      padding: var(--spacing-base);
-      border-radius: var(--border-radius);
-      margin: var(--spacing-base);
-      font-size: var(--font-size-base);
+    .threshold-indicator.normal::after {
+      background: var(--status-success-bg);
     }
 
-    .loading {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 200px;
-      color: var(--color-text-secondary);
-      font-size: var(--font-size-lg);
+    .threshold-indicator.warning {
+      background: var(--status-warning);
     }
 
-    .sparkline-tooltip {
-      position: absolute;
-      background: rgba(0, 0, 0, 0.85);
-      color: white;
-      padding: calc(var(--spacing-base) * 0.5);
-      border-radius: calc(var(--border-radius) * 0.5);
-      font-size: var(--font-size-sm);
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.2s;
-      z-index: 1000;
+    .threshold-indicator.warning::after {
+      background: var(--status-warning-bg);
     }
 
-    @media (max-width: 1200px) {
-      .dashboard {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-base);
-      }
+    .threshold-indicator.critical {
+      background: var(--status-error);
+    }
 
-      .dashboard::before,
-      .dashboard::after {
-        display: none;
-      }
-
-      :host {
-        --font-size-xl: 18px;
-        --spacing-base: var(--system-spacing-3);
-      }
+    .threshold-indicator.critical::after {
+      background: var(--status-error-bg);
     }
   `;
 
@@ -393,6 +502,11 @@ export class SystemStatusPage extends LitElement {
   private updateInterval: number | undefined;
   private retryCount = 0;
   private readonly maxRetries = 3;
+
+  @state()
+  private selectedTimeRange: TimeRange = '5m';
+
+  private readonly timeRanges: readonly TimeRange[] = ['5m', '15m', '1h', '24h'] as const;
 
   constructor() {
     super();
@@ -492,16 +606,16 @@ export class SystemStatusPage extends LitElement {
    * @returns CSS class name for threshold
    * @private
    */
-  private getThresholdClass(value: number, type: 'cpu' | 'memory'): string {
+  private getThresholdClass(value: number, type: 'cpu' | 'memory'): 'normal' | 'warning' | 'critical' {
     const thresholds = {
       cpu: { warning: 70, critical: 90 },
       memory: { warning: 80, critical: 95 },
     };
 
     const limits = thresholds[type];
-    if (value >= limits.critical) return 'threshold-critical';
-    if (value >= limits.warning) return 'threshold-warning';
-    return 'threshold-normal';
+    if (value >= limits.critical) return 'critical';
+    if (value >= limits.warning) return 'warning';
+    return 'normal';
   }
 
   /**
@@ -564,6 +678,28 @@ export class SystemStatusPage extends LitElement {
     if (tooltip) {
       tooltip.style.opacity = '0';
     }
+  }
+
+  private renderTimeRangeSelector() {
+    return html`
+      <div class="time-range-selector">
+        ${this.timeRanges.map(
+          (range) => html`
+            <button
+              class="time-range-button ${range === this.selectedTimeRange ? 'active' : ''}"
+              @click="${() => this.handleTimeRangeChange(range)}"
+            >
+              ${range}
+            </button>
+          `
+        )}
+      </div>
+    `;
+  }
+
+  private handleTimeRangeChange(range: TimeRange) {
+    this.selectedTimeRange = range;
+    // Implement time range filtering logic here
   }
 
   /**
@@ -638,20 +774,18 @@ export class SystemStatusPage extends LitElement {
 
     return html`
       <div class="dashboard" role="main">
+        <div class="dashboard-header">
+          <h1 class="dashboard-title">System Status</h1>
+          ${this.renderTimeRangeSelector()}
+        </div>
+
         <section class="section" role="region" aria-label="Core Services Status">
           <div class="section-header">
             <h2 class="section-title">Core Services</h2>
-            <span class="info-icon" title="Status of core system services">ⓘ</span>
           </div>
 
           <div class="status-card">
-            <div class="status-row">
-              <span class="status-label">
-                <span class="threshold-indicator threshold-normal"></span>
-                Backend Status
-              </span>
-              <span class="status-value status-enabled">CONNECTED</span>
-            </div>
+            ${this.renderMetricValue('CONNECTED', '', 'normal')}
             <div class="status-row">
               <span class="status-label">API Version</span>
               <span class="status-value">1.0.0</span>
@@ -667,79 +801,54 @@ export class SystemStatusPage extends LitElement {
           </div>
 
           <div class="status-card">
-            <div class="status-row">
-              <span class="status-label">
-                <span class="threshold-indicator ${dbConnected ? 'threshold-normal' : 'threshold-critical'}"></span>
-                Database Status
-              </span>
-              <span class="status-value ${dbConnected ? 'status-enabled' : 'status-disabled'}">
-                ${dbConnected ? 'CONNECTED' : 'DISCONNECTED'}
-              </span>
-            </div>
+            ${this.renderMetricValue(
+              dbConnected ? 'CONNECTED' : 'DISCONNECTED',
+              '',
+              dbConnected ? 'normal' : 'critical'
+            )}
             <div class="status-row">
               <span class="status-label">Latency</span>
               <span class="status-value">
                 ${dbLatency ?? 'N/A'}ms
-                ${dbLatency && dbLatency > 100 ? html` <span class="tooltip">High latency detected</span> ` : ''}
+                ${dbLatency && dbLatency > 100 ? html`<span class="tooltip">High latency detected</span>` : ''}
               </span>
             </div>
           </div>
         </section>
 
-        <section class="section" role="region" aria-label="API Features Status">
+        <section class="section" role="region" aria-label="API Features">
           <div class="section-header">
             <h2 class="section-title">API Features</h2>
-            <span class="info-icon" role="tooltip" aria-label="Status of API features and middleware">ⓘ</span>
           </div>
-
-          <div class="feature-list" role="list">
-            ${this.renderFeature('cors', true)} ${this.renderFeature('helmet', true)}
-            ${this.renderFeature('rateLimit', true)} ${this.renderFeature('multipart', false)}
-            ${this.renderFeature('cache', true)} ${this.renderFeature('jwt', true)}
+          <div class="feature-list">
+            ${this.renderFeature('cors', true)}
+            ${this.renderFeature('helmet', true)}
+            ${this.renderFeature('rateLimit', true)}
+            ${this.renderFeature('multipart', false)}
+            ${this.renderFeature('cache', true)}
+            ${this.renderFeature('jwt', true)}
           </div>
         </section>
 
         <section class="section" role="region" aria-label="Performance Metrics">
           <div class="section-header">
             <h2 class="section-title">Performance Metrics</h2>
-            <span class="info-icon" role="tooltip" aria-label="Real-time system performance metrics">ⓘ</span>
           </div>
 
           <div class="status-card">
-            <div class="metric-value">
-              ${responseTime.toFixed(2)}ms
-              ${responseTime > 100
-                ? html` <span class="tooltip" role="tooltip">Response time is higher than recommended</span> `
-                : ''}
-            </div>
-            <div class="metric-label">API Response Time</div>
-            <div
-              class="sparkline-container"
-              @mousemove="${(e: MouseEvent) => this.handleSparklineHover(e, apiResponseTimeData)}"
-              @mouseleave="${this.handleSparklineLeave}"
-            >
-              <div class="sparkline-tooltip"></div>
-              <system-sparkline .data="${apiResponseTimeData}" .unit="ms"></system-sparkline>
-              <div class="sparkline-overlay">
-                <span>Last 5m</span>
-                <span>Now</span>
-              </div>
-            </div>
+            ${this.renderMetricValue(`${responseTime.toFixed(2)}ms`)}
+            <div class="status-label">API Response Time</div>
+            ${this.renderSparklineWithTooltip(apiResponseTimeData, 'ms')}
           </div>
 
           <div class="status-card">
-            <div class="metric-value">
-              <span class="threshold-indicator ${this.getThresholdClass(memoryUsedPercent, 'memory')}"></span>
-              ${Math.round(memoryUsedPercent)}% ${memoryTrend}
-            </div>
-            <div class="metric-label">Memory Usage</div>
-            <div class="sparkline-container">
-              <system-sparkline .data="${memoryUsageData}" .unit="%"></system-sparkline>
-              <div class="sparkline-overlay">
-                <span>Last 5m</span>
-                <span>Now</span>
-              </div>
-            </div>
+            ${this.renderMetricValue(
+              `${Math.round(memoryUsedPercent)}%`,
+              memoryTrend,
+              this.getThresholdClass(memoryUsedPercent, 'memory')
+            )}
+            <div class="status-label">Memory Usage</div>
+            ${this.renderSparklineWithTooltip(memoryUsageData, '%')}
             <div class="metric-details">
               <div class="status-row">
                 <span class="status-label">Total</span>
@@ -753,18 +862,13 @@ export class SystemStatusPage extends LitElement {
           </div>
 
           <div class="status-card">
-            <div class="metric-value">
-              <span class="threshold-indicator ${this.getThresholdClass(cpuUsage, 'cpu')}"></span>
-              ${Math.round(cpuUsage)}% ${cpuTrend}
-            </div>
-            <div class="metric-label">CPU Usage</div>
-            <div class="sparkline-container">
-              <system-sparkline .data="${cpuUsageData}" .unit="%"></system-sparkline>
-              <div class="sparkline-overlay">
-                <span>Last 5m</span>
-                <span>Now</span>
-              </div>
-            </div>
+            ${this.renderMetricValue(
+              `${Math.round(cpuUsage)}%`,
+              cpuTrend,
+              this.getThresholdClass(cpuUsage, 'cpu')
+            )}
+            <div class="status-label">CPU Usage</div>
+            ${this.renderSparklineWithTooltip(cpuUsageData, '%')}
             <div class="metric-details">
               <div class="status-row">
                 <span class="status-label">Cores</span>
@@ -772,7 +876,7 @@ export class SystemStatusPage extends LitElement {
               </div>
               <div class="status-row">
                 <span class="status-label">Temperature</span>
-                <span class="status-value ${cpuTemp > 80 ? 'status-warning' : ''}">${cpuTemp}°C</span>
+                <span class="status-value">${cpuTemp}°C</span>
               </div>
             </div>
           </div>
@@ -817,5 +921,37 @@ export class SystemStatusPage extends LitElement {
       unitIndex++;
     }
     return `${value.toFixed(1)} ${units[unitIndex]}`;
+  }
+
+  private renderSparklineWithTooltip(data: { value: number; timestamp: Date }[], unit: string) {
+    return html`
+      <div
+        class="sparkline-container"
+        @mousemove="${(e: MouseEvent) => this.handleSparklineHover(e, data)}"
+        @mouseleave="${this.handleSparklineLeave}"
+      >
+        <div class="sparkline-tooltip"></div>
+        <system-sparkline
+          .data="${data}"
+          .unit="${unit}"
+          .showMinMax="${true}"
+          .animate="${true}"
+        ></system-sparkline>
+        <div class="sparkline-overlay">
+          <span>Last ${this.selectedTimeRange}</span>
+          <span>Now</span>
+        </div>
+      </div>
+    `;
+  }
+
+  private renderMetricValue(value: string | number, trend?: TemplateResult | '', indicator?: 'normal' | 'warning' | 'critical') {
+    return html`
+      <div class="metric-value">
+        ${indicator ? html`<span class="threshold-indicator ${indicator}"></span>` : ''}
+        <span>${value}</span>
+        ${trend || ''}
+      </div>
+    `;
   }
 }
