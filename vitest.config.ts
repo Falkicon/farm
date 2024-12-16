@@ -4,53 +4,50 @@ import { resolve } from 'path';
 
 export default defineConfig({
     test: {
-        // Enable global test APIs without importing them
-        // This allows using describe, it, expect etc. directly
+        // Enable global test APIs
         globals: true,
 
-        // Use jsdom as the test environment
-        // This simulates a browser-like environment for DOM testing
-        environment: 'jsdom',
+        // Use happy-dom for browser environment
+        environment: 'happy-dom',
 
-        // Specify setup files that run before each test
-        // These can contain global setup logic, custom matchers, etc.
-        setupFiles: ['./src/frontend/shared/testing/setup.ts'],
+        // Setup files
+        setupFiles: ['src/frontend/testing/setup/test-setup.ts'],
 
-        // Pattern for test files to include
-        // Will run all .test.ts files under the src directory
-        include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-
-        // Pattern for test files to exclude
-        // Will exclude all files under node_modules, dist, and e2e directories
-        exclude: ['**/node_modules/**', '**/dist/**', '**/e2e/**'],
+        // Test patterns - explicitly target unit tests
+        include: [
+            'src/frontend/**/*.spec.ts'
+        ],
+        exclude: [
+            'node_modules/**',
+            'dist/**',
+            'e2e/**',
+            '.storybook/**',
+            'coverage/**',
+            'src/tests/e2e/**'  // Explicitly exclude E2E tests
+        ],
 
         // Coverage configuration
         coverage: {
             reporter: ['text', 'json', 'html'],
-            exclude: [
-                'node_modules/',
-                'test/',
-                '**/*.test.ts',
-                '**/*.d.ts'
-            ]
+            include: ['src/frontend/components/**/*.ts'],
+            exclude: ['**/*.spec.ts', '**/testing/**']
         },
 
         // Dependencies configuration
         deps: {
-            inline: [/lit/, /@lit/, /@open-wc/]
+            inline: [/@microsoft\/fast-element/, /@fabric-msft/, /@fluentui/]
         },
 
-        // Test timeout configuration
+        // Test timeout
         testTimeout: 10000,
         hookTimeout: 10000
     },
+
     resolve: {
         alias: {
-            '/src': resolve(__dirname, 'src')
+            '@frontend': resolve(__dirname, 'src/frontend'),
+            '@shared': resolve(__dirname, 'src/shared'),
+            '@tests': resolve(__dirname, 'src/frontend/shared/testing')
         }
-    },
-    define: {
-        'process.env.NODE_ENV': '"test"',
-        'process.env.TEST': 'true'
     }
 });

@@ -1,0 +1,66 @@
+# Welcome to Farm UI Components
+
+This Storybook documents the web components used in the Farm project, built with Fluent UI Web Components and FAST Element.
+
+## Component Library
+
+Our component library is built on:
+- [Fluent UI Web Components](https://learn.microsoft.com/en-us/fluent-ui/web-components/)
+- [FAST Element](https://www.fast.design/docs/fast-element/getting-started/)
+
+## Getting Started
+
+### Installation
+
+```bash
+npm install @fluentui/web-components @microsoft/fast-element
+```
+
+### Basic Usage
+
+```html
+<script type="module">
+  import { ButtonDefinition } from '@fluentui/web-components';
+
+  // Define the component
+  ButtonDefinition.define(customElements);
+</script>
+
+<fluent-button appearance="primary">
+  Click me
+</fluent-button>
+```
+
+## Design Principles
+
+1. **Accessibility First**
+   - WCAG 2.1 AA compliance
+   - Keyboard navigation
+   - Screen reader support
+
+2. **Performance**
+   - Lightweight
+   - Tree-shakeable
+   - No unnecessary dependencies
+
+3. **Customization**
+   - Design tokens
+   - CSS custom properties
+   - Flexible APIs
+
+4. **Developer Experience**
+   - TypeScript support
+   - Comprehensive documentation
+   - Interactive examples
+
+## Component Status
+
+| Component | Status | Documentation |
+|-----------|---------|---------------|
+| Button    | ✅      | Complete      |
+| Card      | 🚧      | In Progress   |
+| TextField | 📋      | Planned       |
+
+## Contributing
+
+See our [contribution guidelines](https://github.com/falkicon/farm/blob/main/CONTRIBUTING.md) for information on how to contribute to the project.

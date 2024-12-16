@@ -1,0 +1,64 @@
+/// <reference lib="dom" />
+/// <reference lib="dom.iterable" />
+
+declare module '@fabric-msft/fabric-web' {
+    export interface LoadingButtonDefinition {
+        define(registry: typeof globalThis.customElements): void;
+    }
+    export const LoadingButtonDefinition: LoadingButtonDefinition;
+
+    export interface CardDefinition {
+        define(registry: typeof globalThis.customElements): void;
+    }
+    export const CardDefinition: CardDefinition;
+}
+
+declare module '@fabric-msft/theme' {
+    export interface Theme {
+        [key: string]: unknown;
+    }
+    export function setTheme(theme: Theme): void;
+    export const fabricLightTheme: Theme;
+}
+
+declare module '@fluentui/web-components' {
+    interface ComponentDefinition {
+        define(registry: typeof globalThis.customElements): void;
+    }
+
+    export interface CheckboxDefinition extends ComponentDefinition {}
+    export const CheckboxDefinition: CheckboxDefinition;
+
+    export interface SliderDefinition extends ComponentDefinition {}
+    export const SliderDefinition: SliderDefinition;
+
+    export interface FieldDefinition extends ComponentDefinition {}
+    export const FieldDefinition: FieldDefinition;
+
+    export interface TextAreaDefinition extends ComponentDefinition {}
+    export const TextAreaDefinition: TextAreaDefinition;
+
+    export interface LabelDefinition extends ComponentDefinition {}
+    export const LabelDefinition: LabelDefinition;
+
+    export interface TabsDefinition extends ComponentDefinition {}
+    export const TabsDefinition: TabsDefinition;
+
+    export interface TabPanelDefinition extends ComponentDefinition {}
+    export const TabPanelDefinition: TabPanelDefinition;
+
+    export interface TabDefinition extends ComponentDefinition {}
+    export const TabDefinition: TabDefinition;
+
+    export interface RadioDefinition extends ComponentDefinition {}
+    export const RadioDefinition: RadioDefinition;
+
+    export interface RadioGroupDefinition extends ComponentDefinition {}
+    export const RadioGroupDefinition: RadioGroupDefinition;
+}
+
+declare module '@microsoft/fast-element' {
+    export class Updates {
+        static next(): Promise<void>;
+    }
+}

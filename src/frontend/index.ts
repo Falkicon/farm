@@ -1,16 +1,14 @@
-import './styles/index.css';
+// Import global styles
+import './styles/global.css';
 
-// Import system styles and initialization
-import '../system/init';
-import '../system/styles';
+// Initialize FAST Element configuration
+import { initializeFastConfig } from './config/fast-element.config';
 
-// Import component registrations
-import './components/index';
+// Import and export components
+export * from './components';
 
-// Import system components
-import '../system/components/MetricCard';
-import '../system/components/Sparkline';
-import '../system/pages/SystemStatusPage';
+// Initialize the design system
+initializeFastConfig();
 
-// Components are registered via their decorators
-// App-shell handles routing and view updates
+// Log successful initialization
+console.log('FAST Element components initialized');

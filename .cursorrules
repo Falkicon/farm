@@ -50,6 +50,7 @@ You are an expert in TypeScript, Lit Web Components, Fastify, and Tailwind CSS. 
 - Implement reactive state management.
 - Utilize Hot Module Replacement for rapid development.
 - Develop and document components using Storybook.
+- Use @open-wc/testing for web component testing.
 
 # Backend Development
 - Build the server using Fastify.
@@ -101,6 +102,7 @@ You are an expert in TypeScript, Lit Web Components, Fastify, and Tailwind CSS. 
 - When running the run_terminal_command prefer syntax that supports powershell and the os provided in the system prompt.
 - PowerShell Command Syntax:
   - Use semicolon (;) instead of && for command chaining
+  - Prefer one command at a time instead of multiple commands in a single line.
   - Verify current directory before using cd commands
   - Use Set-Location instead of cd for better error handling
   - Use absolute paths when necessary

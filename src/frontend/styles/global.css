@@ -4,38 +4,75 @@ body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  background-color: var(--color-bg-primary);
-  color: var(--color-text-primary);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: var(--base-font-family);
+  font-size: var(--base-font-size);
+  font-weight: var(--base-font-weight);
+  background-color: var(--neutral-fill-rest);
+  color: var(--neutral-foreground-rest);
 }
 
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+/* Design system provider */
+.design-system-provider {
+  display: block;
+  min-height: 100vh;
+  --density: 0;
+  --design-unit: 4;
+  --stroke-width: 1;
 }
 
-::-webkit-scrollbar-track {
-  background: var(--color-bg-secondary);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-border);
+/* Component styles */
+fabric-card {
+  display: block;
+  background-color: var(--neutral-fill-rest);
+  border: 1px solid var(--neutral-stroke-rest);
   border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-text-secondary);
+fluent-button,
+fabric-loading-button {
+  margin: 4px;
 }
 
-/* Selection styling */
-::selection {
-  background-color: var(--color-accent);
-  color: var(--color-bg-primary);
+fluent-field {
+  margin: 8px 0;
 }
 
-/* Focus styling */
-:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
+/* Utility classes */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.card {
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.button-container {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  color: var(--neutral-foreground-rest);
+}
+
+p {
+  margin: 0 0 1rem;
+  color: var(--neutral-foreground-rest);
+}
+
+/* Form styles */
+.form {
+  margin: 1rem 0;
+}
+
+.selection-text {
+  margin-top: 1rem;
+  font-style: italic;
 }

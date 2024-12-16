@@ -1,20 +1,14 @@
 /// <reference types="vitest" />
-import { defineConfig } from 'vitest/config';
-import { resolve } from 'path';
+import { defineConfig } from 'vite';
 
 export default defineConfig({
-  resolve: {
-    alias: {
-      '/src': resolve(__dirname, 'src')
-    }
+  root: 'src/frontend',
+  server: {
+    port: 3000,
+    open: true
   },
   build: {
-    sourcemap: true
-  },
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: ['./src/frontend/shared/testing/setup.ts'],
-    include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}']
+    outDir: '../../dist',
+    emptyOutDir: true
   }
 });

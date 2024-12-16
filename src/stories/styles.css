@@ -1,0 +1,23 @@
+@media (forced-colors: active) {
+  fluent-button {
+    forced-color-adjust: auto;
+  }
+
+  fluent-button[appearance="primary"] {
+    background: ButtonText;
+    color: ButtonFace;
+    border-color: ButtonText;
+  }
+
+  fluent-button[appearance="outline"] {
+    background: ButtonFace;
+    color: ButtonText;
+    border-color: ButtonText;
+  }
+
+  fluent-button[disabled] {
+    background: GrayText;
+    color: ButtonFace;
+    border-color: GrayText;
+  }
+}

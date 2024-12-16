@@ -16,7 +16,7 @@
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module",
-    "project": ["./tsconfig.json", "./tsconfig.backend.json"]
+    "project": ["./tsconfig.json", "./tsconfig.backend.json", "./tsconfig.test.json"]
   },
   "plugins": [
     "@typescript-eslint",
@@ -89,11 +89,14 @@
       }
     },
     {
-      "files": ["**/*.test.ts", "**/*.spec.ts"],
+      "files": ["**/*.test.ts", "**/*.spec.ts", "**/testing/**/*.ts"],
       "env": {
-        "jest": true
+        "jest": true,
+        "browser": true
       },
-      "extends": ["plugin:jest/recommended"],
+      "parserOptions": {
+        "project": ["./tsconfig.test.json"]
+      },
       "rules": {
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-non-null-assertion": "off"
