@@ -44,14 +44,6 @@ export const test = base.extend<TestOptions>({
               }
             }
 
-            // Import the component
-            const componentModule = await import('/src/frontend/shared/components/app-button.ts');
-
-            // Make sure the component is defined
-            if (!customElements.get('app-button')) {
-              customElements.define('app-button', componentModule.AppButton);
-            }
-
             // Add fixture helper
             window.fixture = async (template) => {
               const wrapper = document.createElement('div');

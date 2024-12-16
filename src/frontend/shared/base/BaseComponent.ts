@@ -24,6 +24,17 @@ import { ComponentMonitor, MonitorInstance } from '../../core/performance/compon
  */
 export class BaseComponent extends LitElement {
   /**
+   * Shadow root options for all components
+   */
+  static override shadowRootOptions: {
+    mode: 'open' | 'closed';
+    delegatesFocus: boolean;
+  } = {
+    mode: 'open' as const,
+    delegatesFocus: true
+  };
+
+  /**
    * Performance monitoring instance for the component
    * @internal
    */

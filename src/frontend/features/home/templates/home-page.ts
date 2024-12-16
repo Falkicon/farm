@@ -1,5 +1,6 @@
 import { html } from 'lit';
 import { API_CONFIG } from '../../../shared/config/api';
+import '../../../components/button/button';
 
 export const homePageTemplate = () => html`
   <div class="container mx-auto p-4">
@@ -9,7 +10,8 @@ export const homePageTemplate = () => html`
         <h2 slot="header">API Status</h2>
         <div slot="content">
           <p class="mb-4">API URL: ${API_CONFIG.BASE_URL}</p>
-          <app-button
+          <fluent-lit-button
+            appearance="primary"
             @click=${async () => {
               const baseUrl = API_CONFIG.BASE_URL.replace(/\/api$/, '');
               const url = `${baseUrl}/api/health`;
@@ -30,7 +32,7 @@ export const homePageTemplate = () => html`
             }}
           >
             API Health Check
-          </app-button>
+          </fluent-lit-button>
         </div>
       </app-card>
     </div>

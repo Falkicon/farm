@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { customElement } from 'lit/decorators.js';
+import '../../components/button/button';
 
 /**
  * Home page component for the application's landing page
@@ -116,22 +117,14 @@ export class HomePage extends LitElement {
       opacity: 0.8;
     }
 
-    .cta-button {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--color-accent);
-      color: white;
-      padding: 0.75rem 1.5rem;
-      border-radius: var(--system-radius-lg);
-      font-weight: 500;
-      text-decoration: none;
-      transition: background-color 0.2s;
+    fluent-lit-button {
       margin-top: 2rem;
     }
 
-    .cta-button:hover {
-      background: var(--color-accent-dark);
+    fluent-lit-button::part(button) {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     @media (max-width: 1200px) {
@@ -159,6 +152,10 @@ export class HomePage extends LitElement {
     }
   `;
 
+  private handleSystemClick() {
+    window.location.href = '/system';
+  }
+
   /**
    * Renders the component's template
    * @returns The component's template
@@ -169,9 +166,14 @@ export class HomePage extends LitElement {
         <section class="hero">
           <h1>Welcome to Your Application</h1>
           <p class="subtitle">A modern web application built with Lit and TypeScript</p>
-          <a href="/system" class="cta-button">
+          <fluent-lit-button
+            appearance="primary"
+            size="large"
+            @click=${this.handleSystemClick}
+          >
             View System Status
             <svg
+              slot="end"
               xmlns="http://www.w3.org/2000/svg"
               width="20"
               height="20"
@@ -184,7 +186,7 @@ export class HomePage extends LitElement {
             >
               <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
-          </a>
+          </fluent-lit-button>
         </section>
 
         <div class="features">

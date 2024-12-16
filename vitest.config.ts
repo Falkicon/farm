@@ -14,7 +14,7 @@ export default defineConfig({
 
         // Specify setup files that run before each test
         // These can contain global setup logic, custom matchers, etc.
-        setupFiles: ['./src/frontend/shared/testing/setup.ts'],
+        setupFiles: ['./vitest.setup.ts'],
 
         // Pattern for test files to include
         // Will run all .test.ts files under the src directory
@@ -37,7 +37,7 @@ export default defineConfig({
 
         // Dependencies configuration
         deps: {
-            inline: [/lit/, /@lit/, /@open-wc/]
+            inline: [/@open-wc\/testing/],
         },
 
         // Test timeout configuration
